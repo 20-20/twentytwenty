@@ -76,11 +76,34 @@ assuming you're using postgres.
 
 `/bin` has scripts. (Right now it has *one* script that creates a useful symlink.)
 
-## Conventions
+omibear
+[10:57 AM] 
+## Contribution guide
 
-I use `require` and `module.exports` in `.js` files.
+The contribution process is...
 
-I use `import` and `export` in `.jsx` files, unless `require` makes for cleaner code.
+1. Make an issue (or multiple issues)
+2. Make a PR that references that issue
+3. Get it code reviewed by someone on the team, address any comments
+4. Merge into master (with merge commit)
 
-I use two spaces, no semi-colons, and trailing commas where possible. I'll
-have a linter someday soon.
+### Code style guide
+
+- Pay attention to the linter!
+- Don't use semicolons
+- Two spaces
+- Trailing commas where possible
+- `const` or `let` over `var`
+- Use `require` and `module.exports` in `.js` files
+- Use `import` and `export` in `.jsx` files, unless `require` makes for cleaner code
+- Put import statements at top
+- Put the default export at bottom
+- Consider splitting up any file larger than 50 lines
+- Define container components and presentational components in separate files
+- Use the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux) for redux
+- Name files using lowercase-and-dashes instead of camelCase or PascalCase, except for when the default export is a class, then use PascalCase
+- Define react components as pure functions (instead of classes) whenever possible
+
+### Commit message guide
+
+[See here](https://seesparkbox.com/foundry/semantic_commit_messages)
