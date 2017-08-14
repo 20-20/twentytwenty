@@ -1,6 +1,6 @@
 'use strict'
 
-const {STRING, DATE, INTEGER} = require('sequelize')
+const {STRING, TEXT, DATE, INTEGER} = require('sequelize')
 
 module.exports = db => db.define('articles', {
   url: {
@@ -11,13 +11,37 @@ module.exports = db => db.define('articles', {
       notEmpty: true
     }
   },
-  author: STRING,
+  author: {
+    type: STRING
+  },
   date: {
     type: DATE,
     allowNull: false
   },
-  publication: STRING,
-  rating: INTEGER
+  publication: {
+    type: STRING
+  },
+  rating: {
+    type: INTEGER
+  },
+  title: {
+    type: STRING,
+  },
+  body: {
+    type: TEXT
+  },
+  urlToImage: {
+    type: STRING
+  },
+  publishedAt: {
+    type: STRING
+  },
+  description: {
+    type: STRING
+  },
+  views: {
+    type: STRING
+  }
 })
 
 module.exports.associations = (Article, { Comment, Topic, User, History }) => {
