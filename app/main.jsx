@@ -13,24 +13,22 @@ import {Provider, connect} from 'react-redux'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 
 import store from './store'
-import Jokes from './components/Jokes'
+import Home from './components/Home'
 // import Comments from './components/Comments'
 import Login from './components/Login'
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
+import Navbar from './components/Navbar'
 
 const ExampleApp = connect(
   ({ auth }) => ({ user: auth })
 )(
   ({ user, children }) =>
     <div>
-      <nav>
-        {user ? <WhoAmI/> : <Login/>}
-      </nav>
+      <Navbar user={user}/>
       <main>
         <Switch>
-          <Route path="/jokes" component={Jokes} />
-          <Redirect exact from="/" to="/jokes" />
+          <Route path="/" component={Home} />
           <Route component={NotFound} />
         </Switch>
       </main>
