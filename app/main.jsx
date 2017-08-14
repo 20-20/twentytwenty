@@ -14,6 +14,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 
 import store from './store'
 import Jokes from './components/Jokes'
+// import Comments from './components/Comments'
 import Login from './components/Login'
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
