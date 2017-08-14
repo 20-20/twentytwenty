@@ -4,7 +4,7 @@ import WhoAmI from './WhoAmI'
 
 export default function Navbar({ user }) {
   return (
-    <div>
+    <div className="container">
       <nav className="navbar">
         <div className="navbar-brand">
           <a className="navbar-item" href="http://bulma.io">
