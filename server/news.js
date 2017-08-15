@@ -23,6 +23,6 @@ function eventregistryCall() {
   })
 }
 
-setInterval(eventregistryCall, 600000)
+setInterval(eventregistryCall, 3600000)
 
 module.exports = request

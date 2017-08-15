@@ -7,7 +7,6 @@ api
   .use('/auth', require('./auth'))
   .use('/users', require('./users'))
   .use('/comments', require('./comments'))
-  .use('/news', require('./news.js'))
   .use('/trending', require('./trending'))
 
 // No routes matched? 404.
