@@ -5,7 +5,7 @@ import WhoAmI from './WhoAmI'
 export default function Navbar({ user }) {
   return (
     <div className="container" >
-      <div style={{ position: `${'fixed'}`, zIndex: `${'2'}` }}>
+      <div style={{ position: 'fixed', zIndex: '2' }}>
         <nav className="navbar">
           <div className="navbar-brand">
             <a className="navbar-item" href="http://bulma.io" >
