@@ -25,7 +25,7 @@ const ExampleApp = connect(
 )(
   ({ user, children }) =>
     <div>
-      <Navbar user={user}/>
+      <Navbar user={user} />
       <main>
         <Switch>
           <Route path="/" component={Home} />
