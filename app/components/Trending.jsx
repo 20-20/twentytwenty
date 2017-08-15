@@ -10,16 +10,13 @@ export default function Trending() {
       <div>
         <div className="tile is-ancestor">
           <div className="tile is-parent is-4">
-            <article className="tile is-child box" style={{ backgroundImage: `url(www.trbimg.com/img-599216a8/turbine/ct-ptb-quickly-tuesday-st-0815-20170814)` }}>
-              <figure className="image is-4by3">
-                <img src="http://www.trbimg.com/img-599216a8/turbine/ct-ptb-quickly-tuesday-st-0815-20170814" />
-              </figure>
+            <div className="tile is-child box" style={{ backgroundImage: `url('http://www.trbimg.com/img-599216a8/turbine/ct-ptb-quickly-tuesday-st-0815-20170814')`, backgroundPosition: `${'center'}` }}>
               <p className="title">Article Name!</p>
               <p>Twee XOXO tousled, you probably haven't heard of them vexillologist vaporware jean shorts microdosing pork belly kogi shoreditch DIY. Glossier humblebrag adaptogen synth bitters, single-origin coffee farm-to-table yuccie. </p>
-            </article>
+            </div>
           </div>
           <div className="tile is-parent is-8 is-vertical">
-            <article className="tile is-child box">
+            <article className="tile is-child notification is-primary box">
               <p className="title">Article Name!</p>
               <p>Brooklyn kinfolk pabst, photo booth helvetica pitchfork tilde snackwave glossier. Dreamcatcher poutine austin chillwave cloud bread tumeric lyft 3 wolf moon YOLO kickstarter. Biodiesel chia portland, fanny pack hell of brunch salvia fashion axe polaroid direct trade edison bulb. Flannel man bun chartreuse, succulents quinoa plaid 8-bit PBR&B actually gastropub. Seitan live-edge chicharrones taiyaki tumeric PBRB. </p>
             </article >
