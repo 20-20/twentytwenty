@@ -62,14 +62,14 @@ export default function Navbar({ user }) {
             </a>
             <div className="navbar-item">
               <div className="field is-grouped">
-                <p className="control">
-                  <p className="button is-primary" >
+                <div className="control">
+                  <div className="button is-primary" >
                     <span className="icon">
                       <i className="fa fa-download"></i>
                     </span>
                     {user ? <WhoAmI /> : <Login />}
-                  </p>
-                </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
