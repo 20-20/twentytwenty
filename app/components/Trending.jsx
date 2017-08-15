@@ -10,9 +10,9 @@ function Trending({trending}) {
       <div>
         {trending.length && <div className="tile is-ancestor">
           <div className="tile is-parent is-4">
-              <div className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(transparent, black), url('${trending[0].urlToImage}')`, backgroundPosition: `${'center'}` }}>
-              <p className="title">{trending[0].title}</p>
-              <p>{trending[0].body.slice(0, 250)}...</p>
+              <div className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(transparent, black), url('${trending[0].urlToImage}')`, backgroundPosition: `${'center'}`, alignItems: `${'flex-end'}` }}>  
+                <p className="title">{trending[0].title}</p>
+                <p>{trending[0].body.slice(0, 250)}...</p>
             </div>
           </div>
           <div className="tile is-parent is-8 is-vertical">

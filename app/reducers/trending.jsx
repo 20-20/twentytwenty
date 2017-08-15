@@ -22,7 +22,6 @@ export default function reducer(trending = [], action) {
 /* ------------   THUNK CREATORS     ------------------ */
 
 export const fetchTrending = () => dispatch => {
-  console.log('herererere')
   axios.get('/api/trending')
         .then(res => dispatch(init(res.data)))
         .catch(err => console.error('Fetching products unsuccessful', err))
