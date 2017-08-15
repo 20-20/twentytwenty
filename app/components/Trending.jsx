@@ -4,13 +4,13 @@ import { Navlink } from 'react-router-dom'
 
 export default function Trending() {
   return (
-    <div className="container">
+    <div className="container" >
       <p className="title">Trending</p>
       <hr />
       <div>
         <div className="tile is-ancestor">
           <div className="tile is-parent is-4">
-            <div className="tile is-child box" style={{ backgroundImage: `url('http://www.trbimg.com/img-599216a8/turbine/ct-ptb-quickly-tuesday-st-0815-20170814')`, backgroundPosition: `${'center'}` }}>
+            <div className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(transparent, black), url('http://www.trbimg.com/img-599216a8/turbine/ct-ptb-quickly-tuesday-st-0815-20170814')`, backgroundPosition: `${'center'}` }}>
               <p className="title">Article Name!</p>
               <p>Twee XOXO tousled, you probably haven't heard of them vexillologist vaporware jean shorts microdosing pork belly kogi shoreditch DIY. Glossier humblebrag adaptogen synth bitters, single-origin coffee farm-to-table yuccie. </p>
             </div>
