@@ -2,37 +2,42 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Navlink } from 'react-router-dom'
 
-export default function Trending() {
+function Trending({trending}) {
   return (
     <div className="container" >
       <p className="title">Trending</p>
       <hr />
       <div>
-        <div className="tile is-ancestor">
+        {trending.length && <div className="tile is-ancestor">
           <div className="tile is-parent is-4">
-            <div className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(transparent, black), url('http://www.trbimg.com/img-599216a8/turbine/ct-ptb-quickly-tuesday-st-0815-20170814')`, backgroundPosition: `${'center'}` }}>
-              <p className="title">Article Name!</p>
-              <p>Twee XOXO tousled, you probably haven't heard of them vexillologist vaporware jean shorts microdosing pork belly kogi shoreditch DIY. Glossier humblebrag adaptogen synth bitters, single-origin coffee farm-to-table yuccie. </p>
+              <div className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(transparent, black), url('${trending[0].urlToImage}')`, backgroundPosition: `${'center'}` }}>
+              <p className="title">{trending[0].title}</p>
+              <p>{trending[0].body.slice(0, 250)}...</p>
             </div>
           </div>
           <div className="tile is-parent is-8 is-vertical">
-            <article className="tile is-child notification is-primary box">
-              <p className="title">Article Name!</p>
-              <p>Brooklyn kinfolk pabst, photo booth helvetica pitchfork tilde snackwave glossier. Dreamcatcher poutine austin chillwave cloud bread tumeric lyft 3 wolf moon YOLO kickstarter. Biodiesel chia portland, fanny pack hell of brunch salvia fashion axe polaroid direct trade edison bulb. Flannel man bun chartreuse, succulents quinoa plaid 8-bit PBR&B actually gastropub. Seitan live-edge chicharrones taiyaki tumeric PBRB. </p>
-            </article >
+            <div className="tile is-child notification is-primary box" style={{ backgroundImage: `linear-gradient(transparent, black), url('${trending[1].urlToImage}')`, backgroundPosition: `${'center'}` }}>
+              <p className="title">{trending[1].title}</p>
+              <p>{trending[1].body.slice(0, 250)}...</p>
+            </div>
             <div className="tile">
-              <article className="tile is-child box">
-                <p className="title">small title</p>
-                <p>Fixie chartreuse kombucha etsy, ugh snackwave raclette vegan activated charcoal 90's vinyl biodiesel salvia selfies iPhone. Hashtag venmo pabst, tumeric air plant single-origin coffee thundercats messenger bag viral.</p>
+              <article className="tile is-child notification is-primary box" style={{ backgroundImage: `linear-gradient(transparent, black), url('${trending[2].urlToImage}')`, backgroundPosition: `${'center'}` }}>
+                <p className="title">{trending[2].title}</p>
+                <p>{trending[2].body.slice(0, 250)}...</p>
               </article>
-              <article className="tile is-child box">
-                <p className="title">small title</p>
-                <p>Fixie chartreuse kombucha etsy, ugh snackwave raclette vegan activated charcoal 90's vinyl biodiesel salvia selfies iPhone. Hashtag venmo pabst, tumeric air plant single-origin coffee thundercats messenger bag viral.</p>
+              <article className="tile is-child notification is-primary box" style={{ backgroundImage: `linear-gradient(transparent, black), url('${trending[3].urlToImage}')`, backgroundPosition: `${'center'}` }}>
+                <p className="title">{trending[3].title}</p>
+                <p>{trending[3].body.slice(0, 250)}...</p>
               </article>
             </div>
           </div>
-        </div>
+         </div>
+         }
       </div>
     </div>
   )
 }
+
+const mapState = ({trending}) => ({trending})
+
+export default connect(mapState)(Trending)
