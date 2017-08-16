@@ -11,32 +11,82 @@ const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 const createArticle = (article) => {
   const articleProps = article[Object.keys(article)[0]].info
   console.log('date', articleProps.date)
-  return Article.create({where: {
+  return Article.create({
     url: articleProps.url,
     title: articleProps.title,
     body: articleProps.body,
     urlToImage: articleProps.image,
     publication: articleProps.source.title,
     date: articleProps.date
-  }
   })
 }
 
+// const articleCreationProcess = (url) => {
+//   request.get(
+//     'http://eventregistry.org/json/articleMapper?articleUrl=' + url + '&includeAllVersions=false&deep=true',
+//     (error, response, data) => {
+//       const uriObj = JSON.parse(data)
+//       const uri = uriObj[Object.keys(uriObj)[0]]
+//       request.get(
+//         'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
+//         '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
+//         (error, response, data) => createArticle(JSON.parse(data)) // returns createdArticle
+//         // .catch(() => console.log("You've reached the articleCreationProcess catch"))
+//       )
+//     }
+//   )
+// }
+
 module.exports = router
   .get('/:url', (req, res, next) => {
-    Article.findOne({ where: { url: decodeURIComponent(req.params.url) }, include: [{model: Paragraph, include: [Comment]}] })
-    .then(article => res.json(article))
-    .catch(next)
-    .then(() => request.get('http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + '&includeAllVersions=false&deep=true', (error, response, data) => {
-      const uriObj = JSON.parse(data)
-      const uri = uriObj[Object.keys(uriObj)[0]]
-      request.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri + '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000', (error, response, data) => createArticle(JSON.parse(data))
-      .then((article) => res.json(article))
-      .catch(next)
-    )
+    const decodedUrl = decodeURIComponent(req.params.url).split('html')[0]+'html'
+    Article.findOne({
+      where: {
+        url: decodedUrl
+      },
+      include: [{model: Paragraph, include: [Comment]}]
     })
-    )
+      .then((retObj) => {
+        console.log('here is the return object:', retObj)
+        if (!retObj) {
+          request.get(
+            'http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + '&includeAllVersions=false&deep=true',
+            (error, response, data) => {
+              const uriObj = JSON.parse(data)
+              const uri = uriObj[Object.keys(uriObj)[0]]
+              request.get(
+                'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
+                '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
+                (error, response, data) => {
+                  createArticle(JSON.parse(data))
+                  .then(article => res.json(article))
+                }
+              )
+            }
+          )
+        } else res.json(retObj)
+      })
   })
+
+          /* Old article creation process */
+            // articleCreationProcess(req.params.url)
+            // .then(createdArticle => {
+            //   console.log('here is the created article:', createArticle)
+            //   res.json(createArticle)
+            // })
+
+  //   .then(article => res.json(article))
+  //   .catch(next)
+  //   .then(() => request.get('http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + '&includeAllVersions=false&deep=true', (error, response, data) => {
+  //     const uriObj = JSON.parse(data)
+  //     const uri = uriObj[Object.keys(uriObj)[0]]
+  //     request.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri + '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000', (error, response, data) => createArticle(JSON.parse(data))
+  //     .then((article) => res.json(article))
+  //     .catch(next)
+  //   )
+  //   })
+  //   )
+  // })
 
       // console.log(JSON.parse(data))
       // JSON.parse(data)
@@ -57,7 +107,6 @@ module.exports = router
   //   .then(article => res.json(article))
   //   .catch(next)
   // })
-
 
 // 'http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + '&includeAllVersions=false&deep=true&callback=JSON_CALLBACK'
 
