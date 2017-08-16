@@ -1,6 +1,9 @@
 
 $(() => {
-  $('html').dblclick(() => getSelectionText())
+  $('html').dblclick(() => {
+    getSelectionText()
+    showExt()
+  })
 })
 
 function getSelectionText() {
@@ -15,5 +18,23 @@ function getSelectionText() {
   $(parentEl).attr('class').includes('twentyHighlight')
     ? $(parentEl).removeClass('twentyHighlight')
     : $(parentEl).addClass('twentyHighlight')
-  console.log("new parent element:", parentEl)
 }
+
+function showExt() {
+  // if style.cssText exists (is diplay: none), toggle sidebar
+  if ($('.annotate-sidebar')[0].style.cssText) {
+		$('.annotate-sidebar').toggle();
+		$('.annotate-toggle').toggleClass('far-right');
+
+		if ($('.annotate-toggle').text() === "X") {
+			$('.annotate-toggle').text("<")
+		} else {
+			$('.annotate-toggle').text("X")
+		}
+  }
+
+  // focus user input into comment text box
+  $('.annotate-text-entry').focus()
+}
+
+

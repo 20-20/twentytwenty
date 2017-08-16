@@ -7,6 +7,12 @@
 		"<all_urls>",
 		"storage"
 	],
+	"web_accessible_resources": [
+		"*.png",
+		"*.ttf",
+		"*.woff2",
+		"*.woff"
+	],
 	"content_scripts": [
 		{
 			"matches":["<all_urls>"],
@@ -16,8 +22,9 @@
 				"highlight.js"
 			],
 			"css": [
+				"dependencies/bulma.css",
 				"annotate.css",
-				"dependencies/font-awesome.css"
+				"dependencies/font-awesome/css/font-awesome.css"
 				]
 		}
 	]

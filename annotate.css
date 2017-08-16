@@ -10,7 +10,7 @@
 	height: 25px;
 	padding-left:7px;
 	padding-top:3px;
-	z-index: 999999999999999;
+	z-index: 2147483647;
 	color:#f00;
 	background-color:#fff;
 	border: 1px solid #000022;
@@ -26,11 +26,11 @@ span.marked {
 }
 .annotate-sidebar {
 	position: fixed;
-	top: 0px;
+	bottom: 0px;
 	right: 0px;
 	width: 25%;
 	height: 100%;
-	z-index:9999999;
+	z-index: 2147483646;
 	border-left: 1px solid #000022;
 	font-family: helvetica;
 	background-color: white;
