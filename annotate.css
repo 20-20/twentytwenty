@@ -1,0 +1,89 @@
+.annotate-hide {
+	display: none;
+}
+
+.annotate-toggle {
+	position: fixed;
+	top: 0px;
+	right: 25%;
+	width: 25px;
+	height: 25px;
+	padding-left:7px;
+	padding-top:3px;
+	z-index: 999999999999999;
+	color:#f00;
+	background-color:#fff;
+	border: 1px solid #000022;
+}
+
+.far-right {
+	right: 0px;
+}
+
+span.marked {
+	color: #00f;
+	border: 2px solid #f00;
+}
+.annotate-sidebar {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	width: 25%;
+	height: 100%;
+	z-index:9999999;
+	border-left: 1px solid #000022;
+	font-family: helvetica;
+	background-color: white;
+}
+
+.annotate-header {
+	width: 100%;
+	margin-top: 0.75em;
+	margin-bottom: 0.75em;
+	text-align: center;
+	color:black;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.annotate-list {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+}
+
+.annotate-note {
+	width: 90%;
+	margin: 5px auto 5px auto;
+	padding: 2px 5px 2px 5px;
+	border-radius: 4px;
+	background-color: #fff;
+	color: #3e8fd6;
+	word-wrap: break-word;
+}
+
+.annotate-remove-note {
+	float: right;
+}
+
+.annotate-save {
+	position: fixed;
+	bottom: 50px;
+	right: 0px;
+}
+
+.annotate-text-entry {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: 50px;
+	border: 0;
+	border-left: 1px solid #000022;
+	padding-left: 3px;
+	margin: 0;
+}
+
+.twentyHighlight {
+    background: rgba(135, 200, 250, .2)
+}
