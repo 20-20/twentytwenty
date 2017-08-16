@@ -20,7 +20,8 @@ const app = require('APP')
       Topic: require('./topic'),
       History: require('./history'),
       Comment: require('./comment'),
-      Article: require('./article')
+      Article: require('./article'),
+      Paragraph: require('./paragraph')
       // ---------- Add new models here ----------
     }
     , {mapValues} = require('lodash')
