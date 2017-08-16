@@ -20,26 +20,13 @@ import NotFound from './components/NotFound'
 import Navbar from './components/Navbar'
 import Routes from './Routes'
 
-const ExampleApp = connect(
-  ({ auth }) => ({ user: auth })
-)(
-  ({ user, children }) =>
-    <div>
-      <Navbar user={user} />
-      <main>
-        <Switch>
-          <Route path="/" component={Home} />
-          <Route component={NotFound} />
-        </Switch>
-      </main>
-    </div>
-)
+
 
 render(
   <Provider store={store}>
-    <Router>
-      <Routes />
-    </Router>
+        <Router>
+          <Routes />
+        </Router>
   </Provider>,
   document.getElementById('main')
 )

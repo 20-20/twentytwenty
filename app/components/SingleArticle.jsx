@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Navlink } from 'react-router-dom'
 
+
 function SingleArticle({trending, comments}) {
   return (
     <div className="container" >

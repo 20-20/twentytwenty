@@ -17,7 +17,7 @@ class Routes extends Component {
         <div>
             <Navbar />
             <Route exact path='/' component={Home} />
-            <Route path='singleArticle/:id' component={SingleArticle} />
+            <Route exact path='/SingleArticle/:id' component={SingleArticle} />
         </div>
     )
   }
@@ -29,6 +29,6 @@ const mapDispatch = dispatch => ({
   }
 })
 
-const mapProps = ({ user }) => ({ user})
+const mapProps = ({ user }) => ({ user })
 
 export default connect(mapProps, mapDispatch)(Routes)
