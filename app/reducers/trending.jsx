@@ -26,3 +26,6 @@ export const fetchTrending = () => dispatch => {
         .then(res => dispatch(init(res.data)))
         .catch(err => console.error('Fetching products unsuccessful', err))
 }
+
+
+
