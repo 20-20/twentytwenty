@@ -20,10 +20,13 @@ $(document).ready(function() {
 
 	// Add the Toggle (Hide) Button to the page
 	// When the toggle button is clicked, hide the sidebar. Toggle the text shown.
+
 	$('.annotate-toggle').click(function() {
+
 		$('.annotate-toggle').toggleClass('far-right');
 
 		if ($('.annotate-toggle').text() == "X") {
+			$('.annotate-sidebar').toggle();
 			$('.annotate-toggle').text("<")
 		} else {
 			$('body').append(sidebar);
