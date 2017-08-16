@@ -1,5 +1,5 @@
 
-const { TEXT, INTEGER } = require('sequelize')
+const { TEXT, INTEGER, STRING } = require('sequelize')
 
 module.exports = db => db.define('paragraphs', {
   text: {
@@ -11,6 +11,10 @@ module.exports = db => db.define('paragraphs', {
   },
   index: {
     type: INTEGER,
+    allowNull: false
+  },
+  url: {
+    type: STRING,
     allowNull: false
   }
 })
