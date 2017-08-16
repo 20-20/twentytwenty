@@ -30,8 +30,8 @@ export default function reducer(articles = [], action) {
 
 /* ------------   THUNK CREATORS     ------------------ */
 
-export const fetchArticle = () => dispatch => {
-  axios.get('/api/singleArticle')
+export const fetchArticle = (id) => dispatch => {
+  axios.get(`/api/singleArticle/${id}`)
        .then(res => dispatch(init(res.data)))
 }
 

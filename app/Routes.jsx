@@ -14,11 +14,13 @@ class Routes extends Component {
 
   render() {
     return (
+      <Router>
         <div>
             <Navbar />
             <Route exact path='/' component={Home} />
             <Route exact path='/SingleArticle/:id' component={SingleArticle} />
         </div>
+      </Router>
     )
   }
 }
