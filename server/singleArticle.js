@@ -1,3 +1,4 @@
+
 'use strict'
 
 const db = require('APP/db')
@@ -10,7 +11,7 @@ const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 
 const createArticle = (article) => {
   const articleProps = article[Object.keys(article)[0]].info
-  console.log('date', articleProps.date)
+  // createArticleParagraphs(articleProps.body, articleProps.url)
   return Article.create({
     url: articleProps.url,
     title: articleProps.title,
@@ -21,21 +22,18 @@ const createArticle = (article) => {
   })
 }
 
-// const articleCreationProcess = (url) => {
-//   request.get(
-//     'http://eventregistry.org/json/articleMapper?articleUrl=' + url + '&includeAllVersions=false&deep=true',
-//     (error, response, data) => {
-//       const uriObj = JSON.parse(data)
-//       const uri = uriObj[Object.keys(uriObj)[0]]
-//       request.get(
-//         'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
-//         '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
-//         (error, response, data) => createArticle(JSON.parse(data)) // returns createdArticle
-//         // .catch(() => console.log("You've reached the articleCreationProcess catch"))
-//       )
-//     }
-//   )
-// }
+const createArticleParagraphs = function(text, url, articleId) {
+  let allParagraphs = text.split('\n')
+  allParagraphs = allParagraphs.filter(paragraph => paragraph !== '')
+  allParagraphs.forEach((paragraph, index) => {
+    Paragraph.create({
+      text: paragraph,
+      index,
+      url,
+      article_id: articleId
+    })
+  })
+}
 
 module.exports = router
   .get('/:url', (req, res, next) => {
@@ -47,8 +45,8 @@ module.exports = router
       include: [{model: Paragraph, include: [Comment]}]
     })
       .then((retObj) => {
-        console.log('here is the return object:', retObj)
-        if (!retObj) {
+        if (retObj) res.json(retObj)
+        else {
           request.get(
             'http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + '&includeAllVersions=false&deep=true',
             (error, response, data) => {
@@ -59,12 +57,14 @@ module.exports = router
                 '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
                 (error, response, data) => {
                   createArticle(JSON.parse(data))
-                  .then(article => res.json(article))
+                  .then(article => {
+                    createArticleParagraphs(article.body, article.url, article.id)
+                  })
                 }
               )
             }
           )
-        } else res.json(retObj)
+        }
       })
   })
 
