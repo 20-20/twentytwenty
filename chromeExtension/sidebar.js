@@ -1,3 +1,4 @@
+import axios from 'axios'
 
 const sidebar =
 	`<div class='annotate-sidebar' style='display: none'>
@@ -14,10 +15,15 @@ const sidebar =
 		</nav>
 	</div>`
 
+const style =
+  `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
+
 var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
 
 $(document).ready(function() {
 	// Add the sidebar to the page
+	$('head').append(style)
 	$('body').append(sidebar)
 	// Add the Toggle (Hide) Button to the page
 	$('body').append(sidebarToggle)
@@ -34,6 +40,17 @@ $(document).ready(function() {
 	})
 
 	$('#formSubmission').submit(function(evt) {
+		// We were working here at the end of the day
+		chrome.storage.local.get(
+			['selectedText', 'paragraphs'], (stateObj) => {
+				paragraphs.forEach(paragraph => {
+					if ( stateObj.selectedText.includes(paragraph.split('<')[0]) ) {
+						console.log("THIS SHIT FUCKING WORKS", paragraph, selectedText)
+					}
+				})
+			}
+		)
+		// chrome.storage.local.get('paragraphs', (paragraphs) => console.log('sidedbar paragraphs',paragraphs))
 		evt.preventDefault()
 		const comment = $('.annotate-text-entry').val()
 		const commentHTML = `
@@ -45,6 +62,7 @@ $(document).ready(function() {
 		</a>`
 		$('.annotate-list').append($(`${commentHTML}`))
 		$('.annotate-text-entry').val("")
+
 	})
 
 // submitForm function

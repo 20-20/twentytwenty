@@ -6,7 +6,8 @@
 		"tabs",
 		"<all_urls>",
 		"storage",
-		"http://localhost/*"
+		"http://localhost:1337/*",
+		"storage"
 	],
 	"web_accessible_resources": [
 		"*.png",
@@ -19,13 +20,10 @@
 			"matches":["<all_urls>"],
 			"js":[
 				"dependencies/jquery.js",
-				"sidebar.js",
-				"highlight.js"
+				"bundle.js"
 			],
 			"css": [
-				"dependencies/bulma.css",
-				"annotate.css",
-				"dependencies/font-awesome/css/font-awesome.css"
+				"annotate.css"
 				]
 		}
 	]

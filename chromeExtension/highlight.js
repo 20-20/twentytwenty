@@ -1,8 +1,5 @@
 
-
-// const axios = require('axios')
-
-console.log("reached here")
+import axios from 'axios'
 
 $(() => {
   $('html').dblclick(() => {
@@ -13,7 +10,6 @@ $(() => {
 })
 
 function getSelectionText() {
-  console.log("REACHED FIRST FUNCTION")
   let text = "";
   if (window.getSelection) {
     text = window.getSelection().toString(); // string generation
@@ -27,6 +23,8 @@ function getSelectionText() {
       ? $(parentEl).removeClass('twentyHighlight')
       : $(parentEl).addClass('twentyHighlight')
   } else { $(parentEl).addClass('twentyHighlight') }
+  const storageObj = { selectedText: parentEl.innerHTML }
+  chrome.storage.local.set(storageObj)
 }
 
 // function loadArticleData() {

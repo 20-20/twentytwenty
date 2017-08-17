@@ -39,12 +39,13 @@ const createArticleParagraphs = function(text, url, articleId) {
 }
 
 router.post('/:url', (req, res, next) => {
+  console.log('req urkl ',req.url)
   const decodedUrl = decodeURIComponent(req.params.url).split('html')[0]+'html'
   Article.findOne({
     where: { url: decodedUrl },
     include: [{model: Paragraph, include: [Comment]}]
   })
-    .then((retObj) => {
+    .then(retObj => {
       if (retObj) res.json(retObj)
       else {
         request.get(
@@ -52,6 +53,7 @@ router.post('/:url', (req, res, next) => {
           (error, response, data) => {
             const uriObj = JSON.parse(data)
             const uri = uriObj[Object.keys(uriObj)[0]]
+            if (uri === null) return
             request.get(
               'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
               '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
