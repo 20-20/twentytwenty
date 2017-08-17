@@ -26,5 +26,6 @@ module.exports.associations = (Comment, { Paragraph, User, Article, Topic }) => 
   Comment.belongsTo(User)
   Comment.belongsTo(Paragraph)
   Comment.belongsTo(Topic)
+  Comment.belongsTo(Article)
   Comment.belongsTo(Comment, {as: 'parent'})
 }
