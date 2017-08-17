@@ -32,13 +32,8 @@ let userInfo
 		console.log("sigin clicked")
 		chrome.runtime.sendMessage(
     	"signin",
-			function (response){
-				if (response) {
-			  	userInfo = response.displayName
-					console.log("userInfo", userInfo)
-					$('#userInfo').text(userInfo)
-					userInfo = '';
-				}
+			async function (response){
+			await	response ? $('#userInfo').text(response.displayName) : null
 			}
   	)
 	})

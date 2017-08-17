@@ -167,7 +167,7 @@ chrome.runtime.onMessage.addListener(
     // will be opened when the user is not yet authenticated or not.
     // @see http://developer.chrome.com/apps/app_identity.html
     // @see http://developer.chrome.com/apps/identity.html#method-getAuthToken
-    Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+    return Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
       if (chrome.runtime.lastError) {
         sampleSupport.log(chrome.runtime.lastError);
         changeState(STATE_START);
@@ -215,8 +215,7 @@ chrome.runtime.onMessage.addListener(
   }
 
 function signIn() {
-  interactiveSignIn()
-  getUserInfo(true)
+  interactiveSignIn().then(()=>getUserInfo(true))
 }
 
 function signOut() {
