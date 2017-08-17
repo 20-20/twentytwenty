@@ -9,12 +9,11 @@ module.exports = db => db.define('comments', {
       notEmpty: true
     }
   },
-  rating: {
+  upVote: {
     type: INTEGER,
-    validate: {
-      min: 1,
-      max: 5
-    }
+  },
+  downVote: {
+    type: INTEGER
   },
   createdAt: {
     type: DATE,

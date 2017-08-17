@@ -16,13 +16,14 @@ router.post('/:articleId/:paragraphId', (req, res, next) => {
   .then(comment => res.json(comment))
   .catch(next)
 })
+
 // update comment
-// router.put('/:id', (req, res, next) => {
-//   Comment.findById(req.params.id)
-//   .then(article => article.update(req.body))
-//   .then(updatedComment => res.json(updatedComment))
-//   .catch(next)
-// })
+router.put('/:id', (req, res, next) => {
+  Comment.findById(req.params.id)
+  .then(comment => comment.update(req.body))
+  .then(updatedComment => res.json(updatedComment))
+  .catch(next)
+})
 
 // // Get all comments
 // router.post('/paragraphId', (req, res, next) => {
