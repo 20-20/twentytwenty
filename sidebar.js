@@ -1,7 +1,8 @@
+let userInfo
 
-const sidebar =
-	`<div class='annotate-sidebar' style='display: none'>
+let sidebar = `<div class='annotate-sidebar' style='display: none'>
 		<nav class="panel">
+		<p id="userInfo">user info: ${userInfo}</p>
 		<button id="signin">sign in</button>
 			<p class="panel-heading annotate-header">
 				Comments
@@ -30,7 +31,9 @@ $(document).ready(function() {
 		chrome.runtime.sendMessage(
     	"login",
 			function (response){
-				console.log(response);
+				userInfo = response.displayName
+				console.log(userInfo, "usrInfo")
+				$('#userInfo').text("bingo!!!!!" +userInfo)
 			}
   	)
 	})
@@ -59,6 +62,7 @@ $(document).ready(function() {
 		$('.annotate-list').append($(`${commentHTML}`));
 		$('.annotate-text-entry').val("");
 	});
+})
 
 // submitForm function
 	// let submitForm = function(evt) {
@@ -110,7 +114,6 @@ $(document).ready(function() {
 	// 	$('.annotate-text-entry').val("");
 	// });
 
-})
 
 /* saving / rendering notes */
 

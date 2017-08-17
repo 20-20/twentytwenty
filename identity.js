@@ -207,7 +207,7 @@ var googlePlusUserLoader = (function () {
 
       // Trying to get user's info without signing in, it will work if the
       // application was previously authorized by the user.
-      getUserInfo(false);
+      // getUserInfo(false);
     }
   };
 

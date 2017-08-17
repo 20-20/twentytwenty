@@ -2,55 +2,20 @@
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     console.log("background.js got message")
-    sendResponse("We DID it!");
     startUp()
+    sendResponse(userInfo);
+    console.log('before here')
   }
 );
 
-
+//Runs login, when we receive message from sidebar.js
 function startUp() {
   console.log(onload)
   onload();
   // chrome.windows.create({url: "index.html"});
 }
 
-
-// Opens a simple pop-up
-// function startUp() {
-//   console.log(chrome)
-//   chrome.windows.create()
-// }
-
-/// Simple example from Chrome App.  Opens new window from
-/// extension Launch:
-// chrome.app.runtime.onLaunched.addListener(function() {
-//   chrome.app.window.create('index.html',
-//     { "id": "identitywin",
-//       "innerBounds": {
-//         "width": 454,
-//         "height": 540
-//       }
-//     });
-// });
-
-
-/// Trying event.addListener:
-// chrome.app.event.addListener(function(request, sender, sendResponse) {
-//   console.log("main.js here...")
-//   if (request && request.action === 'createWindow' && request.url) {
-//     chrome.windows.create('index.html',
-//       { "id": "identitywin",
-//         "innerBounds": {
-//               "width": 454,
-//              "height": 540
-//         }
-//       }
-//       );
-//   }
-// });
-
-
-'use strict';
+let userInfo;
 
 var googlePlusUserLoader = (function () {
 
@@ -95,9 +60,7 @@ var googlePlusUserLoader = (function () {
   // @corecode_begin getProtectedData
   function xhrWithAuth(method, url, interactive, callback) {
     var access_token;
-
     var retry = true;
-
     getToken();
 
     function getToken() {
@@ -132,6 +95,7 @@ var googlePlusUserLoader = (function () {
   }
 
   function getUserInfo(interactive) {
+    console.log('asdfasdfasdfasdfasdfsdfa')
     xhrWithAuth('GET',
       'https://www.googleapis.com/plus/v1/people/me',
       interactive,
@@ -154,7 +118,8 @@ var googlePlusUserLoader = (function () {
   }
 
   function populateUserInfo(user_info) {
-    user_info_div.innerHTML = "Hello " + user_info.displayName;
+    console.log(user_info)
+    userInfo = user_info;
     fetchImageBytes(user_info);
   }
 
@@ -191,6 +156,7 @@ var googlePlusUserLoader = (function () {
     token (for example when user changes the password on the service)
     you need to call removeCachedAuthToken()
   **/
+
   function interactiveSignIn() {
     changeState(STATE_ACQUIRING_AUTHTOKEN);
 
@@ -201,7 +167,7 @@ var googlePlusUserLoader = (function () {
     // will be opened when the user is not yet authenticated or not.
     // @see http://developer.chrome.com/apps/app_identity.html
     // @see http://developer.chrome.com/apps/identity.html#method-getAuthToken
-    chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+    Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
       if (chrome.runtime.lastError) {
         sampleSupport.log(chrome.runtime.lastError);
         changeState(STATE_START);
@@ -210,9 +176,13 @@ var googlePlusUserLoader = (function () {
           '. See chrome://identity-internals for details.');
         changeState(STATE_AUTHTOKEN_ACQUIRED);
       }
-    });
+    }))
+
     // @corecode_end getAuthToken
+
   }
+
+
 
   function revokeToken() {
     user_info_div.innerHTML = "";
@@ -244,13 +214,10 @@ var googlePlusUserLoader = (function () {
 
   return {
     onload: function () {
-        console.log("identity.js has loaded")
       // signin_button = document.querySelector('#signin');
       // signin_button.addEventListener('click', interactiveSignIn);
       // signin_button.addEventListener('click', console.log("here"));
       interactiveSignIn();
-
-
       // xhr_button = document.querySelector('#getxhr');
       // xhr_button.addEventListener('click', getUserInfo.bind(xhr_button, true));
 
@@ -261,7 +228,7 @@ var googlePlusUserLoader = (function () {
 
       // Trying to get user's info without signing in, it will work if the
       // application was previously authorized by the user.
-      // getUserInfo(false);
+      getUserInfo(true);
     }
   };
 

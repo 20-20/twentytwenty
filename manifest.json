@@ -12,7 +12,9 @@
 		"storage",
 		"identity",
 		"https://accounts.google.com/*",
-		"https://www.googleapis.com/*"
+		"https://www.googleapis.com/*",
+		"cookies",
+		"*://localhost/*"
 	],
 	"oauth2": {
 		"client_id": "917356370239-pb0f7gcr59faq4q41o79mgqb0ojtcjfa.apps.googleusercontent.com",
