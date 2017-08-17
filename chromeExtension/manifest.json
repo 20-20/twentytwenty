@@ -5,7 +5,8 @@
 	"permissions": [
 		"tabs",
 		"<all_urls>",
-		"storage"
+		"storage",
+		"http://localhost/*"
 	],
 	"web_accessible_resources": [
 		"*.png",
