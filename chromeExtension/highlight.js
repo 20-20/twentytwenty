@@ -1,24 +1,37 @@
 
+// const axios = require('axios')
+
+console.log("reached here")
+
 $(() => {
   $('html').dblclick(() => {
     getSelectionText()
+    // loadArticleData()
     showExt()
   })
 })
 
 function getSelectionText() {
+  console.log("REACHED FIRST FUNCTION")
   let text = "";
   if (window.getSelection) {
-      text = window.getSelection().toString(); // string generation
+    text = window.getSelection().toString(); // string generation
   } else if (document.selection && document.selection.type != "Control") {
-      text = document.selection.createRange().text;
+    text = document.selection.createRange().text;
   }
   // let clickCount = {}
-  let parentEl = window.getSelection().anchorNode.parentElement
-  $(parentEl).attr('class').includes('twentyHighlight')
-    ? $(parentEl).removeClass('twentyHighlight')
-    : $(parentEl).addClass('twentyHighlight')
+  const parentEl = window.getSelection().anchorNode.parentElement
+  if ($(parentEl).attr('class')) {
+    $(parentEl).attr('class').includes('twentyHighlight')
+      ? $(parentEl).removeClass('twentyHighlight')
+      : $(parentEl).addClass('twentyHighlight')
+  } else { $(parentEl).addClass('twentyHighlight') }
 }
+
+// function loadArticleData() {
+//   console.log("document url", document.URL)
+//   // axios.post('/api/singleArticle/')
+// }
 
 function showExt() {
   // if style.cssText exists (is diplay: none), toggle sidebar
@@ -37,4 +50,5 @@ function showExt() {
   $('.annotate-text-entry').focus()
 }
 
+  // extends: "eslint-config-standard",
 
