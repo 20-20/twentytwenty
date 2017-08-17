@@ -1,23 +1,25 @@
+let userInfo;
+
 //Simple Background.script receive and respond to Content.script:
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
+    console.log("request", request)
+    console.log("sender", sender)
     console.log("background.js got message")
-    startUp()
-    sendResponse(userInfo);
-    console.log('before here')
+    if (request === 'signin') {
+      signIn();
+      sendResponse(userInfo);
+      console.log('Main.js: userInfo', userInfo)
+      userInfo = '';
+    }
+    if (request === 'signout') {
+      signOut();
+      console.log('Signed Out')
+    }
   }
 );
 
-//Runs login, when we receive message from sidebar.js
-function startUp() {
-  console.log(onload)
-  onload();
-  // chrome.windows.create({url: "index.html"});
-}
-
-let userInfo;
-
-var googlePlusUserLoader = (function () {
+//////  Sign In/Out Code //////
 
   var STATE_START = 1;
   var STATE_ACQUIRING_AUTHTOKEN = 2;
@@ -95,7 +97,7 @@ var googlePlusUserLoader = (function () {
   }
 
   function getUserInfo(interactive) {
-    console.log('asdfasdfasdfasdfasdfsdfa')
+
     xhrWithAuth('GET',
       'https://www.googleapis.com/plus/v1/people/me',
       interactive,
@@ -118,7 +120,7 @@ var googlePlusUserLoader = (function () {
   }
 
   function populateUserInfo(user_info) {
-    console.log(user_info)
+    console.log("populateUserInfo:", user_info)
     userInfo = user_info;
     fetchImageBytes(user_info);
   }
@@ -140,10 +142,8 @@ var googlePlusUserLoader = (function () {
     imgElem.onload = function () {
       window.webkitURL.revokeObjectURL(objUrl);
     }
-    user_info_div.insertAdjacentElement("afterbegin", imgElem);
+    // user_info_div.insertAdjacentElement("afterbegin", imgElem);
   }
-
-  // OnClick event handlers for the buttons.
 
   /**
     Retrieves a valid token. Since this is initiated by the user
@@ -182,10 +182,10 @@ var googlePlusUserLoader = (function () {
 
   }
 
-
-
   function revokeToken() {
-    user_info_div.innerHTML = "";
+    console.log("**********************************")
+    console.log("revokeToken Hit")
+    // user_info_div.innerHTML = "";
     chrome.identity.getAuthToken({ 'interactive': false },
       function (current_token) {
         if (!chrome.runtime.lastError) {
@@ -193,6 +193,7 @@ var googlePlusUserLoader = (function () {
           // @corecode_begin removeAndRevokeAuthToken
           // @corecode_begin removeCachedAuthToken
           // Remove the local cached token
+          console.log("trying to remove local cached token...")
           chrome.identity.removeCachedAuthToken({ token: current_token },
             function () { });
           // @corecode_end removeCachedAuthToken
@@ -208,30 +209,18 @@ var googlePlusUserLoader = (function () {
           changeState(STATE_START);
           sampleSupport.log('Token revoked and removed from cache. ' +
             'Check chrome://identity-internals to confirm.');
+            console.log("Token revoked and removed from cache.")
         }
-      });
+       });
   }
 
-  return {
-    onload: function () {
-      // signin_button = document.querySelector('#signin');
-      // signin_button.addEventListener('click', interactiveSignIn);
-      // signin_button.addEventListener('click', console.log("here"));
-      interactiveSignIn();
-      // xhr_button = document.querySelector('#getxhr');
-      // xhr_button.addEventListener('click', getUserInfo.bind(xhr_button, true));
+function signIn() {
+  interactiveSignIn()
+  getUserInfo(true)
+}
 
-      // revoke_button = document.querySelector('#revoke');
-      // revoke_button.addEventListener('click', revokeToken);
+function signOut() {
+  revokeToken()
+}
 
-      // user_info_div = document.querySelector('#user_info');
 
-      // Trying to get user's info without signing in, it will work if the
-      // application was previously authorized by the user.
-      getUserInfo(true);
-    }
-  };
-
-})();
-
-window.onload = googlePlusUserLoader.onload;
