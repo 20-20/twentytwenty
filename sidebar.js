@@ -2,6 +2,7 @@
 const sidebar =
 	`<div class='annotate-sidebar' style='display: none'>
 		<nav class="panel">
+		<button id="signin">sign in</button>
 			<p class="panel-heading annotate-header">
 				Comments
 			</p>
@@ -16,12 +17,24 @@ const sidebar =
 
 var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
 
+
 $(document).ready(function() {
 	// Add the sidebar to the page
 	$('body').append(sidebar);
 	// Add the Toggle (Hide) Button to the page
 	$('body').append(sidebarToggle);
 	// Toggle sidebar
+
+	$('#signin').click(function() {
+		console.log("sigin clicked")
+		chrome.runtime.sendMessage(
+    	"login",
+			function (response){
+				console.log(response);
+			}
+  	)
+	})
+
 	$('.annotate-toggle').click(function() {
 		$('.annotate-sidebar').toggle();
 		$('.annotate-toggle').toggleClass('far-right');
@@ -142,4 +155,6 @@ $(document).ready(function() {
 // })
 
 			// <form onsubmit=${(() => submitForm())}>
+
+
 

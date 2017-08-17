@@ -2,11 +2,22 @@
 	"name": "20 20 Comments",
 	"manifest_version": 2,
 	"version": "0.0.2",
+	"background": {
+			"scripts": ["main.js", "sample_support.js"],
+			"persistent": false
+	},
 	"permissions": [
 		"tabs",
 		"<all_urls>",
-		"storage"
+		"storage",
+		"identity",
+		"https://accounts.google.com/*",
+		"https://www.googleapis.com/*"
 	],
+	"oauth2": {
+		"client_id": "917356370239-pb0f7gcr59faq4q41o79mgqb0ojtcjfa.apps.googleusercontent.com",
+		"scopes": ["https://www.googleapis.com/auth/plus.login"]
+	},
 	"web_accessible_resources": [
 		"*.png",
 		"*.ttf",
@@ -19,7 +30,9 @@
 			"js":[
 				"dependencies/jquery.js",
 				"sidebar.js",
-				"highlight.js"
+				"highlight.js",
+				"identity.js",
+				"sample_support.js"
 			],
 			"css": [
 				"dependencies/bulma.css",
