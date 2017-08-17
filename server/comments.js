@@ -1,22 +1,29 @@
 'use strict'
 
 const db = require('APP/db')
-const Article = db.Article
+const Comment = db.Comment
 const router = require('express').Router()
 
 module.exports = router
 
-// Single article Route
-router.get('/:id', (req, res, next) => {
-  Article.findById(req.params.id)
-    .then(article => res.json(article))
+// Get all comments
+router.get('/', (req, res, next) => {
+  Comment.findById(req.params.id)
+    .then(comment => res.json(comment))
     .catch(next)
 })
 
-// Update article
-router.put('/:articleId', (req, res, next) => {
-  Article.findById(req.params.id)
-  .then(article => article.update(req.body))
-  .then(updatedarticle => res.json(updatedarticle))
+// Single comment Route
+router.get('/:id', (req, res, next) => {
+  Comment.findById(req.params.id)
+    .then(comment => res.json(comment))
+    .catch(next)
+})
+
+// Update comment
+router.put('/:commentId', (req, res, next) => {
+  Comment.findById(req.params.id)
+  .then(comment => comment.update(req.body))
+  .then(updatedcomment => res.json(updatedcomment))
   .catch(next)
 })
