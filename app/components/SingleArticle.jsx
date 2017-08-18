@@ -14,14 +14,14 @@ function SingleArticle({trending, comments, singleArticle, componentProps}) {
         {trending.length &&
           <div className="columns">
             <div className="column is-8">
-              <h1 className="title is-1">{article && trending[article].title}</h1>
+              <h1 className="title is-1">{article && singleArticle.title}</h1>
               <hr/>
-              <h2 className="subtitle is-3">{article && trending[article].publication}</h2>
-              <a href={article && trending[article].url}>Link to Article</a>
+              <h2 className="subtitle is-3">{article && singleArticle.publication}</h2>
+              <a href={article && singleArticle.url}>Link to Article</a>
               <figure className="image is-square">
-                <img src={article && trending[article].urlToImage} className=""/>
+                <img src={article && singleArticle.urlToImage} className=""/>
               </figure>
-              {article && trending[article].body.split('\n').map((par, index) => (
+              {article && singleArticle.body.split('\n').map((par, index) => (
                 <p key={index}>{par}<br/></p>
               ))
               }
