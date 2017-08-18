@@ -15,3 +15,6 @@ npm-debug.log
 chromeExtension/bundle.js
 chromeExtension/bundle.js.map
 chromeExtension/node_modules
+
+# key for OAuth
+config.js
