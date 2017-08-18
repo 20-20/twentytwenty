@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Navlink } from 'react-router-dom'
 
-function SingleArticle({trending, comments, singleArticle}) {
+function SingleArticle({trending, comments, singleArticle, componentProps}) {
+
+  let article = singleArticle && singleArticle.id
+
   return (
     <div className="container" >
       <p className="title">Trending</p>
@@ -11,14 +14,14 @@ function SingleArticle({trending, comments, singleArticle}) {
         {trending.length &&
           <div className="columns">
             <div className="column is-8">
-              <h1 className="title is-1">{trending[0].title}</h1>
+              <h1 className="title is-1">{article && trending[article].title}</h1>
               <hr/>
-              <h2 className="subtitle is-3">{trending[0].publication}</h2>
-              <a href={trending[0].url}>Link to Article</a>
+              <h2 className="subtitle is-3">{article && trending[article].publication}</h2>
+              <a href={article && trending[article].url}>Link to Article</a>
               <figure className="image is-square">
-                <img src={trending[0].urlToImage}/>
+                <img src={article && trending[article].urlToImage} className=""/>
               </figure>
-              {trending[0].body.split('\n').map((par, index) => (
+              {article && trending[article].body.split('\n').map((par, index) => (
                 <p key={index}>{par}<br/></p>
               ))
               }
@@ -73,10 +76,10 @@ function SingleArticle({trending, comments, singleArticle}) {
                   <input type="checkbox"/>
                   remember me
                 </label>
-                <p class="control has-icons-left">
-                  <input class="input is-small" type="text"/>
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-search"></i>
+                <p className="control has-icons-left">
+                  <input className="input is-small" type="text"/>
+                  <span className="icon is-small is-left">
+                    <i className="fa fa-search"></i>
                   </span>
                 </p>
                 <div className="panel-block">
@@ -93,6 +96,10 @@ function SingleArticle({trending, comments, singleArticle}) {
   )
 }
 
-const mapState = ({trending, comments, singleArticle}) => ({trending, comments, singleArticle})
+const mapState = ({trending, comments, singleArticle}, componentProps) => ({
+  trending, 
+  comments, 
+  singleArticle: trending.find(article => article.id === +componentProps.match.params.id) 
+})
 
 export default connect(mapState)(SingleArticle)
