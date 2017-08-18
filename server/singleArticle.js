@@ -39,7 +39,7 @@ const createArticleParagraphs = function(text, url, articleId) {
 }
 
 router.post('/:url', (req, res, next) => {
-  console.log('req urkl ',req.url)
+  console.log('we are maing a get request')
   const decodedUrl = decodeURIComponent(req.params.url).split('html')[0]+'html'
   Article.findOne({
     where: { url: decodedUrl },

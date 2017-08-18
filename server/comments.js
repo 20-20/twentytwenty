@@ -7,12 +7,8 @@ const router = require('express').Router()
 module.exports = router
 
 // post comment
-router.post('/:articleId/:paragraphId', (req, res, next) => {
-  Comment.create({
-    article_id: req.params.articleId,
-    paragraph_id: req.params.paragraphId,
-    text: req.body.text
-  })
+router.post('/', (req, res, next) => {
+  Comment.create(req.body)
   .then(comment => res.json(comment))
   .catch(next)
 })

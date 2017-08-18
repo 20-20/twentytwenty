@@ -1095,7 +1095,7 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
-lodash@^4.14.0:
+lodash@^4.13.1, lodash@^4.14.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -1691,6 +1691,12 @@ stream-http@^2.3.1:
     readable-stream "^2.2.6"
     to-arraybuffer "^1.0.0"
     xtend "^4.0.0"
+
+string-similarity@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/string-similarity/-/string-similarity-1.2.0.tgz#d75153cb383846318b7a39a8d9292bb4db4e9c30"
+  dependencies:
+    lodash "^4.13.1"
 
 string-width@^1.0.1, string-width@^1.0.2:
   version "1.0.2"
