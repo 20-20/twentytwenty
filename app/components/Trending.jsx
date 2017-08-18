@@ -6,7 +6,7 @@ function Trending({trending}) {
   return (
     <div className="section">
       <div className="container" >
-        <p className="title">Trending</p>
+        <p className="title" id="Trending">Trending</p>
         <hr />
         <div>
           {trending.length &&

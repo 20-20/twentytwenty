@@ -4,9 +4,9 @@ import { Navlink } from 'react-router-dom'
 
 export default function History() {
   return (
-    <div className="section">
+    <div className="section" >
       <div className="container">
-        <p className="title">History</p>
+        <p className="title" id="History">History</p>
         <hr/>
         <div className="columns is-multiline">
           <div className="column is-one-quarter box"><p className="title">content</p></div>
