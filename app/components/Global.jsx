@@ -5,7 +5,7 @@ import { Navlink } from 'react-router-dom'
 export default function Trending() {
   return (
     <div className="container">
-      <p className="title">Trending</p>
+      <p className="title" id="Global">Global</p>
       <hr/>
       <div>
         <div className="tile is-ancestor">

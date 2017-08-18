@@ -4,9 +4,9 @@ import { Navlink } from 'react-router-dom'
 
 export default function TopStories() {
   return (
-    <div className="section">
+    <div className="section" >
       <div className="container">
-        <p className="title">Top Stories</p>
+        <p className="title" id="TopStories">Top Stories</p>
         <hr/>
 
         <table className="table is-fullwidth is-striped">
