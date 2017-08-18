@@ -1,4 +1,5 @@
 import axios from 'axios'
+import stringSimilarity from 'string-similarity'
 
 const sidebar =
 	`<div class='annotate-sidebar' style='display: none'>
@@ -23,6 +24,12 @@ const style =
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
 
 var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
+
+function createComment(comment){
+	console.log('reached createcomment', comment)
+	axios.post(`http://localhost:1337/api/comments`, comment)
+		.catch("Comment was NOT successfully added to db")
+}
 
 $(document).ready(function() {
 	// Add the sidebar to the page
@@ -67,17 +74,7 @@ $(document).ready(function() {
 	})
 
 	$('#formSubmission').submit(function(evt) {
-		// We were working here at the end of the day
-		chrome.storage.local.get(
-			['selectedText', 'paragraphs'], (stateObj) => {
-				paragraphs.forEach(paragraph => {
-					if ( stateObj.selectedText.includes(paragraph.split('<')[0]) ) {
-						console.log("THIS SHIT FUCKING WORKS", paragraph, selectedText)
-					}
-				})
-			}
-		)
-		// chrome.storage.local.get('paragraphs', (paragraphs) => console.log('sidedbar paragraphs',paragraphs))
+		// Visually display comment in chrome extension
 		evt.preventDefault()
 		const comment = $('.annotate-text-entry').val()
 		const commentHTML = `
@@ -89,8 +86,22 @@ $(document).ready(function() {
 		</a>`
 		$('.annotate-list').append($(`${commentHTML}`))
 		$('.annotate-text-entry').val("")
-
+		// Post comment to database
+		chrome.storage.local.get(
+			['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
+				const paragraphText = paragraphs.map(paragraph => paragraph.text)
+				const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
+				const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
+				createComment({
+					article_id: selectedParagraph[0].article_id,
+					paragraph_id: selectedParagraph[0].id,
+					text: comment
+				})
+			}
+		)
 	})
+
+})
 
 // submitForm function
 	// let submitForm = function(evt) {
@@ -142,7 +153,6 @@ $(document).ready(function() {
 	// 	$('.annotate-text-entry').val("")
 	// })
 
-})
 
 /* saving / rendering notes */
 
