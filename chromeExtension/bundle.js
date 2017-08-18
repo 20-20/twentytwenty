@@ -991,6 +991,7 @@ function getSelectionText() {
 //   // axios.post('/api/singleArticle/')
 // }
 
+
 function showExt() {
   // if style.cssText exists (is diplay: none), toggle sidebar
   if ($('.annotate-sidebar')[0].style.cssText) {
