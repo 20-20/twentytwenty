@@ -53,11 +53,14 @@ router.post('/:url', (req, res, next) => {
           (error, response, data) => {
             const uriObj = JSON.parse(data)
             const uri = uriObj[Object.keys(uriObj)[0]]
+            console.log(uri)
             if (uri === null) return
             request.get(
               'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
               '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
               (error, response, data) => {
+                const validation = JSON.parse(data)[uri].error
+                if (validation.startsWith('Invalid article uri')) return
                 createArticle(JSON.parse(data))
                 .then(article => {
                   Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))

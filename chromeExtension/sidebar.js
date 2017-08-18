@@ -26,80 +26,80 @@ const style =
 var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
 
 function createComment(comment){
-	console.log('reached createcomment', comment)
-	axios.post(`http://localhost:1337/api/comments`, comment)
+  console.log('reached createcomment', comment)
+  axios.post(`https://c3dd5611.ngrok.io/api/comments`, comment) //`http://localhost:1337/api/comments` ocmmented out for ngrok
 		.catch("Comment was NOT successfully added to db")
 }
 
 $(document).ready(function() {
 	// Add the sidebar to the page
-	$('head').append(style)
-	$('body').append(sidebar)
-	// Add the Toggle (Hide) Button to the page
-	$('body').append(sidebarToggle)
-	// Toggle sidebar
+  $('head').append(style)
+  $('body').append(sidebar)
+// Add the Toggle (Hide) Button to the page
+  $('body').append(sidebarToggle)
+// Toggle sidebar
 
 	//Sign in/out
-	$('#signin').click(function() {
-		console.log("sigin clicked")
-		chrome.runtime.sendMessage(
-    	"signin",
-			async function (response){
-			await	response ? $('#userInfo').text(response.displayName) : null
-			}
-  	)
-	})
+  $('#signin').click(function() {
+	  console.log("sigin clicked")
+	  chrome.runtime.sendMessage(
+		"signin",
+	  async function(response){
+    await	response ? $('#userInfo').text(response.displayName) : null
+  }
+	)
+  })
 
-		$('#signout').click(function() {
-		console.log("signout clicked")
-		chrome.runtime.sendMessage(
-    	"signout",
-			function (response){
-				userInfo = "User Signed Out"
-				console.log(userInfo, "usrInfo")
-				$('#userInfo').text(userInfo)
-			}
-  	)
-	})
+  $('#signout').click(function() {
+    console.log("signout clicked")
+    chrome.runtime.sendMessage(
+			"signout",
+        function(response){
+          userInfo = "User Signed Out"
+          console.log(userInfo, "usrInfo")
+          $('#userInfo').text(userInfo)
+        }
+      )
+  })
 
-	$('.annotate-toggle').click(function() {
-		$('.annotate-sidebar').toggle()
-		$('.annotate-toggle').toggleClass('far-right')
+  $('.annotate-toggle').click(function() {
+    $('.annotate-sidebar').toggle()
+    $('.annotate-toggle').toggleClass('far-right')
 
-		if ($('.annotate-toggle').text() === "X") {
-			$('.annotate-toggle').text("<")
-		} else {
-			$('.annotate-toggle').text("X")
-		}
-	})
+    if ($('.annotate-toggle').text() === "X") {
+      $('.annotate-toggle').text("<")
+    } else {
+      $('.annotate-toggle').text("X")
+    }
+  })
 
-	$('#formSubmission').submit(function(evt) {
-		// Visually display comment in chrome extension
-		evt.preventDefault()
-		const comment = $('.annotate-text-entry').val()
-		const commentHTML = `
-		<a class="panel-block is-active">
-			<span class="panel-icon">
-				<i class="fa fa-book"></i>
-			</span>
-			${comment}
-		</a>`
-		$('.annotate-list').append($(`${commentHTML}`))
-		$('.annotate-text-entry').val("")
-		// Post comment to database
-		chrome.storage.local.get(
-			['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
-				const paragraphText = paragraphs.map(paragraph => paragraph.text)
-				const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
-				const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
-				createComment({
-					article_id: selectedParagraph[0].article_id,
-					paragraph_id: selectedParagraph[0].id,
-					text: comment
-				})
-			}
-		)
-	})
+  $('#formSubmission').submit(function(evt) {
+// Visually display comment in chrome extension
+    evt.preventDefault()
+    const comment = $('.annotate-text-entry').val()
+    const commentHTML = `
+			<a class="panel-block is-active">
+				<span class="panel-icon">
+					<i class="fa fa-book"></i>
+				</span>
+				${comment}
+			</a>`
+    $('.annotate-list').append($(`${commentHTML}`))
+    $('.annotate-text-entry').val("")
+// Post comment to database
+    chrome.storage.local.get(
+      ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
+        const paragraphText = paragraphs.map(paragraph => paragraph.text)
+        const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
+        const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
+        createComment({
+          article_id: selectedParagraph[0].article_id,
+          paragraph_id: selectedParagraph[0].id,
+          text: comment
+        })
+      }
+)
+})
 
 })
 

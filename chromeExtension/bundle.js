@@ -3158,22 +3158,23 @@ var _axios2 = _interopRequireDefault(_axios);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 $(document).ready(function () {
-    var url = encodeURIComponent($(document)[0].URL);
-    _axios2.default.post('http://localhost:1337/api/singleArticle/' + url).then(function (article) {
-        chrome.storage.local.set(article.data, function () {
-            return console.log('here is the article', article);
-        });
-        fetchArticleData(article.data);
-    }).catch("Could not fetch article data");
+  var url = encodeURIComponent($(document)[0].URL);
+  _axios2.default.post('https://c3dd5611.ngrok.io/api/singleArticle/' + url) //`http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
+  .then(function (article) {
+    chrome.storage.local.set(article.data, function () {
+      return console.log('here is the article', article);
+    });
+    fetchArticleData(article.data);
+  }).catch("Could not fetch article data");
 });
 
 function fetchArticleData(article) {
-    article.paragraphs.forEach(function (paragraph) {
-        paragraph.comments.forEach(function (comment) {
-            var comments = '<a class="panel-block is-active">\n                <span class="panel-icon">\n                <i class="fa fa-book"></i>\n                </span>\n                ' + comment.text + '\n            </a>';
-            $('.annotate-list').append($('' + comments));
-        });
+  article.paragraphs.forEach(function (paragraph) {
+    paragraph.comments.forEach(function (comment) {
+      var comments = '<a class="panel-block is-active">\n          <span class="panel-icon">\n            <i class="fa fa-book"></i>\n              </span>\n                ' + comment.text + '\n            </a>';
+      $('.annotate-list').append($('' + comments));
     });
+  });
 }
 
 /***/ }),
@@ -3203,7 +3204,8 @@ var sidebarToggle = '<div class=\'annotate-toggle far-right\'>X</div>';
 
 function createComment(comment) {
 	console.log('reached createcomment', comment);
-	_axios2.default.post('http://localhost:1337/api/comments', comment).catch("Comment was NOT successfully added to db");
+	_axios2.default.post('https://c3dd5611.ngrok.io/api/comments', comment) //`http://localhost:1337/api/comments` ocmmented out for ngrok
+	.catch("Comment was NOT successfully added to db");
 }
 
 $(document).ready(function () {
@@ -3277,7 +3279,7 @@ $(document).ready(function () {
 		// Visually display comment in chrome extension
 		evt.preventDefault();
 		var comment = $('.annotate-text-entry').val();
-		var commentHTML = '\n\t\t<a class="panel-block is-active">\n\t\t\t<span class="panel-icon">\n\t\t\t\t<i class="fa fa-book"></i>\n\t\t\t</span>\n\t\t\t' + comment + '\n\t\t</a>';
+		var commentHTML = '\n\t\t\t<a class="panel-block is-active">\n\t\t\t\t<span class="panel-icon">\n\t\t\t\t\t<i class="fa fa-book"></i>\n\t\t\t\t</span>\n\t\t\t\t' + comment + '\n\t\t\t</a>';
 		$('.annotate-list').append($('' + commentHTML));
 		$('.annotate-text-entry').val("");
 		// Post comment to database

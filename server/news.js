@@ -15,13 +15,12 @@ function eventregistryCall() {
           body: result.body,
           urlToImage: result.image,
           publication: result.source.title,
-          date: result.date
+          date: result.date,
+          status: 'trending'
         }
       })
     )
   })
 }
 
-setInterval(eventregistryCall, 3600000)
-
-module.exports = request
+module.exports = eventregistryCall
