@@ -1,5 +1,5 @@
 module.exports = {
-  entry: ['./highlight.js', './comments.js', './sidebar.js', './main.js', './onload.js', './sample_support.js'], // assumes your entry point is the index.js in the root of your project folder
+  entry: ['babel-polyfill', './sidebar.js', './highlight.js', './comments.js'], // assumes your entry point is the index.js in the root of your project folder
   output: {
     path: __dirname,
     filename: './bundle.js' // assumes your bundle.js will also be in the root of your project folder
@@ -18,3 +18,5 @@ module.exports = {
     ]
   }
 };
+
+
