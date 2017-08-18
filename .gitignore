@@ -10,3 +10,11 @@ public/bundle.js.map
 
 # NPM errors
 npm-debug.log
+
+# chrome extensions
+chromeExtensions/bundle.js
+chromeExtensions/bundle.js.map
+
+#ignore sass caches
+.sass-cache/*
+
