@@ -177,12 +177,10 @@ chrome.runtime.onMessage.addListener(
         changeState(STATE_AUTHTOKEN_ACQUIRED);
       }
     }))
-
     // @corecode_end getAuthToken
-
   }
 
-  function revokeToken() {
+function revokeToken() {
     console.log("**********************************")
     console.log("revokeToken Hit")
     // user_info_div.innerHTML = "";
