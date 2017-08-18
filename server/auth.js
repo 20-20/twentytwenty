@@ -4,6 +4,7 @@ const passport = require('passport')
 
 const {User, OAuth} = require('APP/db')
 const auth = require('express').Router()
+const config = require('../config.js')
 
 /*************************
  * Auth strategies
@@ -49,11 +50,7 @@ OAuth.setupStrategy({
 OAuth.setupStrategy({
   provider: 'google',
   strategy: require('passport-google-oauth').OAuth2Strategy,
-  config: {
-    clientID: env.GOOGLE_CLIENT_ID,
-    clientSecret: env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${app.baseUrl}/api/auth/login/google`,
-  },
+  config,
   passport
 })
 

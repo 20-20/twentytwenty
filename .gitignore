@@ -18,3 +18,5 @@ chromeExtensions/bundle.js.map
 #ignore sass caches
 .sass-cache/*
 
+# don't upload config
+config.js
