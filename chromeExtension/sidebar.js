@@ -3,6 +3,9 @@ import axios from 'axios'
 const sidebar =
 	`<div class='annotate-sidebar' style='display: none'>
 		<nav class="panel">
+		<p id="userInfo">Not Logged In</p>
+		<button id="signin">sign in</button>
+		<button id="signout">sign out</button>
 			<p class="panel-heading annotate-header">
 				Comments
 			</p>
@@ -28,6 +31,30 @@ $(document).ready(function() {
 	// Add the Toggle (Hide) Button to the page
 	$('body').append(sidebarToggle)
 	// Toggle sidebar
+
+	//Sign in/out
+	$('#signin').click(function() {
+		console.log("sigin clicked")
+		chrome.runtime.sendMessage(
+    	"signin",
+			async function (response){
+			await	response ? $('#userInfo').text(response.displayName) : null
+			}
+  	)
+	})
+
+		$('#signout').click(function() {
+		console.log("signout clicked")
+		chrome.runtime.sendMessage(
+    	"signout",
+			function (response){
+				userInfo = "User Signed Out"
+				console.log(userInfo, "usrInfo")
+				$('#userInfo').text(userInfo)
+			}
+  	)
+	})
+
 	$('.annotate-toggle').click(function() {
 		$('.annotate-sidebar').toggle()
 		$('.annotate-toggle').toggleClass('far-right')
