@@ -7,7 +7,7 @@ const rootReducer = combineReducers({
   auth: require('./auth').default,
   trending,
   comments,
-  singleArticle
+  singleArticle,
 })
 
 export default rootReducer

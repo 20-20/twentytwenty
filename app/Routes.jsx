@@ -5,6 +5,7 @@ import Home from './components/Home'
 import Navbar from './components/Navbar'
 import SingleArticle from './components/SingleArticle'
 import { fetchTrending } from './reducers/trending'
+import Login from './components/Login'
 
 
 class Routes extends Component {
@@ -19,6 +20,7 @@ class Routes extends Component {
             <Navbar />
             <Route exact path='/' component={Home} />
             <Route exact path='/SingleArticle/:id' component={SingleArticle} />
+            <Route exact path="/LogIn" component={Login} />
         </div>
       </Router>
     )
@@ -31,6 +33,6 @@ const mapDispatch = dispatch => ({
   }
 })
 
-const mapProps = ({ user }) => ({ user })
+const mapProps = ({ currentUser }) => ({ currentUser })
 
 export default connect(mapProps, mapDispatch)(Routes)

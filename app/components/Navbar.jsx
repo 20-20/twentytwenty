@@ -1,12 +1,21 @@
 import React, { Component } from 'react'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { logout as logOutUser } from '../reducers/auth'
 
-export default function Navbar({ user }) {
-  return (
-    <div className="container" >
-      <nav className="navbar has-shadow">
+class Navbar extends Component {
+  constructor(props) {
+    super(props)
+    this.renderLoginSignup = this.renderLoginSignup.bind(this)
+    this.renderLogout = this.renderLogout.bind(this)
+  }
+
+  render() {
+    return (
+      <div className="container" >
+        <nav className="navbar has-shadow">
           <div className="navbar-brand is-info">
             <NavLink className="navbar-item" to={'/'} >
               Twenty Twenty
@@ -49,23 +58,56 @@ export default function Navbar({ user }) {
                   <i className="fa fa-github"></i>
                 </span>
               </a>
-              <div className="navbar-item">
-                <div className="field is-grouped">
-                  <p className="control">
-                    <NavLink to={`/SignUp`} className="button is-info" >
-                      <span>Sign Up</span>
-                    </NavLink>
-                  </p>
-                  <p className="control">
-                    <NavLink to={`/LogIn`} className="button is-info" >
-                      Log In
-                    </NavLink>
-                  </p>
-                </div>
-              </div>
+              { this.props.currentUser ? this.renderLogout() : this.renderLoginSignup() }
             </div>
           </div>
-      </nav>
-    </div>
-  )
+        </nav>
+      </div>
+    )
+  }
+
+  renderLoginSignup() {
+    return (
+      <div className="navbar-item">
+        <div className="field is-grouped">
+          <p className="control">
+            <NavLink to={`/SignUp`} className="button is-info" >
+              <span>Sign Up</span>
+            </NavLink>
+          </p>
+          <p className="control">
+            <NavLink to={`/LogIn`} className="button is-info" >
+              Log In
+                    </NavLink>
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  renderLogout() {
+    const name = this.props.currentUser.name || this.props.currentUser.email
+    return (
+      <ul className="nav navbar-nav navbar-right">
+        <li>
+          <button
+            className="navbar-btn btn btn-default"
+            onClick={this.props.logout}>
+            logout {name}
+          </button>
+        </li>
+      </ul>
+    )
+  }
 }
+
+const mapState = ({ user, currentUser }) => ({ user, currentUser })
+
+const mapDispatch = dispatch => ({
+  logout: () => {
+    dispatch(logOutUser())
+    // history.push('/'); // removed to demo logout instant re-render
+  }
+})
+
+export default withRouter(connect(mapState, mapDispatch)(Navbar))
