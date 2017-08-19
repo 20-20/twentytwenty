@@ -8,7 +8,6 @@ function SingleArticle({trending, comments, singleArticle, componentProps}) {
 
   return (
     <div className="container" >
-      <p className="title">Trending</p>
       <hr />
       <div>
         {trending.length &&
