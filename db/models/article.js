@@ -54,4 +54,5 @@ module.exports.associations = (Article, { Paragraph, Comment, Topic, User, Histo
   Article.hasMany(Comment)
   Article.belongsTo(Topic)
   Article.belongsToMany(User, {through: History})
+  Paragraph.belongsTo(Article)
 }

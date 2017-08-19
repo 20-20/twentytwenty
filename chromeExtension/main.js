@@ -2,7 +2,7 @@ let userInfo;
 
 //Simple Background.script receive and respond to Content.script:
 chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
+  function(request, sender, sendResponse) {
     console.log("request", request)
     console.log("sender", sender)
     console.log("background.js got message")
@@ -66,7 +66,7 @@ function xhrWithAuth(method, url, interactive, callback) {
   getToken();
 
   function getToken() {
-    chrome.identity.getAuthToken({ interactive: interactive }, function (token) {
+    chrome.identity.getAuthToken({ interactive: interactive }, function(token) {
       if (chrome.runtime.lastError) {
         callback(chrome.runtime.lastError);
         return;
@@ -167,7 +167,7 @@ function interactiveSignIn() {
   // will be opened when the user is not yet authenticated or not.
   // @see http://developer.chrome.com/apps/app_identity.html
   // @see http://developer.chrome.com/apps/identity.html#method-getAuthToken
-  return Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+  return Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     if (chrome.runtime.lastError) {
       sampleSupport.log(chrome.runtime.lastError);
       changeState(STATE_START);

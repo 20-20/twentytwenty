@@ -18,8 +18,8 @@ function SingleArticle({trending, comments, singleArticle, componentProps}) {
               <hr/>
               <h2 className="subtitle is-3">{article && singleArticle.publication}</h2>
               <a href={article && singleArticle.url}>Link to Article</a>
-              <figure className="image is-square">
-                <img src={article && singleArticle.urlToImage} className=""/>
+              <figure className="image">
+                <img style={{maxWidth:'100%', height:'auto'}} src={article && singleArticle.urlToImage} className=""/>
               </figure>
               {article && singleArticle.body.split('\n').map((par, index) => (
                 <p key={index}>{par}<br/></p>

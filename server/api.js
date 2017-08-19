@@ -10,7 +10,7 @@ api
   .use('/users', require('./users'))
   .use('/comments', require('./comments'))
   .use('/trending', require('./trending'))
-  .use('/singleArticle', require('./singleArticle'))
+  .use('/singleArticle', require('./singleArticle').router)
   .get('/news', require('./news'))
 
 // No routes matched? 404.

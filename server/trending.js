@@ -4,13 +4,16 @@ const db = require('APP/db')
 const Article = db.model('articles')
 const router = require('express').Router()
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
+const Paragraph = db.model('paragraphs')
+const Comment = db.model('comments')
 
 // All trending route
 module.exports = router.get('/', (req, res, next) => {
   Article.findAll({
     where: {status: 'trending'},
-    limit: 10,
-    order: [['created_at', 'DESC']]
+    limit: 5,
+    order: [['created_at', 'DESC']],
+    include: [{ model: Paragraph, where: { id: article_id }, include: [Comment] }]
   })
     .then(articles => res.json(articles))
     .catch(next)

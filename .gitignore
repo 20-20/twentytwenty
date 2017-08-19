@@ -11,7 +11,6 @@ public/bundle.js.map
 # NPM errors
 npm-debug.log
 
-<<<<<<< HEAD
 #chrome Extension
 chromeExtension/bundle.js
 chromeExtension/bundle.js.map
@@ -24,9 +23,7 @@ config.js
 chromeExtensions/bundle.js
 chromeExtensions/bundle.js.map
 
-#ignore sass caches
+#ignore caches
 .sass-cache/*
+.vscode/*
 
-# don't upload config
-config.js
->>>>>>> loginPage
