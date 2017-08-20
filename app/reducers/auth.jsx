@@ -18,14 +18,17 @@ export const authenticated = user => ({
 
 /* ------------------    REDUCER    --------------------- */
 
-export default function reducer(currentUser = null, action) {
+export default function reducer(user = null, action) {
+  console.log('user', user)
   switch (action.type) {
   case SET:
+    return action.user
+  case AUTHENTICATED:
     return action.user
   case REMOVE:
     return null
   default:
-    return currentUser
+    return user
   }
 }
 
@@ -35,11 +38,11 @@ const resToData = res => res.data
 
 // a "simple" thunk creator which uses API, changes state, and returns a promise.
 export const login = credentials => dispatch => axios.put('/api/auth/me', credentials)
-    .then(resToData)
-    .then(user => {
-      dispatch(set(user))
-      return user
-    })
+  .then(resToData)
+  .then(user => {
+    dispatch(set(user))
+    return user
+  })
 
 // a "composed" thunk creator which uses the "simple" one, then routes to a page.
 export const loginAndGoToUser = credentials => dispatch => {
@@ -49,12 +52,12 @@ export const loginAndGoToUser = credentials => dispatch => {
 }
 
 export const signup = credentials => dispatch => axios.post('/api/auth/me', credentials)
-    .then(resToData)
-    .then(user => {
-      dispatch(createUser(user)) // so new user appears in our master list
-      dispatch(set(user)) // set current user
-      return user
-    })
+  .then(resToData)
+  .then(user => {
+    dispatch(createUser(user)) // so new user appears in our master list
+    dispatch(set(user)) // set current user
+    return user
+  })
 
 export const signupAndGoToUser = credentials => dispatch => {
   dispatch(signup(credentials))
