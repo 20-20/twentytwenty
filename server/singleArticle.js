@@ -42,7 +42,7 @@ const getArticle = function(articleUrl) {
   request.get(
     'http://eventregistry.org/json/articleMapper?articleUrl=' + articleUrl + '&includeAllVersions=false&deep=true',
     (error, response, data) => {
-      if (typeof data === 'string') return // catches the 'As a free user you have reached the number of allowed daily requests (50)' reponse...
+      // if (typeof data === 'string') return console.log('out of API calls')// catches the 'As a free user you have reached the number of allowed daily requests (50)' reponse...
       const uriObj = JSON.parse(data)
       const uri = uriObj[Object.keys(uriObj)[0]]
       console.log('uri', uri)
@@ -61,7 +61,7 @@ const getArticle = function(articleUrl) {
                     where: { id: articleId },
                     include: [{ model: Paragraph, include: [Comment] }]
                   })
-                    .then(article => res.json(article))
+                    .catch(article => res.json(article)) // errors produced here... 
                 })
                 .catch(() => console.log('Error appending article to DB'))
             })

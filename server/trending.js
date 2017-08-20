@@ -13,7 +13,7 @@ module.exports = router.get('/', (req, res, next) => {
     where: {status: 'trending'},
     limit: 5,
     order: [['created_at', 'DESC']],
-    include: [{ model: Paragraph, where: { id: article_id }, include: [Comment] }]
+    include: [{ model: Paragraph, include: [Comment] }]
   })
     .then(articles => res.json(articles))
     .catch(next)
