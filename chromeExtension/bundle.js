@@ -11323,6 +11323,7 @@ $(document).ready(function () {
 			var selectedText = _ref2.selectedText,
 			    paragraphs = _ref2.paragraphs;
 
+			console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs);
 			var paragraphText = paragraphs.map(function (paragraph) {
 				return paragraph.text;
 			});
@@ -15617,9 +15618,13 @@ var _axios2 = _interopRequireDefault(_axios);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 $(document).ready(function () {
+  console.log('inside document ready function to grab article');
   var url = encodeURIComponent($(document)[0].URL);
-  _axios2.default.post('https://localhost:1337/api/singleArticle/' + url) // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
+  console.log('here is the url:', url);
+  _axios2.default.post('http://localhost:1337/api/singleArticle/' + url)
+  // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(function (article) {
+    console.log('HERE IS THE ARTICLE:', article);
     chrome.storage.local.set(article.data, function () {
       return console.log('here is the article', article);
     });
