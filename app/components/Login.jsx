@@ -38,6 +38,7 @@ export const Login = ({ login }) => (
                 <i className="fa fa-google">
                 </i>
               </span>
+              Log in with Google
             </NavLink>
           </p>
         </div>
