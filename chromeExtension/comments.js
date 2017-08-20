@@ -3,12 +3,13 @@ import axios from 'axios'
 
 $(document).ready(function() {
   const url = encodeURIComponent($(document)[0].URL)
-  axios.post(`https://c3dd5611.ngrok.io/api/singleArticle/${url}`) //`http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
+  axios.post(`https://localhost:1337/api/singleArticle/${url}`)
+  // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(article => {
-    chrome.storage.local.set(article.data, () => console.log('here is the article',article))
+    chrome.storage.local.set(article.data, () => console.log('here is the article', article))
     fetchArticleData(article.data)
   })
-  .catch("Could not fetch article data")
+  .catch('Could not fetch article data')
 })
 
 function fetchArticleData(article) {
