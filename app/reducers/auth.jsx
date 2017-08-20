@@ -6,11 +6,15 @@ import history from '../history'
 
 const SET = 'SET_CURRENT_USER'
 const REMOVE = 'REMOVE_CURRENT_USER'
+const AUTHENTICATED = 'AUTHENTICATED'
 
 /* --------------    ACTION CREATORS    ----------------- */
 
 const set = user => ({ type: SET, user })
 const remove = () => ({ type: REMOVE })
+export const authenticated = user => ({
+  type: AUTHENTICATED, user
+})
 
 /* ------------------    REDUCER    --------------------- */
 
@@ -76,6 +80,7 @@ export const whoami = () =>
     axios.get('/api/auth/whoami')
       .then(response => {
         const user = response.data
+        console.log('user', user)
         dispatch(authenticated(user))
       })
       .catch(failed => dispatch(authenticated(null)))
