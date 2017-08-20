@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 export const Login = ({ login }) => (
   <div className='section'>
@@ -32,15 +32,22 @@ export const Login = ({ login }) => (
           </div>
         </div>
         <div className="column">
-          <p>
-            <NavLink target="_self" to="/api/auth/login/google" className="button btn-google">
-              <span className="icon">
-                <i className="fa fa-google">
-                </i>
+          <div className='field' >
+            <label className='label'>
+              Log in
+            </label>
+            <p>
+              <NavLink target="_self" to="/api/auth/login/google" className="button btn-google is-info">
+                <span className="icon">
+                  <i className="fa fa-google">
+                  </i>
+                </span>
+                <span>
+                  Log in with Google
               </span>
-              Log in with Google
-            </NavLink>
-          </p>
+              </NavLink>
+            </p>
+          </div>
         </div>
       </div>
     </div>
