@@ -11,19 +11,13 @@ public/bundle.js.map
 # NPM errors
 npm-debug.log
 
-#chrome Extension
-chromeExtension/bundle.js
-chromeExtension/bundle.js.map
-chromeExtension/node_modules
-
-# key for OAuth
-config.js
-=======
 # chrome extensions
 chromeExtensions/bundle.js
 chromeExtensions/bundle.js.map
+chromeExtensions/node_modules/*
 
-#ignore caches
+#ignore sass caches
 .sass-cache/*
-.vscode/*
 
+# don't upload config
+config.js
