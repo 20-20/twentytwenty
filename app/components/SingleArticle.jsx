@@ -103,4 +103,3 @@ const mapState = ({ trending, comments, singleArticle }, componentProps) => ({
 })
 
 export default connect(mapState)(SingleArticle)
-X
