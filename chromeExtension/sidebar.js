@@ -25,10 +25,10 @@ const style =
 
 var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
 
-function createComment(comment){
+function createComment(comment) {
   console.log('reached createcomment', comment)
-  axios.post(`https://c3dd5611.ngrok.io/api/comments`, comment) //`http://localhost:1337/api/comments` ocmmented out for ngrok
-		.catch("Comment was NOT successfully added to db")
+  axios.post(`http://localhost:1337/api/comments`, comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
+		.catch('Comment was NOT successfully added to db')
 }
 
 $(document).ready(function() {
@@ -39,24 +39,24 @@ $(document).ready(function() {
   $('body').append(sidebarToggle)
 // Toggle sidebar
 
-	//Sign in/out
+	// Sign in/out
   $('#signin').click(function() {
-	  console.log("sigin clicked")
+	  console.log('sigin clicked')
 	  chrome.runtime.sendMessage(
-		"signin",
-	  async function(response){
+		'signin',
+	  async function(response) {
     await	response ? $('#userInfo').text(response.displayName) : null
   }
 	)
   })
 
   $('#signout').click(function() {
-    console.log("signout clicked")
+    console.log('signout clicked')
     chrome.runtime.sendMessage(
-			"signout",
-        function(response){
-          userInfo = "User Signed Out"
-          console.log(userInfo, "usrInfo")
+			'signout',
+        function(response) {
+          userInfo = 'User Signed Out'
+          console.log(userInfo, 'usrInfo')
           $('#userInfo').text(userInfo)
         }
       )
@@ -66,10 +66,10 @@ $(document).ready(function() {
     $('.annotate-sidebar').toggle()
     $('.annotate-toggle').toggleClass('far-right')
 
-    if ($('.annotate-toggle').text() === "X") {
-      $('.annotate-toggle').text("<")
+    if ($('.annotate-toggle').text() === 'X') {
+      $('.annotate-toggle').text('<')
     } else {
-      $('.annotate-toggle').text("X")
+      $('.annotate-toggle').text('X')
     }
   })
 
@@ -85,10 +85,11 @@ $(document).ready(function() {
 				${comment}
 			</a>`
     $('.annotate-list').append($(`${commentHTML}`))
-    $('.annotate-text-entry').val("")
+    $('.annotate-text-entry').val('')
 // Post comment to database
     chrome.storage.local.get(
       ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
+        console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs)
         const paragraphText = paragraphs.map(paragraph => paragraph.text)
         const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
         const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
@@ -99,8 +100,7 @@ $(document).ready(function() {
         })
       }
 )
-})
-
+  })
 })
 
 // submitForm function
@@ -153,7 +153,6 @@ $(document).ready(function() {
 	// 	$('.annotate-text-entry').val("")
 	// })
 
-
 /* saving / rendering notes */
 
 // 	// Load the notes that have been saved for the current page, and then render them in the sidebar.
@@ -170,7 +169,6 @@ $(document).ready(function() {
 // var saveNote = function(text) {
 // 		console.log("saveNote... here")
 // }
-
 
 /* Darryn's Version */
 

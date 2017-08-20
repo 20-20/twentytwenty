@@ -52,6 +52,7 @@
     "concurrently": "^3.1.0",
     "cookie-session": "^2.0.0-alpha.1",
     "enzyme": "^2.5.1",
+    "eslint-config-medikoo-es5": "^1.4.1",
     "express": "^4.14.0",
     "finalhandler": "^1.0.0",
     "homedir": "^0.6.0",
