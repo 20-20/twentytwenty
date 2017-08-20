@@ -21,7 +21,7 @@ function SingleArticle({ trending, comments, singleArticle, componentProps }) {
                 <img style={{ maxWidth: '100%', height: 'auto' }} src={article && singleArticle.urlToImage} className="" />
               </figure>
               {
-                article && singleArticle.paragraphs.map(para => (
+                singleArticle.paragraphs && singleArticle.paragraphs.map(para => (
                   <div><p key={para.index}>{para.text}</p><br /></div>)
                 )
               }
