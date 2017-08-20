@@ -42,11 +42,7 @@ const getArticle = function(articleUrl) {
   request.get(
     'http://eventregistry.org/json/articleMapper?articleUrl=' + articleUrl + '&includeAllVersions=false&deep=true',
     (error, response, data) => {
-      if (data === 'As a free user you have reached the number of allowed daily requests (50)') {
-        return console.log('out of API calls') // catches the 'As a free user you have reached the number of allowed daily requests (50)' reponse...
-      } else {
-        const uriObj = JSON.parse(data)
-      }
+      const uriObj = JSON.parse(data)
       const uri = uriObj[Object.keys(uriObj)[0]]
       console.log('uri', uri)
       if (uri === null) return
