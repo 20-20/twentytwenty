@@ -1,0 +1,22 @@
+{
+  "name": "chromeextension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "comments.js",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "babel": "^6.23.0",
+    "bulma": "^0.5.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "string-similarity": "^1.2.0",
+    "webpack": "^3.5.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --watch"
+  },
+  "author": "",
+  "license": "ISC"
+}

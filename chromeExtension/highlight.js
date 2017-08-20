@@ -1,4 +1,6 @@
 
+import axios from 'axios'
+
 $(() => {
   $('html').dblclick(() => {
     getSelectionText()
@@ -14,10 +16,14 @@ function getSelectionText() {
       text = document.selection.createRange().text;
   }
   // let clickCount = {}
-  let parentEl = window.getSelection().anchorNode.parentElement
-  $(parentEl).attr('class').includes('twentyHighlight')
-    ? $(parentEl).removeClass('twentyHighlight')
-    : $(parentEl).addClass('twentyHighlight')
+  const parentEl = window.getSelection().anchorNode.parentElement
+  if ($(parentEl).attr('class')) {
+    $(parentEl).attr('class').includes('twentyHighlight')
+      ? $(parentEl).removeClass('twentyHighlight')
+      : $(parentEl).addClass('twentyHighlight')
+  } else { $(parentEl).addClass('twentyHighlight') }
+  const storageObj = { selectedText: parentEl.innerHTML }
+  chrome.storage.local.set(storageObj)
 }
 
 function showExt() {
