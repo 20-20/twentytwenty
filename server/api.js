@@ -10,6 +10,7 @@ api
   .use('/users', require('./users'))
   .use('/comments', require('./comments'))
   .use('/trending', require('./trending'))
+  .use('/topStories', require('./topStories'))
   .use('/singleArticle', require('./singleArticle').router)
   .get('/news', require('./news'))
 

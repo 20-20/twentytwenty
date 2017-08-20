@@ -42,6 +42,10 @@ module.exports = db => db.define('articles', {
   views: {
     type: STRING
   },
+  commentsCount: {
+    type: INTEGER,
+    defaultValue: 0
+  },
   status: {
     type: ENUM,
     values: ['trending', 'notTrending'],
