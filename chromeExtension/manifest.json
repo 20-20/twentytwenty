@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"version": "0.0.2",
 	"background": {
-			"scripts": ["main.js", "sample_support.js"],
+			"scripts": ["main.js"],
 			"persistent": false
 	},
 	"permissions": [

@@ -2,7 +2,7 @@ let userInfo;
 
 //Simple Background.script receive and respond to Content.script:
 chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
+  function(request, sender, sendResponse) {
     console.log("request", request)
     console.log("sender", sender)
     console.log("background.js got message")
@@ -46,7 +46,6 @@ function changeState(newState) {
     disableButton(revoke_button);
     break;
   case STATE_ACQUIRING_AUTHTOKEN:
-    sampleSupport.log('Acquiring token...');
     disableButton(signin_button);
     disableButton(xhr_button);
     disableButton(revoke_button);
@@ -66,13 +65,14 @@ function xhrWithAuth(method, url, interactive, callback) {
   getToken();
 
   function getToken() {
-    chrome.identity.getAuthToken({ interactive: interactive }, function (token) {
+    chrome.identity.getAuthToken({ interactive: interactive }, function(token) {
       if (chrome.runtime.lastError) {
         callback(chrome.runtime.lastError);
         return;
       }
 
       access_token = token;
+      console.log("reached token; here is token:", token)
       requestStart();
     });
   }
@@ -109,9 +109,9 @@ function getUserInfo(interactive) {
   // Code updating the user interface, when the user information has been
   // fetched or displaying the error.
 function onUserInfoFetched(error, status, response) {
+  console.log("REACHED HERE")
   if (!error && status == 200) {
     changeState(STATE_AUTHTOKEN_ACQUIRED);
-    sampleSupport.log(response);
     var user_info = JSON.parse(response);
     populateUserInfo(user_info);
   } else {
@@ -120,7 +120,6 @@ function onUserInfoFetched(error, status, response) {
 }
 
 function populateUserInfo(user_info) {
-  console.log("populateUserInfo:", user_info)
   userInfo = user_info;
   fetchImageBytes(user_info);
 }
@@ -167,13 +166,10 @@ function interactiveSignIn() {
   // will be opened when the user is not yet authenticated or not.
   // @see http://developer.chrome.com/apps/app_identity.html
   // @see http://developer.chrome.com/apps/identity.html#method-getAuthToken
-  return Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+  return Promise.resolve(chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     if (chrome.runtime.lastError) {
-      sampleSupport.log(chrome.runtime.lastError);
       changeState(STATE_START);
     } else {
-      sampleSupport.log('Token acquired:' + token +
-        '. See chrome://identity-internals for details.');
       changeState(STATE_AUTHTOKEN_ACQUIRED);
     }
   }))
@@ -205,8 +201,6 @@ function revokeToken() {
 
       // Update the user interface accordingly
       changeState(STATE_START);
-      sampleSupport.log('Token revoked and removed from cache. ' +
-        'Check chrome://identity-internals to confirm.');
       console.log("Token revoked and removed from cache.")
     }
   });
