@@ -12,7 +12,7 @@ module.exports = db => db.define('topics', {
   }
 })
 
-module.exports.associations = (Topic, {Comment, Article}) => {
+module.exports.associations = (Topic, {Comment, Article, Relevance}) => {
   Topic.hasMany(Comment)
-  Topic.hasMany(Article)
+  Topic.belongsToMany(Article, {through: Relevance})
 }

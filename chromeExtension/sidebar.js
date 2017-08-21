@@ -26,7 +26,6 @@ const style =
 var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
 
 function createComment(comment) {
-  console.log('reached createcomment', comment)
   axios.post(`http://localhost:1337/api/comments`, comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
 		.catch('Comment was NOT successfully added to db')
 }
@@ -41,7 +40,6 @@ $(document).ready(function() {
 
 	// Sign in/out
   $('#signin').click(function() {
-	  console.log('sigin clicked')
 	  chrome.runtime.sendMessage(
 		'signin',
 	  async function(response) {
@@ -51,12 +49,10 @@ $(document).ready(function() {
   })
 
   $('#signout').click(function() {
-    console.log('signout clicked')
     chrome.runtime.sendMessage(
 			'signout',
         function(response) {
           userInfo = 'User Signed Out'
-          console.log(userInfo, 'usrInfo')
           $('#userInfo').text(userInfo)
         }
       )
@@ -89,7 +85,6 @@ $(document).ready(function() {
 // Post comment to database
     chrome.storage.local.get(
       ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
-        console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs)
         const paragraphText = paragraphs.map(paragraph => paragraph.text)
         const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
         const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)

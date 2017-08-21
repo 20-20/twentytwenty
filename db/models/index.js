@@ -21,7 +21,8 @@ const app = require('APP')
       History: require('./history'),
       Comment: require('./comment'),
       Article: require('./article'),
-      Paragraph: require('./paragraph')
+      Paragraph: require('./paragraph'),
+      Relevance: require('./relevance')
       // ---------- Add new models here ----------
     }
     , {mapValues} = require('lodash')

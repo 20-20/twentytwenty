@@ -9,7 +9,6 @@ $(() => {
 })
 
 function getSelectionText() {
-  console.log('here1')
   let text = ''
   if (window.getSelection) {
     text = window.getSelection().toString() // string generation
@@ -24,7 +23,6 @@ function getSelectionText() {
       : $(parentEl).addClass('twentyHighlight')
   } else { $(parentEl).addClass('twentyHighlight') }
   const storageObj = { selectedText: parentEl.innerHTML }
-  console.log('here is the storage obj:', storageObj)
   chrome.storage.local.set(storageObj)
 }
 

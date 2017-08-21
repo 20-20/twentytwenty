@@ -28,15 +28,13 @@ function sentimentAnalysis(targetUrl) {
     }
   }
 
-  naturalLanguageUnderstanding.analyze(parameters, function (err, response) {
+  naturalLanguageUnderstanding.analyze(parameters, function(err, response) {
     if (err) {
       console.log('error:', err)
     } else {
-      console.log(JSON.stringify(response, null, 2))
+      // console.log(JSON.stringify(response, null, 2))
     }
   })
 }
 
 module.exports = sentimentAnalysis
-
-sentimentAnalysis('https://www.nytimes.com/2017/08/20/world/asia/trump-afghanistan-strategy-mattis.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news&_r=0')
