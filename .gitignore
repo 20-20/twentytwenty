@@ -12,9 +12,9 @@ public/bundle.js.map
 npm-debug.log
 
 # chrome extensions
-chromeExtensions/bundle.js
-chromeExtensions/bundle.js.map
-chromeExtensions/node_modules/*
+chromeExtension/bundle.js
+chromeExtension/bundle.js.map
+chromeExtension/node_modules/*
 
 #ignore sass caches
 .sass-cache/*
