@@ -30,7 +30,7 @@ export default function reducer(topStories = [], action) {
 /* ------------   THUNK CREATORS     ------------------ */
 
 export const fetchTopStories = () => dispatch => {
-  axios.get(`/api/topStories`)
+  axios.get(`/api/topStories/totalComments`)
        .then(res => {
          console.log('res.data:', res.data)
          dispatch(init(res.data))
