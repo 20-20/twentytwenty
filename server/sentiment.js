@@ -23,7 +23,8 @@ function sentimentAnalysis(targetUrl) {
       },
       'entities': {
         'limit': 4
-      }
+      },
+      'emotion': {}
     }
   }
 
