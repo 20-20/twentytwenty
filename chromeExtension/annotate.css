@@ -87,3 +87,8 @@ span.marked {
 .twentyHighlight {
     background: rgba(135, 200, 250, .2)
 }
+
+.loginCenter {
+	text-align: center;
+	margin-top: 50%
+}

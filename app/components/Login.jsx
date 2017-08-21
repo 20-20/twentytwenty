@@ -9,14 +9,14 @@ export const Login = ({ login }) => (
           <div className='field' >
             <form onSubmit={evt => {
               evt.preventDefault()
-              login(evt.target.username.value, evt.target.password.value)
+              login(evt.target.email.value, evt.target.password.value)
             }}>
               <div className='form-group'>
                 <label className='label'>
                   Email
                 </label>
                 <div className='control'>
-                  <input type='email' name='username' className='input' required='' />
+                  <input type='email' name='email' className='input' required='' />
                 </div>
               </div>
               <br />

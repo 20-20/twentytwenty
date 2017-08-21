@@ -9,7 +9,6 @@ $(() => {
 })
 
 function getSelectionText() {
-  console.log('here1')
   let text = ''
   if (window.getSelection) {
     text = window.getSelection().toString() // string generation
