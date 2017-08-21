@@ -12,6 +12,8 @@ function Trending({trending}) {
           {trending.length &&
           <div className="tile is-ancestor">
             <div className="tile is-parent is-4" >
+                {console.log('*************************')}
+                {console.log('trending[0].id', trending[0].id)}
                 <NavLink to={`/SingleArticle/${trending[0].id}`} id={trending[0].id} className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(black, transparent), url('${trending[0].urlToImage}')`, backgroundPosition: 'center' }}>
                   <div style={{alignSelf: 'flex-end'}}>
                   <p className='title' style={{alignSelf: 'flex-end'}}>{trending[0].title}</p>

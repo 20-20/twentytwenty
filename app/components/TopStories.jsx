@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Navlink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { render } from 'react-dom'
 import { fetchTopStories } from '../reducers/topStories'
 
@@ -25,7 +25,11 @@ class TopStories extends Component {
                 topStories.map((story) => (
                   <tr key={story.id}>
                     <td>{index++}</td>
+                    {console.log('*************************')}
+                    {console.log('story', story)}
+                    <NavLink to={`/SingleArticle/${story.id}`} id={story.id} >
                     <td>{story.title}</td>
+                    </NavLink>
                     <td>{story.author}</td>
                     <td>Comments</td>
                     <td>Views</td>
