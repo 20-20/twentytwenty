@@ -42,6 +42,22 @@ module.exports = db => db.define('articles', {
   views: {
     type: STRING
   },
+  commentsCount: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  upVotes: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  downVotes: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  engagement: {
+    type: INTEGER,
+    defaultValue: 0
+  },
   status: {
     type: ENUM,
     values: ['trending', 'notTrending'],
@@ -55,3 +71,9 @@ module.exports.associations = (Article, { Paragraph, Comment, Topic, User, Histo
   Article.belongsTo(Topic)
   Article.belongsToMany(User, {through: History})
 }
+// return this.commentsCount + this.totalVotes
+// {
+//   getterMethods: {
+//     totalVotes: function() { return this.upVotes + this.downVotes },
+//     engagement: function() { return this.commentsCount + this.totalVotes }
+//   }
