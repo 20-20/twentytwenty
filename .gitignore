@@ -21,3 +21,4 @@ chromeExtension/node_modules/*
 
 # don't upload config
 config.js
+watson-config.js
