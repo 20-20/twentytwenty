@@ -9,7 +9,7 @@ module.exports = db => db.define('comments', {
       notEmpty: true
     }
   },
-  upVote: {
+  upVote: { // OB/ET: consider join table `article_votes`, joining users and articles, and adding another vote field that would be "up" or "down"
     type: INTEGER,
   },
   downVote: {

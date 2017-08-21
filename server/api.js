@@ -9,6 +9,7 @@ api
   .use('/auth', require('./auth'))
   .use('/users', require('./users'))
   .use('/comments', require('./comments'))
+  // OB/ET: consider unifying routes into /api/articles instead of having different endpoints for the same abstract resource
   .use('/trending', require('./trending'))
   .use('/topStories', require('./topStories'))
   .use('/singleArticle', require('./singleArticle').router)

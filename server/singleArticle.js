@@ -11,6 +11,7 @@ const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 
 /* BELOW FOR CHROME EXTENSION */
 
+// OB/ET: write some comments to describe non-standard logic
 const createArticle = (article) => {
   const articleProps = article[Object.keys(article)[0]].info
   // createArticleParagraphs(articleProps.body, articleProps.url)
@@ -28,7 +29,7 @@ const createArticleParagraphs = function(text, url, articleId) {
   let allParagraphs = text.split('\n')
   allParagraphs = allParagraphs.filter(paragraph => paragraph !== '')
   allParagraphs.forEach((paragraph, index) => {
-    Paragraph.create({
+    Paragraph.create({ // <= OB/ET: race condition / async issue, instead use `Promise.all`, `Bluebird.map`
       text: paragraph,
       index,
       url,
@@ -49,6 +50,7 @@ const createArticleParagraphs = function(text, url, articleId) {
 // }
 
 router.post(`/:url`, (req, res, next) => {
+  // OB/ET: BIG function, try to split it up, think about what things you can return
   console.log(`we are maing a get request`)
   console.log('here is our req.param.url', req.params.url)
   const decodedUrl = req.params.url.includes('html')
@@ -71,7 +73,9 @@ router.post(`/:url`, (req, res, next) => {
             const uriObj = JSON.parse(data)
             const uri = uriObj[Object.keys(uriObj)[0]]
             console.log('here is the uri', uri)
-            if (uri === null) return
+            if (uri === null) return // OB/ET: should send a response
+            // OB/ET: nested promise chains
+            // OB/ET: axios can help with query string e.g. `axios.get(url, {params: {articleUri: uri, infoArticleBodyLen: 10000}})`
             request.get(
               'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
               '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
@@ -79,6 +83,7 @@ router.post(`/:url`, (req, res, next) => {
                 console.log('should be mashable article', JSON.parse(data))
                 createArticle(JSON.parse(data))
                 .then(article => {
+                  // OB/ET: unnecessary `Promise.resolve`
                   Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))
                   .then(articleId => {
                     Article.findOne({

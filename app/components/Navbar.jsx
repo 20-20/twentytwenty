@@ -20,6 +20,7 @@ class Navbar extends Component {
             <NavLink className="navbar-item" to={'/'} >
               Twenty Twenty
             </NavLink>
+            {/* OB/ET: watch out for target="_blank" security hole */}
             <NavLink className="navbar-item is-hidden-desktop" to={'https://github.com/20-20/twentytwenty'} target="_blank">
               <span className="icon" style={{ color: '#333' }}>
                 <i className="fa fa-github"></i>

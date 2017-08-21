@@ -5,7 +5,7 @@ const Article = db.model('articles')
 const router = require('express').Router()
 
 module.exports = router
-  .get('/totalComments',
+  .get('/totalComments', // OB/ET: consider more RESTful route /api/topStories/totalComments => /api/articles?sortBy=totalComments&limit=5
   (req, res, next) =>
     Article.findAll({
       limit: 5,

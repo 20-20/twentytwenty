@@ -74,6 +74,7 @@ $(document).ready(function() {
   })
 
   $('#formSubmission').submit(function(evt) {
+    // OB/ET: consider splitting into multiple functions
 // Visually display comment in chrome extension
     evt.preventDefault()
     const comment = $('.annotate-text-entry').val()
@@ -87,7 +88,7 @@ $(document).ready(function() {
     $('.annotate-list').append($(`${commentHTML}`))
     $('.annotate-text-entry').val('')
 // Post comment to database
-    chrome.storage.local.get(
+    chrome.storage.local.get( // OB/ET: consider using redux
       ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
         console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs)
         const paragraphText = paragraphs.map(paragraph => paragraph.text)

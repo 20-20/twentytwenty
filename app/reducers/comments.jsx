@@ -48,7 +48,7 @@ export const fetchcomments = () => dispatch => {
 export const addcomment = comment => dispatch => {
   axios.post('/api/comments', comment)
        .then(res => dispatch(create(res.data)))
-       .catch(err => console.error(`Creating comment: ${comment} unsuccesful`, err))
+       .catch(err => console.error(`Creating comment: ${comment} unsuccesful`, err)) // OB/ET: consider toastr
 }
 
 /* ORIGINAL CODE

@@ -1,0 +1,8 @@
+- Use issues / PRs
+- .sass-cache could be removed and then gitignored (ditto for the bundle stuff in chrome extension)
+- Edit readme
+- Dead code is bad for you! It is dead
+- Would recommend bulma as a dependency (potentially as your own github fork of bulma)
+- For the chrome extension use node_modules + package.json instead of "dependencies" folder
+- Consider using react for your chrome extension
+- Short term: security hole for oauth in chrome extension; long term: research it

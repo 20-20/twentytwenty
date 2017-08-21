@@ -21,6 +21,7 @@ router.put('/:id', (req, res, next) => {
   .catch(next)
 })
 
+// OB/ET: bury dead code!
 // // Get all comments
 // router.post('/paragraphId', (req, res, next) => {
 //   Comment.findById(req.params.id)

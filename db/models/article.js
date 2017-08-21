@@ -54,7 +54,7 @@ module.exports = db => db.define('articles', {
     type: INTEGER,
     defaultValue: 0
   },
-  engagement: {
+  engagement: { // <= OB/ET could do a hook here
     type: INTEGER,
     defaultValue: 0
   },
@@ -64,6 +64,7 @@ module.exports = db => db.define('articles', {
     defaultValue: 'notTrending'
   }
 })
+// OB/ET: consider using defaultScope to include paragraphs
 
 module.exports.associations = (Article, { Paragraph, Comment, Topic, User, History }) => {
   Article.hasMany(Paragraph)

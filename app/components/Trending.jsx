@@ -10,8 +10,10 @@ function Trending({trending}) {
         <hr />
         <div>
           {trending.length &&
+            // OB/ET: consider mapping down stuff, refactoring
           <div className="tile is-ancestor">
             <div className="tile is-parent is-4" >
+                {/* OB/ET: consistent code style with indentation, newlines */}
                 <NavLink to={`/SingleArticle/${trending[0].id}`} id={trending[0].id} className="tile is-child box notification is-primary" style={{ backgroundImage: `linear-gradient(black, transparent), url('${trending[0].urlToImage}')`, backgroundPosition: 'center' }}>
                   <div style={{alignSelf: 'flex-end'}}>
                   <p className='title' style={{alignSelf: 'flex-end'}}>{trending[0].title}</p>

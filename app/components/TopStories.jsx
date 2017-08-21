@@ -22,6 +22,7 @@ class TopStories extends Component {
 
             <tbody>
               {
+                // OB/ET: you have access to index as the second argument to the map callback
                 topStories.map((story) => (
                   <tr key={story.id}>
                     <td>{index++}</td>

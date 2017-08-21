@@ -19,6 +19,8 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
+// OB/ET: link to source where you copied this from!
+
 //////  Sign In/Out Code //////
 
 var STATE_START = 1;
@@ -59,6 +61,7 @@ function changeState(newState) {
 }
 
   // @corecode_begin getProtectedData
+  // OB/ET: 
 function xhrWithAuth(method, url, interactive, callback) {
   var access_token;
   var retry = true;

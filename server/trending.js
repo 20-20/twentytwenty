@@ -8,6 +8,8 @@ const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
 
 // All trending route
+// OB/ET: /api/trending => /api/articles?status=trending&sortBy=createdAt&includeAll=true
+// OB/ET: also consider sequelize scopes
 module.exports = router.get('/', (req, res, next) => {
   Article.findAll({
     where: {status: 'trending'},

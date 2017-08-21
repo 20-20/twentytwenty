@@ -9,6 +9,7 @@ const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
 })
 
 function sentimentAnalysis(targetUrl) {
+  // OB/ET: could return a promise
   const parameters = {
     'url': targetUrl,
     'features': {
@@ -29,9 +30,9 @@ function sentimentAnalysis(targetUrl) {
 
   naturalLanguageUnderstanding.analyze(parameters, function (err, response) {
     if (err) {
-      console.log('error:', err)
+      console.log('error:', err) // <= OB/ET: this is where you'd resolve that promise
     } else {
-      console.log(JSON.stringify(response, null, 2))
+      console.log(JSON.stringify(response, null, 2)) // <= OB/ET: this is where you'd reject that promise
     }
   })
 }
