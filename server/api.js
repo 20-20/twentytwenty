@@ -2,7 +2,7 @@
 
 const api = module.exports = require('express').Router()
 const eventRegistryCaller = require('./news')
-eventRegistryCaller()
+// eventRegistryCaller()
 
 api
   .get('/heartbeat', (req, res) => res.send({ok: true}))
