@@ -1,6 +1,6 @@
 'use strict'
 
-const {STRING, ENUM, TEXT, DATE, INTEGER} = require('sequelize')
+const { STRING, ENUM, TEXT, DATE, INTEGER, FLOAT, BOOLEAN } = require('sequelize')
 
 module.exports = db => db.define('articles', {
   url: {
@@ -42,6 +42,30 @@ module.exports = db => db.define('articles', {
   views: {
     type: STRING
   },
+  sentimentScore: {
+    type: FLOAT,
+    defaultValue: 0
+  },
+  sadness: {
+    type: FLOAT,
+    defaultValue: 0
+  },
+  joy: {
+    type: FLOAT,
+    defaultValue: 0
+  },
+  fear: {
+    type: FLOAT,
+    defaultValue: 0
+  },
+  disgust: {
+    type: FLOAT,
+    defaultValue: 0
+  },
+  anger: {
+    type: FLOAT,
+    defaultValue: 0
+  },
   commentsCount: {
     type: INTEGER,
     defaultValue: 0
@@ -58,22 +82,15 @@ module.exports = db => db.define('articles', {
     type: INTEGER,
     defaultValue: 0
   },
-  status: {
-    type: ENUM,
-    values: ['trending', 'notTrending'],
-    defaultValue: 'notTrending'
+  trending: {
+    type: BOOLEAN,
+    defaultValue: false
   }
 })
 
-module.exports.associations = (Article, { Paragraph, Comment, Topic, User, History }) => {
+module.exports.associations = (Article, { Paragraph, Comment, Topic, User, History, Relevance }) => {
   Article.hasMany(Paragraph)
   Article.hasMany(Comment)
-  Article.belongsTo(Topic)
-  Article.belongsToMany(User, {through: History})
+  Article.belongsToMany(Topic, { through: Relevance })
+  Article.belongsToMany(User, { through: History })
 }
-// return this.commentsCount + this.totalVotes
-// {
-//   getterMethods: {
-//     totalVotes: function() { return this.upVotes + this.downVotes },
-//     engagement: function() { return this.commentsCount + this.totalVotes }
-//   }
