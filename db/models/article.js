@@ -70,6 +70,22 @@ module.exports = db => db.define('articles', {
     type: FLOAT,
     defaultValue: 0
   },
+  commentsCount: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  upVotes: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  downVotes: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  engagement: {
+    type: INTEGER,
+    defaultValue: 0
+  }
 })
 
 module.exports.associations = (Article, { Paragraph, Comment, Topic, User, History, Relevance }) => {

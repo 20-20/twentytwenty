@@ -2,6 +2,11 @@
 	"name": "20 20 Comments",
 	"manifest_version": 2,
 	"version": "0.0.2",
+	"browser_action": {
+		"default_icon": "images/eye_icon.png",
+		"default_title": "20-20",
+		"default_popup": "popup.html"
+	},
 	"background": {
 			"scripts": ["main.js"],
 			"persistent": false
@@ -10,6 +15,7 @@
 		"tabs",
 		"<all_urls>",
 		"storage",
+		"activeTab",
 		"identity",
 		"http://localhost:1337/*",
 		"*://localhost/*",
@@ -32,8 +38,7 @@
 		{
 			"matches":["<all_urls>"],
 			"js":[
-				"dependencies/jquery.js",
-				"bundle.js"
+				"dependencies/jquery.js"
 			],
 			"css": [
 				"annotate.css"

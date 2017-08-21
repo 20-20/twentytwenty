@@ -3,7 +3,7 @@ const io = require('socket.io-client')
 const socket = io()
 import React, { Component } from 'react'
 
-export default class Messgaes extends Component {
+export default class Messages extends Component {
   constructor(props) {
     super(props)
     this.state = {code: ''}
