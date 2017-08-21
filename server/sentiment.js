@@ -8,19 +8,26 @@ const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
   'version_date': '2017-02-27'
 })
 
-function naturalLanguage(targetUrl) {
+function sentimentAnalysis(targetUrl) {
   const parameters = {
     'url': targetUrl,
     'features': {
+      'sentiment': { 'document': true },
       'keywords': {
         'sentiment': true,
         'emotion': true,
         'limit': 3
+      },
+      'concepts': {
+        'limit': 4
+      },
+      'entities': {
+        'limit': 4
       }
     }
   }
 
-  naturalLanguageUnderstanding.analyze(parameters, function(err, response) {
+  naturalLanguageUnderstanding.analyze(parameters, function (err, response) {
     if (err) {
       console.log('error:', err)
     } else {
@@ -29,4 +36,6 @@ function naturalLanguage(targetUrl) {
   })
 }
 
-module.exports = naturalLanguage
+module.exports = sentimentAnalysis
+
+sentimentAnalysis('https://www.nytimes.com/2017/08/20/world/asia/trump-afghanistan-strategy-mattis.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news&_r=0')
