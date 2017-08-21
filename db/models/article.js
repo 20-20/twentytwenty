@@ -1,6 +1,6 @@
 'use strict'
 
-const { STRING, ENUM, TEXT, DATE, INTEGER, FLOAT } = require('sequelize')
+const { STRING, ENUM, TEXT, DATE, INTEGER, FLOAT, BOOLEAN } = require('sequelize')
 
 module.exports = db => db.define('articles', {
   url: {
@@ -42,10 +42,9 @@ module.exports = db => db.define('articles', {
   views: {
     type: STRING
   },
-  status: {
-    type: ENUM,
-    values: ['trending', 'notTrending'],
-    defaultValue: 'notTrending'
+  trending: {
+    type: BOOLEAN,
+    defaultValue: false
   },
   sentimentScore: {
     type: FLOAT,

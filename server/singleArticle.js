@@ -12,11 +12,11 @@ const sentimentAnalysis = require('./sentiment')
 
 /* BELOW FOR CHROME EXTENSION */
 
-const createArticle = async (article) => {
+const createArticle = (article, trending) => {
   const articleProps = article[Object.keys(article)[0]].info
   // createArticleParagraphs(articleProps.body, articleProps.url)
-  const watson = await sentimentAnalysis(articleProps.url)
-  const emotion = watson.emotion.document.emotion
+  // const watson = await sentimentAnalysis(articleProps.url)
+  // const emotion = watson.emotion.document.emotion
   return Article.create({
     url: articleProps.url,
     title: articleProps.title,
@@ -24,12 +24,13 @@ const createArticle = async (article) => {
     urlToImage: articleProps.image,
     publication: articleProps.source.title,
     date: articleProps.date,
-    sentimentScore: watson.sentiment.document.score,
-    sadness: emotion.sadness,
-    fear: emotion.fear,
-    anger: emotion.anger,
-    disgust: emotion.disgust,
-    joy: emotion.joy
+    trending
+    // sentimentScore: watson.sentiment.document.score,
+    // sadness: emotion.sadness,
+    // fear: emotion.fear,
+    // anger: emotion.anger,
+    // disgust: emotion.disgust,
+    // joy: emotion.joy
   })
 }
 
@@ -76,13 +77,12 @@ router.post(`/:url`, (req, res, next) => {
           (error, response, data) => {
             const uriObj = JSON.parse(data)
             const uri = uriObj[Object.keys(uriObj)[0]]
-            console.log('here is the uri', uri)
             if (uri === null) return
             request.get(
               'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
               '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
               (error, response, data) => {
-                createArticle(JSON.parse(data))
+                createArticle(JSON.parse(data), req.query.trending)
                 .then(article => {
                   Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))
                   .then(articleId => {
@@ -101,36 +101,36 @@ router.post(`/:url`, (req, res, next) => {
     })
 })
 
-const getArticle = function(articleUrl) {
-  request.get(
-    'http://eventregistry.org/json/articleMapper?articleUrl=' + articleUrl + '&includeAllVersions=false&deep=true',
-    (error, response, data) => {
-      const uriObj = JSON.parse(data)
-      const uri = uriObj[Object.keys(uriObj)[0]]
-      console.log('uri', uri)
-      if (uri === null) return
-      request.get(
-        'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
-        '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
-        (error, response, data) => {
-          const validation = JSON.parse(data)[uri].error
-          if (validation && validation.startsWith('Invalid article uri')) return
-          createArticle(JSON.parse(data))
-            .then(article => {
-              Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))
-                .then(articleId => {
-                  Article.findOne({
-                    where: { id: articleId },
-                    include: [{ model: Paragraph, include: [Comment] }]
-                  })
-                    .then(article => res.json(article)) // errors produced here...
-                })
-                .catch(() => console.log('Error appending article to DB'))
-            })
-        })
-    }
-  )
-}
+// const getArticle = function(articleUrl) {
+//   request.get(
+//     'http://eventregistry.org/json/articleMapper?articleUrl=' + articleUrl + '&includeAllVersions=false&deep=true',
+//     (error, response, data) => {
+//       const uriObj = JSON.parse(data)
+//       const uri = uriObj[Object.keys(uriObj)[0]]
+//       console.log('uri', uri)
+//       if (uri === null) return
+//       request.get(
+//         'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
+//         '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
+//         (error, response, data) => {
+//           const validation = JSON.parse(data)[uri].error
+//           if (validation && validation.startsWith('Invalid article uri')) return
+//           createArticle(JSON.parse(data))
+//             .then(article => {
+//               Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))
+//                 .then(articleId => {
+//                   Article.findOne({
+//                     where: { id: articleId },
+//                     include: [{ model: Paragraph, include: [Comment] }]
+//                   })
+//                     .then(article => res.json(article)) // errors produced here...
+//                 })
+//                 .catch(() => console.log('Error appending article to DB'))
+//             })
+//         })
+//     }
+//   )
+// }
 
 // router.post('/:url', (req, res, next) => {
 //   console.log('we are making a get request')
@@ -161,4 +161,4 @@ router.get('/:articleId', (req, res, next) => {
     .catch('Error fetching article with provided Id')
 })
 
-module.exports = { getArticle, router, createArticle, createArticleParagraphs }
+module.exports = { router, createArticle, createArticleParagraphs }
