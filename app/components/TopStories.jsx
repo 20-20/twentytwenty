@@ -15,41 +15,45 @@ class TopStories extends Component {
       <div>
         <div className="section" >
           <div className="container">
-          <p className="title" id="TopStories">Top Stories</p>
-          <hr/>
-          <table className="table is-fullwidth is-striped">
+            <p className="title" id="TopStories">Top Stories</p>
+            <hr />
+            <table className="table is-fullwidth is-striped">
 
-            <tbody>
-              {
-                topStories.map((story, index) => (
-                  <tr key={story.id}>
-                    <td>{index+1}</td>
-                    <td>{story.title}</td>
-                    <td>{story.author}</td>
-                    <td>Comments: {story.commentsCount}</td>
-                    <td>Engagement: {story.engagement}</td>
-                  </tr>
+              <tbody>
+                {
+                  topStories.map((story, index) => (
+                    <tr key={story.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <NavLink to={`/SingleArticle/${story.id}`} className=''>{story.title}
+                        </NavLink>
+                      </td>
+                      <td>{story.author}</td>
+                      <td>Comments: {story.commentsCount}</td>
+                      <td>Engagement: {story.engagement}</td>
+                    </tr>
+
                   )
-                )
-              }
-            </tbody>
+                  )
+                }
+              </tbody>
 
-          </table>
+            </table>
           </div>
+        </div>
       </div>
-    </div>
     )
   }
 }
 
-const mapStateToProps = function(state) {
+const mapStateToProps = function (state) {
   console.log('state.topStories', state.topStories)
   return {
     topStory: state.topStories
   }
 }
 
-const mapDispatchToProps = function(dispatch) {
+const mapDispatchToProps = function (dispatch) {
   return {
     loadTopStories: () => {
       dispatch(fetchTopStories())

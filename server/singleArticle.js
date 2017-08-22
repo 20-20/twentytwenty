@@ -15,27 +15,27 @@ const axios = require('axios')
 /* Event Registry Api Functions */
 const eventRegistryFull = (url, trending) => {
   return eventRegistryUri(url)
-  .then(uri => {
-    if (uri === null) throw new Error('This article cannot be found')
-    else return uri
-  }).then((uri) =>
-    eventRegistryContent(uri)
-  ).then(result => {
-    const articleInfo = result.data
-    return createArticle(articleInfo, trending)
-  }).then(article => createArticleParagraphs(article.body, article.url, article.id)
-  ).then(([...paragraphs]) => Article.findOne({
-    where: { id: paragraphs[0].article_id },
-    include: [{ model: Paragraph, include: [Comment] }]
-  }))
+    .then(uri => {
+      if (uri === null) throw new Error('This article cannot be found')
+      else return uri
+    }).then((uri) =>
+      eventRegistryContent(uri)
+    ).then(result => {
+      const articleInfo = result.data
+      return createArticle(articleInfo, trending)
+    }).then(article => createArticleParagraphs(article.body, article.url, article.id)
+    ).then(([...paragraphs]) => Article.findOne({
+      where: { id: paragraphs[0].article_id },
+      include: [{ model: Paragraph, include: [Comment] }, {model: Topic }]
+    }))
 }
 
 const eventRegistryUri = (url) => {
   return axios.get('http://eventregistry.org/json/articleMapper?articleUrl=' + url + `&includeAllVersions=false&deep=true`)
-  .then(result => {
-    const uriObj = result.data
-    return uriObj[Object.keys(uriObj)[0]]
-  })
+    .then(result => {
+      const uriObj = result.data
+      return uriObj[Object.keys(uriObj)[0]]
+    })
 }
 
 const eventRegistryContent = (uri) => {
@@ -52,13 +52,15 @@ const createArticle = async (article, trending) => {
   const keywordTopics = watson.keywords.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
   const entityTopics = watson.entities.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
   const conceptTopics = watson.concepts.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
-  const topics = [...keywordTopics, ...entityTopics, ...conceptTopics ]
+  const topics = [...keywordTopics, ...entityTopics, ...conceptTopics]
   topics.forEach(topic => {
-    console.log('these are my topics',topic.text)
-    Topic.findOrCreate({ where: {
-      name: topic.text
-    }
-  })})
+    console.log('these are my topics', topic.text)
+    Topic.findOrCreate({
+      where: {
+        name: topic.text
+      }
+    })
+  })
   console.log(topics)
   return Article.create({
     url: articleProps.url,
@@ -77,7 +79,7 @@ const createArticle = async (article, trending) => {
   })
 }
 
-const createArticleParagraphs = function(text, url, articleId) {
+const createArticleParagraphs = function (text, url, articleId) {
   let allParagraphs = text.split('\n')
   allParagraphs = allParagraphs.filter(paragraph => paragraph !== '')
   const promises = []
@@ -103,15 +105,15 @@ router.post(`/:url`, (req, res, next) => {
     : decodeURIComponent(req.params.url)
   Article.findOne({
     where: { url: decodedUrl },
-    include: [{ model: Paragraph, include: [Comment] }]
+    include: [{ model: Paragraph, include: [Comment] }, {model: Topic }]
   })
-  .then(retObj => {
-    if (retObj) return retObj
-    else return eventRegistryFull(req.params.url, req.query.trending)
-  })
-  .then(articleWithParagraphs =>
-    res.json(articleWithParagraphs)
-  ).catch(error => console.log(error.message))
+    .then(retObj => {
+      if (retObj) return retObj
+      else return eventRegistryFull(req.params.url, req.query.trending)
+    })
+    .then(articleWithParagraphs =>
+      res.json(articleWithParagraphs)
+    ).catch(error => console.log(error.message))
 })
 
 router.get('/:articleId', (req, res, next) => {
@@ -119,7 +121,7 @@ router.get('/:articleId', (req, res, next) => {
     where: {
       id: req.params.articleId
     },
-    include: [{ model: Paragraph, include: [Comment] }]
+    include: [{ model: Paragraph, include: [Comment] }, {model: Topic }]
   })
     .then(article => res.json(article))
     .catch('Error fetching article with provided Id')
