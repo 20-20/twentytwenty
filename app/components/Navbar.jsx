@@ -58,7 +58,7 @@ class Navbar extends Component {
                   <i className="fa fa-github"></i>
                 </span>
               </a>
-              { this.props.user ? this.renderLogout() : this.renderLoginSignup() }
+              {this.props.user ? this.renderLogout() : this.renderLoginSignup()}
             </div>
           </div>
         </nav>
@@ -88,15 +88,17 @@ class Navbar extends Component {
   renderLogout() {
     const name = this.props.user.name || this.props.user.email
     return (
-      <ul className="nav navbar-nav navbar-right">
-        <li>
-          <button
-            className="navbar-btn btn btn-default"
-            onClick={this.props.logout}>
-            logout {name}
-          </button>
-        </li>
-      </ul>
+      <div className="navbar-item">
+        <div className="field is-grouped">
+          <p className="control">
+            <button
+              className="button is-info"
+              onClick={this.props.logout}>
+              logout {name}
+            </button>
+          </p>
+        </div>
+      </div>
     )
   }
 }

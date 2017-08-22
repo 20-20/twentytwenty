@@ -21,12 +21,10 @@ module.exports = {
     "one-var": "off",
     "new-parens": "off",
     "arrow-body-style": ["warn", "as-needed"],
-
     "no-unused-vars": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/react-in-jsx-scope": "error",
-
     "import/first": "off",
 
     // This rule enforces a comma-first style, such as
