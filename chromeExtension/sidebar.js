@@ -66,8 +66,8 @@ function checkLogin() {
 }
 
 function renderChrExt() {
-	showButton()
-	// appendExt()
+	// showButton()
+	appendExt()
 	appendFormSubmission()
 }
 
@@ -95,7 +95,7 @@ function appendExt() {
   $('body').append(sidebar)
 	// Add the Toggle (Hide) Button to the page
 	$('body').append(sidebarToggle)
-	$('.annotate-toggle').append(sidebarButton)
+	$('.annotate-toggle').append(toggleButton)
 	// Toggle sidebar
   $('.annotate-toggle').click(function() {
     $('.annotate-sidebar').toggle()
