@@ -1,6 +1,6 @@
 let userInfo;
 
-//Simple Background.script receive and respond to Content.script:
+// Listens for sigin / signout message sent from sidebar.js
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     console.log("request", request)
@@ -19,7 +19,15 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
-//////  Sign In/Out Code //////
+/*
+Below OAuth code was taken from Chrome Apps Samples.  Minor parts were refactored for our purposes.
+
+Official samples for Chrome Apps platform. If you want to learn about the platform, you can:
+
+1. look at the source code of the samples below. Most samples have a "Try it now" button that allows you to install and play with it.
+2. read the [official docs](http://developer.chrome.com/apps)
+3. follow the [official Codelab](http://goo.gl/UHCS8) presented at Google I/O
+*/
 
 var STATE_START = 1;
 var STATE_ACQUIRING_AUTHTOKEN = 2;

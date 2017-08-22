@@ -78,6 +78,10 @@ module.exports = db => db.define('articles', {
     type: INTEGER,
     defaultValue: 0
   },
+  totalVotes: {
+    type: INTEGER,
+    defaultValue: 0
+  },
   engagement: {
     type: INTEGER,
     defaultValue: 0
@@ -86,7 +90,16 @@ module.exports = db => db.define('articles', {
     type: BOOLEAN,
     defaultValue: false
   }
-})
+},
+  {
+    hooks: {
+      beforeCreate: article => {
+        article.totalVotes = article.upVotes + article.downVotes
+        article.engagement = article.totalVotes + article.commentsCount
+      }
+    }
+  }
+)
 
 module.exports.associations = (Article, { Paragraph, Comment, Topic, User, History, Relevance }) => {
   Article.hasMany(Paragraph)

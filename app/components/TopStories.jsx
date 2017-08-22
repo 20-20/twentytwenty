@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Navlink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { render } from 'react-dom'
 import { fetchTopStories } from '../reducers/topStories'
 
@@ -11,7 +11,6 @@ class TopStories extends Component {
 
   render() {
     const topStories = this.props.topStory
-    let index = 1
     return (
       <div>
         <div className="section" >
@@ -22,13 +21,13 @@ class TopStories extends Component {
 
             <tbody>
               {
-                topStories.map((story) => (
+                topStories.map((story, index) => (
                   <tr key={story.id}>
-                    <td>{index++}</td>
+                    <td>{index+1}</td>
                     <td>{story.title}</td>
                     <td>{story.author}</td>
-                    <td>Comments</td>
-                    <td>Views</td>
+                    <td>Comments: {story.commentsCount}</td>
+                    <td>Engagement: {story.engagement}</td>
                   </tr>
                   )
                 )
