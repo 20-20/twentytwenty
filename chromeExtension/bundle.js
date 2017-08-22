@@ -11237,7 +11237,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* Relevnat HTML */
 var style = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">';
 function appendSidebar(name) {
-	var sidebar = '\n\t\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t\t<div class=\'level\'>\n\t\t\t\t<div class="level-item has-text-centered">Hello ' + name + '</div>\n\t\t\t</div>\n\t\t\t<nav class="panel">\n\t\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\t\tComments\n\t\t\t\t</p>\n\t\t\t\t<div class=\'annotate-list\'>\n\t\t\t\t</div>\n\t\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'What do you think?\'>\n\t\t\t\t</form>\n\t\t\t</nav>\n    </div>\n\t\t';
+	var sidebar = '\n\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t<nav class="panel">\n\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\tComments\n\t\t\t</p>\n\t\t\t<div class=\'annotate-list\'></div>\n\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'' + name + ', what do you think?\'>\n\t\t\t</form>\n\t\t</nav>\n\t</div>\n\t';
 	$('body').append(sidebar);
 }
 var sidebarToggle = '<div class="annotate-toggle far-right "></div>';
@@ -11273,7 +11273,6 @@ function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style);
 	appendSidebar(name);
-	// $('body').append(appendSidebar(name))
 	$('body').append(sidebarToggle);
 	$('.annotate-toggle').append(toggleButton);
 	appendToggle();
@@ -11298,7 +11297,7 @@ function appendFormSubmission() {
 		// Visually display comment in chrome extension
 		evt.preventDefault();
 		var comment = $('.annotate-text-entry').val();
-		var commentHTML = '\n            <a class="panel-block is-active">\n                <span class="panel-icon">\n                    <i class="fa fa-book"></i>\n                </span>\n                ' + comment + '\n            </a>';
+		var commentHTML = '\n\t\t\t<a class="panel-block is-active">\n\t\t\t\t<span class="panel-icon">\n\t\t\t\t\t<i class="fa fa-book"></i>\n\t\t\t\t</span>\n\t\t\t\t' + comment + '\n\t\t\t</a>';
 		$('.annotate-list').append($('' + commentHTML));
 		$('.annotate-text-entry').val('');
 		displayComment(comment);
@@ -11329,6 +11328,15 @@ function displayComment(comment) {
 		});
 	});
 }
+
+// <form id='formSubmission'>
+// 	<input type=submit class='annotate-save' value='Comment'>
+// 	<input class='annotate-text-entry' placeholder='${name}, what do you think?'>
+// </form>
+
+// <div class="control">
+// 	<input class='input' type='text' placeholder='${name}, what do you think?'>
+// </div>
 
 /***/ }),
 /* 380 */
@@ -15533,10 +15541,13 @@ var _axios2 = _interopRequireDefault(_axios);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 $(document).ready(function () {
+  console.log("INSIDE DOC READY");
   var url = encodeURIComponent($(document)[0].URL);
-  _axios2.default.post('http://localhost:1337/api/singleArticle/' + url)
+  console.log("url here:", url);
+  _axios2.default.post("http://localhost:1337/api/singleArticle/" + url)
   // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(function (article) {
+    console.log("HERE IS THE ARTICLE", article);
     chrome.storage.local.set(article.data);
     fetchArticleData(article.data);
   }).catch('Could not fetch article data');
@@ -15545,8 +15556,8 @@ $(document).ready(function () {
 function fetchArticleData(article) {
   article.paragraphs.forEach(function (paragraph) {
     paragraph.comments.forEach(function (comment) {
-      var comments = '<a class="panel-block is-active">\n          <span class="panel-icon">\n            <i class="fa fa-book"></i>\n              </span>\n                ' + comment.text + '\n            </a>';
-      $('.annotate-list').append($('' + comments));
+      var comments = "<a class=\"panel-block is-active\">\n          <span class=\"panel-icon\">\n            <i class=\"fa fa-book\"></i>\n              </span>\n                " + comment.text + "\n            </a>";
+      $('.annotate-list').append($("" + comments));
     });
   });
 }

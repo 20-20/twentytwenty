@@ -1,21 +1,52 @@
-
 'use strict'
-
 const db = require('APP/db')
 const Article = db.model('articles')
 const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
+const Topic = db.model('topics')
 const router = require('express').Router()
 const request = require('request')
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 const sentimentAnalysis = require('./sentiment')
 const axios = require('axios')
-
-/* BELOW FOR CHROME EXTENSION */
-
+/* Event Registry Api Functions */
+const eventRegistryFull = (url, trending) => eventRegistryUri(url)
+  .then(uri => {
+    if (uri === null) throw new Error('This article cannot be found')
+    else return uri
+  }).then((uri) =>
+    eventRegistryContent(uri)
+  ).then(result => {
+    const articleInfo = result.data
+    return createArticle(articleInfo, trending)
+  }).then(article => createArticleParagraphs(article.body, article.url, article.id)
+  ).then(([...paragraphs]) => Article.findOne({
+    where: { id: paragraphs[0].article_id },
+    include: [{ model: Paragraph, include: [Comment] }]
+  }))
+const eventRegistryUri = (url) => axios.get('http://eventregistry.org/json/articleMapper?articleUrl=' + url + `&includeAllVersions=false&deep=true`)
+  .then(result => {
+    const uriObj = result.data
+    return uriObj[Object.keys(uriObj)[0]]
+  })
+const eventRegistryContent = (uri) => axios.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
+    '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000')
+/* Event Registry Api Functions till here */
+/* Article Creation Functions */
 const createArticle = async (article, trending) => {
   const articleProps = article[Object.keys(article)[0]].info
   const watson = await sentimentAnalysis(articleProps.url)
+  const keywordTopics = watson.keywords.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
+  const entityTopics = watson.entities.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
+  const conceptTopics = watson.concepts.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
+  const topics = [...keywordTopics, ...entityTopics, ...conceptTopics ]
+  topics.forEach(topic => {
+    console.log('these are my topics',topic.text)
+    Topic.findOrCreate({ where: {
+      name: topic.text
+    }
+  })})
+  console.log(topics)
   return Article.create({
     url: articleProps.url,
     title: articleProps.title,
@@ -32,7 +63,6 @@ const createArticle = async (article, trending) => {
     joy: watson.emotion.document.emotion.joy
   })
 }
-
 const createArticleParagraphs = function(text, url, articleId) {
   let allParagraphs = text.split('\n')
   allParagraphs = allParagraphs.filter(paragraph => paragraph !== '')
@@ -47,18 +77,11 @@ const createArticleParagraphs = function(text, url, articleId) {
   })
   return Promise.all(promises)
 }
-
-// uriChecker(uri) {
-//   request.get(
-//   'http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + `&includeAllVersions=false&deep=true`,
-//   (error, response, data) => {
-//     const uriObj = JSON.parse(data)
-//     const uri = uriObj[Object.keys(uriObj)[0]]
-//     console.log('here is the uri', uri)
-
-// }
-
+/*       Article Creation Functions till here       */
+/********        Routes        ********/
+// route for chrome extension
 router.post(`/:url`, (req, res, next) => {
+  console.log("ENTERED AXIOS POST")
   const decodedUrl = req.params.url.includes('html')
     ? decodeURIComponent(req.params.url).split(`html`)[0] + `html`
     : decodeURIComponent(req.params.url)
@@ -67,72 +90,13 @@ router.post(`/:url`, (req, res, next) => {
     include: [{ model: Paragraph, include: [Comment] }]
   })
   .then(retObj => {
-    if (retObj) res.json(retObj)
-  }).then(() => axios.get('http://eventregistry.org/json/articleMapper?articleUrl=' + req.params.url + `&includeAllVersions=false&deep=true`))
-  .then(result => {
-    const uriObj = result.data
-    const uri = uriObj[Object.keys(uriObj)[0]]
-    if (uri === null) res.sendStatus(404)
-    else return uri
-  }).then((uri) => axios.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
-    '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000')).then(result => {
-    const articleInfo = result.data
-    return createArticle(articleInfo, req.query.trending)
-  }).then(article => createArticleParagraphs(article.body, article.url, article.id)
-  ).then(([...paragraphs]) => console.log("paragraph length". paragraphs)
-  // res.json(article)
-  ).catch(next)
+    if (retObj) return retObj
+    else return eventRegistryFull(req.params.url, req.query.trending)
+  })
+  .then(articleWithParagraphs =>
+    res.json(articleWithParagraphs)
+  ).catch(error => console.log(error.message))
 })
-
-// const getArticle = function(articleUrl) {
-//   request.get(
-//     'http://eventregistry.org/json/articleMapper?articleUrl=' + articleUrl + '&includeAllVersions=false&deep=true',
-//     (error, response, data) => {
-//       const uriObj = JSON.parse(data)
-//       const uri = uriObj[Object.keys(uriObj)[0]]
-//       console.log('uri', uri)
-//       if (uri === null) return
-//       request.get(
-//         'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
-//         '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
-//         (error, response, data) => {
-//           const validation = JSON.parse(data)[uri].error
-//           if (validation && validation.startsWith('Invalid article uri')) return
-//           createArticle(JSON.parse(data))
-//             .then(article => {
-//               Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))
-//                 .then(articleId => {
-//                   Article.findOne({
-//                     where: { id: articleId },
-//                     include: [{ model: Paragraph, include: [Comment] }]
-//                   })
-//                     .then(article => res.json(article)) // errors produced here...
-//                 })
-//                 .catch(() => console.log('Error appending article to DB'))
-//             })
-//         })
-//     }
-//   )
-// }
-
-// router.post('/:url', (req, res, next) => {
-//   console.log('we are making a get request')
-//   const decodedUrl = decodeURIComponent(req.params.url).split('html')[0] + 'html'
-//   console.log('here is the decoded url', decodedUrl)
-//   Article.findOne({
-//     where: { url: decodedUrl },
-//     include: [{ model: Paragraph, include: [Comment] }]
-//   })
-//     .then(retObj => {
-//       if (retObj) res.json(retObj)
-//       else {
-//         getArticle(req.params.url)
-//       }
-//     })
-// })
-
-/* BELOW FOR WEB APP */
-
 router.get('/:articleId', (req, res, next) => {
   Article.findOne({
     where: {
@@ -143,5 +107,5 @@ router.get('/:articleId', (req, res, next) => {
     .then(article => res.json(article))
     .catch('Error fetching article with provided Id')
 })
-
+/********        Routes till here        ********/
 module.exports = { router, createArticle, createArticleParagraphs }

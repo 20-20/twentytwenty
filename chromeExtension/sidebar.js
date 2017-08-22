@@ -9,27 +9,22 @@ const style =
 function appendSidebar(name) {
 	const sidebar =
 	`
-		<div class='annotate-sidebar' style='display: none'>
-			<div class='level'>
-				<div class="level-item has-text-centered">Hello ${name}</div>
-			</div>
-			<nav class="panel">
-				<p class="panel-heading annotate-header">
-					Comments
-				</p>
-				<div class='annotate-list'>
-				</div>
-				<form id='formSubmission'>
-					<input type=submit class='annotate-save' value='Comment'>
-					<input class='annotate-text-entry' placeholder='What do you think?'>
-				</form>
-			</nav>
-    </div>
-		`
+	<div class='annotate-sidebar' style='display: none'>
+		<nav class="panel">
+			<p class="panel-heading annotate-header">
+				Comments
+			</p>
+			<div class='annotate-list'></div>
+			<form id='formSubmission'>
+				<input type=submit class='annotate-save' value='Comment'>
+				<input class='annotate-text-entry' placeholder='${name}, what do you think?'>
+			</form>
+		</nav>
+	</div>
+	`
 	$('body').append(sidebar)
-
 }
-const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
+	const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
 const toggleButton =
 	`
 	<a
@@ -69,7 +64,6 @@ function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style)
 	appendSidebar(name)
-	// $('body').append(appendSidebar(name))
 	$('body').append(sidebarToggle)
 	$('.annotate-toggle').append(toggleButton)
 	appendToggle()
@@ -95,12 +89,12 @@ function appendFormSubmission() {
 		evt.preventDefault()
 		const comment = $('.annotate-text-entry').val()
 		const commentHTML = `
-            <a class="panel-block is-active">
-                <span class="panel-icon">
-                    <i class="fa fa-book"></i>
-                </span>
-                ${comment}
-            </a>`
+			<a class="panel-block is-active">
+				<span class="panel-icon">
+					<i class="fa fa-book"></i>
+				</span>
+				${comment}
+			</a>`
 		$('.annotate-list').append($(`${commentHTML}`))
 		$('.annotate-text-entry').val('')
 		displayComment(comment)
@@ -112,7 +106,9 @@ function displayComment(comment) {
 		['selectedText', 'paragraphs'], ({ selectedText, paragraphs }) => {
 			const paragraphText = paragraphs.map(paragraph => paragraph.text)
 			const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
-			const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
+			const selectedParagraph = paragraphs.filter(
+				(paragraph) => paragraph.text === bestMatch.target
+			)
 			console.log("params:", selectedParagraph[0])
 			console.log("comment", comment)
 			postComment({
@@ -123,3 +119,12 @@ function displayComment(comment) {
 		}
 	)
 }
+
+			// <form id='formSubmission'>
+			// 	<input type=submit class='annotate-save' value='Comment'>
+			// 	<input class='annotate-text-entry' placeholder='${name}, what do you think?'>
+			// </form>
+
+			// <div class="control">
+			// 	<input class='input' type='text' placeholder='${name}, what do you think?'>
+			// </div>
