@@ -42,6 +42,10 @@ module.exports = db => db.define('articles', {
   views: {
     type: STRING
   },
+  trending: {
+    type: BOOLEAN,
+    defaultValue: false
+  },
   sentimentScore: {
     type: FLOAT,
     defaultValue: 0
@@ -85,10 +89,6 @@ module.exports = db => db.define('articles', {
   engagement: {
     type: INTEGER,
     defaultValue: 0
-  },
-  trending: {
-    type: BOOLEAN,
-    defaultValue: false
   }
 },
   {
