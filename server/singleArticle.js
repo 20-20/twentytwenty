@@ -74,16 +74,12 @@ router.post(`/:url`, (req, res, next) => {
     const uri = uriObj[Object.keys(uriObj)[0]]
     if (uri === null) res.sendStatus(404)
     else return uri
-  }).then((uri) => {
-    return axios.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
-    '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000')
-  }).then(result => {
+  }).then((uri) => axios.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
+    '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000')).then(result => {
     const articleInfo = result.data
     return createArticle(articleInfo, req.query.trending)
-  }).then(article => {
-    return createArticleParagraphs(article.body, article.url, article.id)
-  }
-  ).then(([...paragraphs]) => console.log(paragraphs)
+  }).then(article => createArticleParagraphs(article.body, article.url, article.id)
+  ).then(([...paragraphs]) => console.log("paragraph length". paragraphs)
   // res.json(article)
   ).catch(next)
 })

@@ -11234,30 +11234,20 @@ var _loginPrompt2 = _interopRequireDefault(_loginPrompt);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* Relevnat HTML */
 var style = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">';
-
-// const button = '<a class="button is-dark">20-20</a>'
-
-var sidebar = '\n\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t<nav class="panel">\n\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\tComments\n\t\t\t</p>\n\t\t\t<div class=\'annotate-list\'>\n\t\t\t</div>\n\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'What do you think?\'>\n\t\t\t</form>\n\t\t</nav>\n\t</div>\n\t';
-
+function appendSidebar(name) {
+	var sidebar = '\n\t\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t\t<div class=\'level\'>\n\t\t\t\t<div class="level-item has-text-centered">Hello ' + name + '</div>\n\t\t\t</div>\n\t\t\t<nav class="panel">\n\t\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\t\tComments\n\t\t\t\t</p>\n\t\t\t\t<div class=\'annotate-list\'>\n\t\t\t\t</div>\n\t\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'What do you think?\'>\n\t\t\t\t</form>\n\t\t\t</nav>\n    </div>\n\t\t';
+	$('body').append(sidebar);
+}
 var sidebarToggle = '<div class="annotate-toggle far-right "></div>';
-var toggleButton = '\n<a\n\tclass=\'button is-dark is-medium is-focused\'>\n\t<i class="fa fa-globe"></i>\n\t20-20\n</a>\n';
-
-// const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
-// const sidebarToggle =
-// 	`<button
-// 		class='annotate-toggle far-right'>
-// 		<i class="fa fa-globe"></i>
-// 		20-20
-// 	</button>`
-
-
+var toggleButton = '\n\t<a\n    class=\'button iconText is-dark is-medium is-focused\'>\n    <i class=\'fa fa-globe\'></i>20-20\n\t</a>\n';
+/* Relevant Code */
 $(document).ready(function () {
 	_axios2.default.get('http://localhost:1337/api/auth/whoami').then(function (res) {
-		res.data ? renderChrExt() : (0, _loginPrompt2.default)();
+		res.data ? renderChrExt(res.data) : (0, _loginPrompt2.default)();
 	});
 });
-
 function checkLogin() {
 	_axios2.default.get('http://localhost:1337/api/auth/whoami').then(function (res) {
 		return res.data;
@@ -11265,126 +11255,80 @@ function checkLogin() {
 		return console.error('Problem fetching current user', err);
 	});
 }
-
-function renderChrExt() {
-	// showButton()
-	appendExt();
+function renderChrExt(user) {
+	storeCurrentUser(user);
+	// displayHello(user.name)
+	showButton(user.name);
 	appendFormSubmission();
 }
-
-function showButton() {
+function storeCurrentUser(user) {
+	chrome.storage.local.set({ currentUser: user });
+}
+// function displayHello(name) {
+// 	$('annotate-sidebar').append(
+// 		`<hr class='title is-4'>${name}</h4>`
+// 	)
+// }
+function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style);
-	$('body').append(sidebar);
+	appendSidebar(name);
+	// $('body').append(appendSidebar(name))
 	$('body').append(sidebarToggle);
 	$('.annotate-toggle').append(toggleButton);
+	appendToggle();
 }
-
-function createComment(comment) {
-	_axios2.default.post('http://localhost:1337/api/comments', comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
-	.catch('Comment was NOT successfully added to db');
-}
-
-function appendExt() {
-	// Add the sidebar to the page
-	$('head').append(style);
-	$('body').append(sidebar);
-	// Add the Toggle (Hide) Button to the page
-	$('body').append(sidebarToggle);
-	$('.annotate-toggle').append(toggleButton);
-	// Toggle sidebar
+function appendToggle() {
 	$('.annotate-toggle').click(function () {
 		$('.annotate-sidebar').toggle();
 		$('.annotate-toggle').toggleClass('far-right');
-
-		if ($('.annotate-toggle').text() === 'X') {
-			$('.annotate-toggle').text('<');
-		} else {
-			$('.annotate-toggle').text('X');
-		}
+		if ($('.iconText').text().length) {
+			$('.iconText').text('');
+			$('.iconText').append('<i class=\'fa fa-globe\'></i>');
+		} else $('.iconText').append('20-20');
 	});
 }
-
+function postComment(comment) {
+	_axios2.default.post('http://localhost:1337/api/comments', comment)
+	// `http://localhost:1337/api/comments` ocmmented out for ngrok
+	.catch('Comment was NOT successfully added to db');
+}
 function appendFormSubmission() {
 	$('#formSubmission').submit(function (evt) {
 		// Visually display comment in chrome extension
 		evt.preventDefault();
 		var comment = $('.annotate-text-entry').val();
-		var commentHTML = '\n\t\t\t<a class="panel-block is-active">\n\t\t\t\t<span class="panel-icon">\n\t\t\t\t\t<i class="fa fa-book"></i>\n\t\t\t\t</span>\n\t\t\t\t' + comment + '\n\t\t\t</a>';
+		var commentHTML = '\n            <a class="panel-block is-active">\n                <span class="panel-icon">\n                    <i class="fa fa-book"></i>\n                </span>\n                ' + comment + '\n            </a>';
 		$('.annotate-list').append($('' + commentHTML));
 		$('.annotate-text-entry').val('');
-		// Post comment to database
-		chrome.storage.local.get(['selectedText', 'paragraphs'], function (_ref) {
-			var selectedText = _ref.selectedText,
-			    paragraphs = _ref.paragraphs;
+		displayComment(comment);
+	});
+}
+function displayComment(comment) {
+	// Post comment to database
+	chrome.storage.local.get(['selectedText', 'paragraphs'], function (_ref) {
+		var selectedText = _ref.selectedText,
+		    paragraphs = _ref.paragraphs;
 
-			var paragraphText = paragraphs.map(function (paragraph) {
-				return paragraph.text;
-			});
+		var paragraphText = paragraphs.map(function (paragraph) {
+			return paragraph.text;
+		});
 
-			var _stringSimilarity$fin = _stringSimilarity2.default.findBestMatch(selectedText, paragraphText),
-			    bestMatch = _stringSimilarity$fin.bestMatch;
+		var _stringSimilarity$fin = _stringSimilarity2.default.findBestMatch(selectedText, paragraphText),
+		    bestMatch = _stringSimilarity$fin.bestMatch;
 
-			var selectedParagraph = paragraphs.filter(function (paragraph) {
-				return paragraph.text === bestMatch.target;
-			});
-			createComment({
-				article_id: selectedParagraph[0].article_id,
-				paragraph_id: selectedParagraph[0].id,
-				text: comment
-			});
+		var selectedParagraph = paragraphs.filter(function (paragraph) {
+			return paragraph.text === bestMatch.target;
+		});
+		console.log("params:", selectedParagraph[0]);
+		console.log("comment", comment);
+		postComment({
+			article_id: selectedParagraph[0].article_id,
+			paragraph_id: selectedParagraph[0].id,
+			text: comment
 		});
 	});
 }
-
-// $(document).ready(function() {
-// 	// Add the sidebar to the page
-//   $('head').append(style)
-//   $('body').append(sidebar)
-// 	// Add the Toggle (Hide) Button to the page
-//   $('body').append(sidebarToggle)
-
-// 	// Toggle sidebar
-//   $('.annotate-toggle').click(function() {
-//     $('.annotate-sidebar').toggle()
-//     $('.annotate-toggle').toggleClass('far-right')
-
-//     if ($('.annotate-toggle').text() === 'X') {
-//       $('.annotate-toggle').text('<')
-//     } else {
-//       $('.annotate-toggle').text('X')
-//     }
-//   })
-
-//   $('#formSubmission').submit(function(evt) {
-// 	// Visually display comment in chrome extension
-//     evt.preventDefault()
-//     const comment = $('.annotate-text-entry').val()
-//     const commentHTML = `
-// 			<a class="panel-block is-active">
-// 				<span class="panel-icon">
-// 					<i class="fa fa-book"></i>
-// 				</span>
-// 				${comment}
-// 			</a>`
-//     $('.annotate-list').append($(`${commentHTML}`))
-//     $('.annotate-text-entry').val('')
-// 	// Post comment to database
-//     chrome.storage.local.get(
-//       ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
-//         console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs)
-//         const paragraphText = paragraphs.map(paragraph => paragraph.text)
-//         const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
-//         const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
-//         createComment({
-//           article_id: selectedParagraph[0].article_id,
-//           paragraph_id: selectedParagraph[0].id,
-//           text: comment
-//         })
-//       }
-// )
-//   })
-// })
 
 /***/ }),
 /* 380 */
