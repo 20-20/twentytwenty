@@ -3,7 +3,7 @@ import Login from './Login'
 import WhoAmI from './WhoAmI'
 import { NavLink, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logout as logOutUser } from '../reducers/auth'
+import { logout } from '../reducers/auth'
 
 class Navbar extends Component {
   constructor(props) {
@@ -58,7 +58,7 @@ class Navbar extends Component {
                   <i className="fa fa-github"></i>
                 </span>
               </a>
-              { this.props.currentUser ? this.renderLogout() : this.renderLoginSignup() }
+              { this.props.user ? this.renderLogout() : this.renderLoginSignup() }
             </div>
           </div>
         </nav>
@@ -78,7 +78,7 @@ class Navbar extends Component {
           <p className="control">
             <NavLink to={`/LogIn`} className="button is-info" >
               Log In
-                    </NavLink>
+            </NavLink>
           </p>
         </div>
       </div>
@@ -86,7 +86,7 @@ class Navbar extends Component {
   }
 
   renderLogout() {
-    const name = this.props.currentUser.name || this.props.currentUser.email
+    const name = this.props.user.name || this.props.user.email
     return (
       <ul className="nav navbar-nav navbar-right">
         <li>
@@ -101,13 +101,17 @@ class Navbar extends Component {
   }
 }
 
-const mapState = ({ user, currentUser }) => ({ user, currentUser })
-
-const mapDispatch = dispatch => ({
-  logout: () => {
-    dispatch(logOutUser())
-    // history.push('/'); // removed to demo logout instant re-render
-  }
+const mapState = (state, componentProps) => ({
+  user: state.auth
 })
+
+const mapDispatch = ({ logout })
+
+// const mapDispatch = dispatch => ({
+//   logout: () => {
+//     dispatch(logOutUser())
+//     // history.push('/'); // removed to demo logout instant re-render
+//   }
+// })
 
 export default withRouter(connect(mapState, mapDispatch)(Navbar))
