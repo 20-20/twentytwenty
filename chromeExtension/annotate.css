@@ -97,3 +97,7 @@ span.marked {
 .largeZ {
 	z-index: 2147483646;
 }
+
+.fa-comment-o {
+	color: black
+}
