@@ -11,7 +11,6 @@ class TopStories extends Component {
 
   render() {
     const topStories = this.props.topStory
-    let index = 1
     return (
       <div>
         <div className="section" >
@@ -22,17 +21,13 @@ class TopStories extends Component {
 
             <tbody>
               {
-                topStories.map((story) => (
+                topStories.map((story, index) => (
                   <tr key={story.id}>
-                    <td>{index++}</td>
-                    {console.log('*************************')}
-                    {console.log('story', story)}
-                    <NavLink to={`/SingleArticle/${story.id}`} id={story.id} >
+                    <td>{index+1}</td>
                     <td>{story.title}</td>
-                    </NavLink>
                     <td>{story.author}</td>
-                    <td>Comments</td>
-                    <td>Views</td>
+                    <td>Comments: {story.commentsCount}</td>
+                    <td>Engagement: {story.engagement}</td>
                   </tr>
                   )
                 )

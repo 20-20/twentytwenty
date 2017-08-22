@@ -54,6 +54,14 @@ module.exports = db => db.define('articles', {
     type: INTEGER,
     defaultValue: 0
   },
+  totalVotes: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  engagement: {
+    type: INTEGER,
+    defaultValue: 0
+  },
   status: {
     type: ENUM,
     values: ['trending', 'notTrending'],
@@ -61,9 +69,11 @@ module.exports = db => db.define('articles', {
   }
 },
   {
-    getterMethods: {
-      totalVotes: function() { return this.upVotes + this.downVotes },
-      engagement: function() { return this.commentsCount + this.totalVotes }
+    hooks: {
+      beforeCreate: article => {
+        article.totalVotes = article.upVotes + article.downVotes
+        article.engagement = article.totalVotes + article.commentsCount
+      }
     }
   }
 )
