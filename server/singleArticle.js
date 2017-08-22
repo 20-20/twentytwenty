@@ -5,6 +5,7 @@ const db = require('APP/db')
 const Article = db.model('articles')
 const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
+const Topic = db.model('topics')
 const router = require('express').Router()
 const request = require('request')
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
@@ -48,7 +49,17 @@ const eventRegistryContent = (uri) => {
 const createArticle = async (article, trending) => {
   const articleProps = article[Object.keys(article)[0]].info
   const watson = await sentimentAnalysis(articleProps.url)
-  console.log(watson)
+  const keywordTopics = watson.keywords.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
+  const entityTopics = watson.entities.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
+  const conceptTopics = watson.concepts.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
+  const topics = [...keywordTopics, ...entityTopics, ...conceptTopics ]
+  topics.forEach(topic => {
+    console.log('these are my topics',topic.text)
+    Topic.findOrCreate({ where: {
+      name: topic.text
+    }
+  })})
+  console.log(topics)
   return Article.create({
     url: articleProps.url,
     title: articleProps.title,
