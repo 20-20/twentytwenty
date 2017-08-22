@@ -1,83 +1,20 @@
-# Hi, I'm bones
+# 20-20
 
-I'm a happy little skeleton. You can clone me to use as a starter on your projects!
-I have React, Redux, Sequelize, and Express all just rattling around in here ready
-to go.
+Jason Lerner
+Andrew Atkinson
+Ezra Shamie
+Darryn Wu
 
-## I need node >= 6.7.0
+# Description
 
-If you don't have it, I'll complain and tell you how to install it.
+Media availability can broaden our perspectives. However, with advancements in consumer targeting, news organizations have increasingly directed their political slants. 20-20 aggregates and provides comprehensive information, showcasing relevant content in a modern web application and chrome extension.
 
-## 1. Make me into something!
+20-20 offers three key product attributes:
+- Distribution of aligned and contrasting articles for a given article
+- Community to share insights and opinions via comments and articles
+- Comprehensive source for current topics and trending articles across news sources
 
-We recommend that you **clone**, not fork, this repo – unless your intention is
-to develop Bones proper instead of using Bones as the starting point for your
-own application.
 
-Start by doing either of the following:
-
-* Create a GitHub repo and clone it, or
-* `git init` in an empty directory on your machine.
-
-After you have a repo on your machine:
-
-```sh
-git remote add bones https://github.com/1706-FSA-NY/bones.git
-git fetch bones
-git merge bones/master
-```
-
-And then you'll have me! If I change – which I probably will – you can get the most recent
-version by doing this again:
-
-```sh
-git fetch bones
-git merge bones/master
-```
-
-## 2. I need a name.
-
-I don't have a name. I think I used to have one, but it turned to dust right along with my
-heart and liver and pituitary gland and all that stuff.
-
-Anyway, I'll need one. Give me a name in `package.json`.
-
-## 3. Start my dusty heart
-
-Short and sweet:
-
-```sh
-npm install
-npm run dev
-```
-
-The `dev` script sets `NODE_ENV` to "development", runs the build script in watch mode, and
-starts the server with `nodemon`. Build vs server logs are separated by a prefix. If you prefer
-to run the server and build processes separately, you can instead do:
-
-```sh
-npm run start-dev
-```
-
-```sh
-npm run build-dev
-```
-
-In two separate terminals. The vanilla `npm start` is for production — you won't use it in development!
-
-## My anatomy
-
-`/app` has the React/Redux setup. `main.jsx` is the entry point.
-
-`/db` has the Sequelize models and database setup. It'll create the database for you if it doesn't exist,
-assuming you're using postgres.
-
-`/server` has the Express server and routes. `start.js` is the entry point.
-
-`/bin` has scripts. (Right now it has *one* script that creates a useful symlink.)
-
-omibear
-[10:57 AM] 
 ## Contribution guide
 
 The contribution process is...
