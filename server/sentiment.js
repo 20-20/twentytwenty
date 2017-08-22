@@ -28,12 +28,14 @@ function sentimentAnalysis(targetUrl) {
     }
   }
 
-  naturalLanguageUnderstanding.analyze(parameters, function(err, response) {
-    if (err) {
-      console.log('error:', err)
-    } else {
-      // console.log(JSON.stringify(response, null, 2))
-    }
+  return new Promise((resolve, reject) => {
+    naturalLanguageUnderstanding.analyze(parameters, function(err, response) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(response)
+      }
+    })
   })
 }
 

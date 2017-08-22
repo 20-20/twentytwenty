@@ -1,4 +1,3 @@
-
 'use strict'
 
 const db = require('APP/db')
@@ -7,17 +6,20 @@ const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
 const router = require('express').Router()
 const request = require('request')
-const { mustBeLoggedIn, forbidden } = require('./auth.filters')
+const {
+  mustBeLoggedIn,
+  forbidden
+} = require('./auth.filters')
 const sentimentAnalysis = require('./sentiment')
 
 /* BELOW FOR CHROME EXTENSION */
 
 const createArticle = (article, trending) => {
   const articleProps = article[Object.keys(article)[0]].info
-  // createArticleParagraphs(articleProps.body, articleProps.url)
-  // const watson = await sentimentAnalysis(articleProps.url)
-  // const emotion = watson.emotion.document.emotion
-  return Article.create({
+  createArticleParagraphs(articleProps.body, articleProps.url)
+  const watson = sentimentAnalysis(articleProps.url)
+  console.log('this is the real watson', watson)
+  const newArticle = Article.create({
     url: articleProps.url,
     title: articleProps.title,
     body: articleProps.body,
@@ -25,12 +27,21 @@ const createArticle = (article, trending) => {
     publication: articleProps.source.title,
     date: articleProps.date,
     trending
-    // sentimentScore: watson.sentiment.document.score,
-    // sadness: emotion.sadness,
-    // fear: emotion.fear,
-    // anger: emotion.anger,
-    // disgust: emotion.disgust,
-    // joy: emotion.joy
+  })
+  return Promise.all([watson, newArticle])
+  .then(([watson, newArticle]) => {
+    console.log('i am watson ', typeof watson)
+    console.log('this is our newArticle', newArticle)
+    const emotion = watson.emotion.document.emotion
+    console.log('my emotions are blinding', emotion)
+    return newArticle.update({
+      sentimentScore: watson.sentiment.document.score,
+      sadness: emotion.sadness,
+      fear: emotion.fear,
+      anger: emotion.anger,
+      disgust: emotion.disgust,
+      joy: emotion.joy
+    })
   })
 }
 
@@ -59,14 +70,19 @@ const createArticleParagraphs = function(text, url, articleId) {
 // }
 
 router.post(`/:url`, (req, res, next) => {
-  const decodedUrl = req.params.url.includes('html')
-    ? decodeURIComponent(req.params.url).split(`html`)[0]+`html`
-    : decodeURIComponent(req.params.url)
+  const decodedUrl = req.params.url.includes('html') ?
+    decodeURIComponent(req.params.url).split(`html`)[0] + `html` :
+    decodeURIComponent(req.params.url)
   // const decodedUrl = decodeURIComponent(req.params.url).split(`html`)[0]+`html`
   console.log('here is the decoded url', decodedUrl)
   Article.findOne({
-    where: { url: decodedUrl },
-    include: [{model: Paragraph, include: [Comment]}]
+    where: {
+      url: decodedUrl
+    },
+    include: [{
+      model: Paragraph,
+      include: [Comment]
+    }]
   })
     .then(retObj => {
       if (retObj) res.json(retObj)
@@ -82,21 +98,24 @@ router.post(`/:url`, (req, res, next) => {
               'http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
               '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000',
               (error, response, data) => {
+                console.log(data)
                 createArticle(JSON.parse(data), req.query.trending)
-                .then(article => {
-                  Promise.resolve(createArticleParagraphs(article.body, article.url, article.id))
-                  .then(articleId => {
+                  .then(article => {
+                    console.log(article)
                     Article.findOne({
-                      where: { id: articleId },
-                      include: [{model: Paragraph, include: [Comment]}]
+                      where: {
+                        id: article.id
+                      },
+                      include: [{
+                        model: Paragraph,
+                        include: [Comment]
+                      }]
                     })
                     .then(article => res.json(article))
                   })
                   .catch(() => console.log(`Error appending article to DB`))
-                })
               })
-          }
-        )
+          })
       }
     })
 })
@@ -152,13 +171,20 @@ router.post(`/:url`, (req, res, next) => {
 
 router.get('/:articleId', (req, res, next) => {
   Article.findOne({
-    where: {
-      id: req.params.articleId
-    },
-    include: [{ model: Paragraph, include: [Comment] }]
-  })
+      where: {
+        id: req.params.articleId
+      },
+      include: [{
+        model: Paragraph,
+        include: [Comment]
+      }]
+    })
     .then(article => res.json(article))
     .catch('Error fetching article with provided Id')
 })
 
-module.exports = { router, createArticle, createArticleParagraphs }
+module.exports = {
+  router,
+  createArticle,
+  createArticleParagraphs
+}
