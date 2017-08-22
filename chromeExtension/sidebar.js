@@ -2,11 +2,11 @@ import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import renderLoginPrompt from './loginPrompt'
 
+/* Relevnat HTML */
+
 const style =
   `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
-
-// const button = '<a class="button is-dark">20-20</a>'
 
 const sidebar =
 	`
@@ -35,20 +35,7 @@ const toggleButton =
 </a>
 `
 
-
-// const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
-// const sidebarToggle =
-// 	`<button
-// 		class='annotate-toggle far-right'>
-// 		<i class="fa fa-globe"></i>
-// 		20-20
-// 	</button>`
-
-
-
-
-
-
+/* Relevant Code */
 
 $(document).ready(function() {
 	axios.get(`http://localhost:1337/api/auth/whoami`)
@@ -66,11 +53,10 @@ function checkLogin() {
 }
 
 function renderChrExt() {
-	// showButton()
-	appendExt()
+	showButton()
+	// appendExt()
 	appendFormSubmission()
 }
-
 
 function showButton() {
 	// Add the sidebar to the page
@@ -78,8 +64,21 @@ function showButton() {
 	$('body').append(sidebar)
 	$('body').append(sidebarToggle)
 	$('.annotate-toggle').append(toggleButton)
+	appendToggle()
 }
 
+function appendToggle() {
+	$('.annotate-toggle').click(function() {
+		$('.annotate-sidebar').toggle()
+		$('.annotate-toggle').toggleClass('far-right')
+
+		if ($('.annotate-toggle').text() === 'X') {
+			$('.annotate-toggle').text('<')
+		} else {
+			$('.annotate-toggle').text('X')
+		}
+	})
+}
 
 
 

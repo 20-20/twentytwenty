@@ -11234,23 +11234,16 @@ var _loginPrompt2 = _interopRequireDefault(_loginPrompt);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var style = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">';
+/* Relevnat HTML */
 
-// const button = '<a class="button is-dark">20-20</a>'
+var style = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">';
 
 var sidebar = '\n\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t<nav class="panel">\n\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\tComments\n\t\t\t</p>\n\t\t\t<div class=\'annotate-list\'>\n\t\t\t</div>\n\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'What do you think?\'>\n\t\t\t</form>\n\t\t</nav>\n\t</div>\n\t';
 
 var sidebarToggle = '<div class="annotate-toggle far-right "></div>';
 var toggleButton = '\n<a\n\tclass=\'button is-dark is-medium is-focused\'>\n\t<i class="fa fa-globe"></i>\n\t20-20\n</a>\n';
 
-// const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
-// const sidebarToggle =
-// 	`<button
-// 		class='annotate-toggle far-right'>
-// 		<i class="fa fa-globe"></i>
-// 		20-20
-// 	</button>`
-
+/* Relevant Code */
 
 $(document).ready(function () {
 	_axios2.default.get('http://localhost:1337/api/auth/whoami').then(function (res) {
@@ -11267,8 +11260,8 @@ function checkLogin() {
 }
 
 function renderChrExt() {
-	// showButton()
-	appendExt();
+	showButton();
+	// appendExt()
 	appendFormSubmission();
 }
 
@@ -11278,6 +11271,20 @@ function showButton() {
 	$('body').append(sidebar);
 	$('body').append(sidebarToggle);
 	$('.annotate-toggle').append(toggleButton);
+	appendToggle();
+}
+
+function appendToggle() {
+	$('.annotate-toggle').click(function () {
+		$('.annotate-sidebar').toggle();
+		$('.annotate-toggle').toggleClass('far-right');
+
+		if ($('.annotate-toggle').text() === 'X') {
+			$('.annotate-toggle').text('<');
+		} else {
+			$('.annotate-toggle').text('X');
+		}
+	});
 }
 
 function createComment(comment) {
