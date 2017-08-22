@@ -4,16 +4,14 @@
 
 .annotate-toggle {
 	position: fixed;
-	top: 0px;
+	text-align: center;
+	top: 5%;
 	right: 25%;
-	width: 25px;
-	height: 25px;
-	padding-left:7px;
-	padding-top:3px;
+	width: 10%;
+	height: 5%;
 	z-index: 2147483647;
-	color:#f00;
-	background-color:#fff;
-	border: 1px solid #000022;
+	color:black;
+	background-color: transparent;
 }
 
 .far-right {
@@ -88,7 +86,14 @@ span.marked {
     background: rgba(135, 200, 250, .2)
 }
 
-.loginCenter {
+.marginTop {
+	margin-top: 30%
+}
+
+.centerText {
 	text-align: center;
-	margin-top: 50%
+}
+
+.largeZ {
+	z-index: 2147483646;
 }

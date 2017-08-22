@@ -5835,8 +5835,8 @@ module.exports = castPath;
 
 __webpack_require__(174);
 __webpack_require__(379);
-__webpack_require__(494);
-module.exports = __webpack_require__(495);
+__webpack_require__(495);
+module.exports = __webpack_require__(496);
 
 
 /***/ }),
@@ -11228,103 +11228,114 @@ var _stringSimilarity = __webpack_require__(398);
 
 var _stringSimilarity2 = _interopRequireDefault(_stringSimilarity);
 
+var _loginPrompt = __webpack_require__(494);
+
+var _loginPrompt2 = _interopRequireDefault(_loginPrompt);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-$(document).ready(function () {
-	checkLogin();
-});
-
-function checkLogin() {
-	chrome.storage.local.get('user', function (user) {
-		if (!Object.keys(user).length) renderLogin();else renderChrExt();
-	});
-}
-
-// html for login page
-var loginPage = '\n\t<div class=\'annotate-sidebar\'>\n\t<div class=\'hero\'>\n\t\t<h1 class=\'title loginCenter\'>\n\t\t<a\n\t\t\tclass=\'button\n\t\t\t\tis-dark\n\t\t\t\tis-large\n\t\t\t\tis-focused\'\n\t\t\tid="signin">\n\t\t\tSignup\n\t\t</a>\n\t\t</h1>\n\t</div>\n\t</div>\n\t';
-
-// html for logged in sidebar
-var sidebar = '\n\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t<nav class="panel">\n\t\t<p id="userInfo">Not Logged In</p>\n\t\t<button id="signin">sign in</button>\n\t\t<button id="signout">sign out</button>\n\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\tComments\n\t\t\t</p>\n\t\t\t<div class=\'annotate-list\'>\n\t\t\t</div>\n\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'What do you think?\'>\n\t\t\t</form>\n\t\t</nav>\n\t</div>\n\t';
-
-var sidebarToggle = '<div class=\'annotate-toggle far-right\'>X</div>';
 
 var style = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">';
 
-// if not logged in, render login page
-function renderLogin() {
-	$('head').append(style);
-	$('body').append(loginPage);
-	$('#signin').click(function () {
-		console.log('sigin clicked');
-		chrome.runtime.sendMessage('signin', function () {
-			var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(response) {
-				return regeneratorRuntime.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								_context.next = 2;
-								return response;
+// const button = '<a class="button is-dark">20-20</a>'
 
-							case 2:
-								if (!_context.sent) {
-									_context.next = 6;
-									break;
-								}
+var sidebar = '\n\t<div class=\'annotate-sidebar\' style=\'display: none\'>\n\t\t<nav class="panel">\n\t\t\t<p class="panel-heading annotate-header">\n\t\t\t\tComments\n\t\t\t</p>\n\t\t\t<div class=\'annotate-list\'>\n\t\t\t</div>\n\t\t\t<form id=\'formSubmission\'>\n\t\t\t\t<input type=submit class=\'annotate-save\' value=\'Comment\'>\n\t\t\t\t<input class=\'annotate-text-entry\' placeholder=\'What do you think?\'>\n\t\t\t</form>\n\t\t</nav>\n\t</div>\n\t';
 
-								$('#userInfo').text(response.displayName);
-								_context.next = 7;
-								break;
+var sidebarToggle = '<div class="annotate-toggle far-right "></div>';
+var toggleButton = '\n<a\n\tclass=\'button is-dark is-medium is-focused\'>\n\t<i class="fa fa-globe"></i>\n\t20-20\n</a>\n';
 
-							case 6:
-								null;
+// const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
+// const sidebarToggle =
+// 	`<button
+// 		class='annotate-toggle far-right'>
+// 		<i class="fa fa-globe"></i>
+// 		20-20
+// 	</button>`
 
-							case 7:
-							case 'end':
-								return _context.stop();
-						}
-					}
-				}, _callee, this);
-			}));
 
-			return function (_x) {
-				return _ref.apply(this, arguments);
-			};
-		}());
+$(document).ready(function () {
+	_axios2.default.get('http://localhost:1337/api/auth/whoami').then(function (res) {
+		res.data ? renderChrExt() : (0, _loginPrompt2.default)();
+	});
+});
+
+function checkLogin() {
+	_axios2.default.get('http://localhost:1337/api/auth/whoami').then(function (res) {
+		return res.data;
+	}).catch(function (err) {
+		return console.error('Problem fetching current user', err);
 	});
 }
 
-// const sidebar =
-// 	`
-// 	<div class='annotate-sidebar' style='display: none'>
-// 		<nav class="panel">
-// 		<p id="userInfo">Not Logged In</p>
-// 		<button id="signin">sign in</button>
-// 		<button id="signout">sign out</button>
-// 			<p class="panel-heading annotate-header">
-// 				Comments
-// 			</p>
-// 			<div class='annotate-list'>
-// 			</div>
-// 			<form id='formSubmission'>
-// 				<input type=submit class='annotate-save' value='Comment'>
-// 				<input class='annotate-text-entry' placeholder='What do you think?'>
-// 			</form>
-// 		</nav>
-// 	</div>
-// 	`
+function renderChrExt() {
+	showButton();
+	// appendExt()
+	appendFormSubmission();
+}
 
-// const style =
-//   `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-//   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
+function showButton() {
+	// Add the sidebar to the page
+	$('head').append(style);
+	$('body').append(sidebar);
+	$('body').append(sidebarToggle);
+	$('.annotate-toggle').append(toggleButton);
+}
 
-// var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
+function createComment(comment) {
+	_axios2.default.post('http://localhost:1337/api/comments', comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
+	.catch('Comment was NOT successfully added to db');
+}
 
-// function createComment(comment) {
-//   axios.post(`http://localhost:1337/api/comments`, comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
-// 		.catch('Comment was NOT successfully added to db')
-// }
+function appendExt() {
+	// Add the sidebar to the page
+	$('head').append(style);
+	$('body').append(sidebar);
+	// Add the Toggle (Hide) Button to the page
+	$('body').append(sidebarToggle);
+	$('.annotate-toggle').append(sidebarButton);
+	// Toggle sidebar
+	$('.annotate-toggle').click(function () {
+		$('.annotate-sidebar').toggle();
+		$('.annotate-toggle').toggleClass('far-right');
+
+		if ($('.annotate-toggle').text() === 'X') {
+			$('.annotate-toggle').text('<');
+		} else {
+			$('.annotate-toggle').text('X');
+		}
+	});
+}
+
+function appendFormSubmission() {
+	$('#formSubmission').submit(function (evt) {
+		// Visually display comment in chrome extension
+		evt.preventDefault();
+		var comment = $('.annotate-text-entry').val();
+		var commentHTML = '\n\t\t\t<a class="panel-block is-active">\n\t\t\t\t<span class="panel-icon">\n\t\t\t\t\t<i class="fa fa-book"></i>\n\t\t\t\t</span>\n\t\t\t\t' + comment + '\n\t\t\t</a>';
+		$('.annotate-list').append($('' + commentHTML));
+		$('.annotate-text-entry').val('');
+		// Post comment to database
+		chrome.storage.local.get(['selectedText', 'paragraphs'], function (_ref) {
+			var selectedText = _ref.selectedText,
+			    paragraphs = _ref.paragraphs;
+
+			var paragraphText = paragraphs.map(function (paragraph) {
+				return paragraph.text;
+			});
+
+			var _stringSimilarity$fin = _stringSimilarity2.default.findBestMatch(selectedText, paragraphText),
+			    bestMatch = _stringSimilarity$fin.bestMatch;
+
+			var selectedParagraph = paragraphs.filter(function (paragraph) {
+				return paragraph.text === bestMatch.target;
+			});
+			createComment({
+				article_id: selectedParagraph[0].article_id,
+				paragraph_id: selectedParagraph[0].id,
+				text: comment
+			});
+		});
+	});
+}
 
 // $(document).ready(function() {
 // 	// Add the sidebar to the page
@@ -11332,27 +11343,6 @@ function renderLogin() {
 //   $('body').append(sidebar)
 // 	// Add the Toggle (Hide) Button to the page
 //   $('body').append(sidebarToggle)
-// 	// Sign in/out
-//   $('#signin').click(function() {
-// 	  console.log('sigin clicked')
-// 	  chrome.runtime.sendMessage(
-// 		'signin',
-// 	  async function(response) {
-//     await	response ? $('#userInfo').text(response.displayName) : null
-//   }
-// 	)
-//   })
-//   $('#signout').click(function() {
-//     console.log('signout clicked')
-//     chrome.runtime.sendMessage(
-// 			'signout',
-//         function(response) {
-//           userInfo = 'User Signed Out'
-//           console.log(userInfo, 'usrInfo')
-//           $('#userInfo').text(userInfo)
-//         }
-//       )
-//   })
 
 // 	// Toggle sidebar
 //   $('.annotate-toggle').click(function() {
@@ -11367,7 +11357,7 @@ function renderLogin() {
 //   })
 
 //   $('#formSubmission').submit(function(evt) {
-// // Visually display comment in chrome extension
+// 	// Visually display comment in chrome extension
 //     evt.preventDefault()
 //     const comment = $('.annotate-text-entry').val()
 //     const commentHTML = `
@@ -11395,102 +11385,6 @@ function renderLogin() {
 // )
 //   })
 // })
-
-
-// OLD COMMENTED OUT - NOT RELEVANT
-
-// submitForm function
-// let submitForm = function(evt) {
-// 	evt.preventDefault()
-// 	console.log("Clicked on Save Button")
-// 	const comment = $('.annotate-text-entry').val()
-// 	const commentHTML = `
-// 	<a class="panel-block is-active">
-// 		<span class="panel-icon">
-// 			<i class="fa fa-book"></i>
-// 		</span>
-// 		${comment}
-// 	</a>`
-// 	$('.annotate-list').append($(`${commentHTML}`))
-// 	$('.annotate-text-entry').val("")
-// }
-
-// keypress trial
-// When the save button is clicked, save the text as a note
-// $('.annotate-save').keypress(function (key) {
-// 	if (key.which === 13) {
-// 		console.log("Clicked on Save Button")
-// 		const comment = $('.annotate-text-entry').val()
-// 		const commentHTML = `
-// 		<a class="panel-block is-active">
-// 			<span class="panel-icon">
-// 				<i class="fa fa-book"></i>
-// 			</span>
-// 			${comment}
-// 		</a>`
-// 		$('.annotate-list').append($(`${commentHTML}`))
-// 		$('.annotate-text-entry').val("")
-// 	}
-// })
-// $('.annotate-save').click(submitForm())
-
-// OLD VERSION
-// $('.annotate-save').click(function() {
-// 	console.log("Clicked on Save Button")
-// 	const comment = $('.annotate-text-entry').val()
-// 	const commentHTML = `
-// 	<a class="panel-block is-active">
-// 		<span class="panel-icon">
-// 			<i class="fa fa-book"></i>
-// 		</span>
-// 		${comment}
-// 	</a>`
-// 	$('.annotate-list').append($(`${commentHTML}`))
-// 	$('.annotate-text-entry').val("")
-// })
-
-/* saving / rendering notes */
-
-// 	// Load the notes that have been saved for the current page, and then render them in the sidebar.
-// 	// getNotes(renderNotes)
-// })
-
-// var saveNotes = function(list) {
-// 	var save = {}
-// 	save[getCurrentPage()] = list
-// 	chrome.storage.sync.set(save, function(){})
-// }
-
-// // Given the `text` of a new note (after Save was clicked), save it to the list.
-// var saveNote = function(text) {
-// 		console.log("saveNote... here")
-// }
-
-/* Darryn's Version */
-
-// // on document ready, load button
-// $(document).ready(function() {
-
-// 	$('body').append(sidebarToggle)
-
-// 	// Add the Toggle (Hide) Button to the page
-// 	// When the toggle button is clicked, hide the sidebar. Toggle the text shown.
-
-// 	$('.annotate-toggle').click(function() {
-
-// 		$('.annotate-toggle').toggleClass('far-right')
-
-// 		if ($('.annotate-toggle').text() == "X") {
-// 			$('.annotate-sidebar').toggle()
-// 			$('.annotate-toggle').text("<")
-// 		} else {
-// 			$('body').append(sidebar)
-// 			$('.annotate-toggle').text("X")
-// 		}
-// 	})
-// })
-
-// <form onsubmit=${(() => submitForm())}>
 
 /***/ }),
 /* 380 */
@@ -15610,6 +15504,29 @@ module.exports = isFlattenable;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = renderLoginPrompt;
+
+var style = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">';
+
+// html for login page
+var loginPage = '\n\t<div class=\'annotate-sidebar\'>\n\t<div class=\'hero\'>\n\t\t<h1 class=\'title marginTop centerText\'>\n\t\t\tPlease login to access this extension\n\t\t</h1>\n\t\t<h1 class=\'title centerText\'>\n\t\t<a\n\t\t\tclass=\'button\n\t\t\t\tis-dark\n\t\t\t\tis-large\n\t\t\t\tis-focused\'\n\t\t\thref=\'http://localhost:1337/login\'\n\t\t\ttarget=\'_blank\'\n\t\t\trel=\'noopener\'>\n\t\t\tLogin\n\t\t</a>\n\t\t</h1>\n\t</div>\n\t</div>\n\t';
+
+// if not logged in, render login page
+function renderLoginPrompt() {
+	$('head').append(style);
+	$('body').append(loginPage);
+}
+
+/***/ }),
+/* 495 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _axios = __webpack_require__(106);
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -15660,7 +15577,7 @@ function showExt() {
 }
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
