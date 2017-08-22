@@ -7274,18 +7274,22 @@ var Navbar = function (_Component) {
     value: function renderLogout() {
       var name = this.props.user.name || this.props.user.email;
       return _react2.default.createElement(
-        'ul',
-        { className: 'nav navbar-nav navbar-right' },
+        'div',
+        { className: 'navbar-item' },
         _react2.default.createElement(
-          'li',
-          null,
+          'div',
+          { className: 'field is-grouped' },
           _react2.default.createElement(
-            'button',
-            {
-              className: 'navbar-btn btn btn-default',
-              onClick: this.props.logout },
-            'logout ',
-            name
+            'p',
+            { className: 'control' },
+            _react2.default.createElement(
+              'button',
+              {
+                className: 'button is-info',
+                onClick: this.props.logout },
+              'logout ',
+              name
+            )
           )
         )
       );
