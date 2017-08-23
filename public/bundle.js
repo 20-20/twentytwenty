@@ -25394,7 +25394,7 @@ var Navbar = function (_Component) {
   return Navbar;
 }(_react.Component);
 
-var mapState = function mapState(state, componentProps) {
+var mapState = function mapState(state) {
   return {
     user: state.auth
   };
@@ -42857,6 +42857,10 @@ var _WhoAmI = __webpack_require__(119);
 
 var _WhoAmI2 = _interopRequireDefault(_WhoAmI);
 
+var _comments = __webpack_require__(428);
+
+var _comments2 = _interopRequireDefault(_comments);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -42887,92 +42891,63 @@ var Comments = function (_Component) {
         'div',
         { className: 'column' },
         _react2.default.createElement(
-          'nav',
-          { className: 'panel' },
+          'div',
+          { className: 'scroll annotate-sidebar', style: 'display: none' },
           _react2.default.createElement(
-            'p',
-            { className: 'panel-heading' },
-            'Comments'
-          ),
-          _react2.default.createElement(
-            'a',
-            { className: 'panel-block is-active' },
+            'nav',
+            { className: 'panel' },
             _react2.default.createElement(
-              'span',
-              { className: 'panel-icon' },
-              _react2.default.createElement('i', { className: 'fa fa-book' })
+              'p',
+              { className: 'panel-heading annotate-header' },
+              _react2.default.createElement(
+                'strong',
+                null,
+                'Comments'
+              )
+            )
+          ),
+          _react2.default.createElement('article', { className: 'contentHere' }),
+          _react2.default.createElement(
+            'article',
+            { className: 'media' },
+            _react2.default.createElement(
+              'figure',
+              { className: 'media-left' },
+              _react2.default.createElement(
+                'p',
+                { className: 'image is-48x48 leftBuffer' },
+                _react2.default.createElement('img', { src: 'http://bulma.io/images/placeholders/128x128.png' })
+              )
             ),
-            'BULMA'
-          ),
-          _react2.default.createElement(
-            'a',
-            { className: 'panel-block' },
             _react2.default.createElement(
-              'span',
-              { className: 'panel-icon' },
-              _react2.default.createElement('i', { className: 'fa fa-book' })
-            ),
-            'marksheet'
-          ),
-          _react2.default.createElement(
-            'a',
-            { className: 'panel-block' },
-            _react2.default.createElement(
-              'span',
-              { className: 'panel-icon' },
-              _react2.default.createElement('i', { className: 'fa fa-book' })
-            ),
-            'minireset.css'
-          ),
-          _react2.default.createElement(
-            'a',
-            { className: 'panel-block' },
-            _react2.default.createElement(
-              'span',
-              { className: 'panel-icon' },
-              _react2.default.createElement('i', { className: 'fa fa-book' })
-            ),
-            'jgthms.github.io'
-          ),
-          _react2.default.createElement(
-            'a',
-            { className: 'panel-block' },
-            _react2.default.createElement(
-              'span',
-              { className: 'panel-icon' },
-              _react2.default.createElement('i', { className: 'fa fa-code-fork' })
-            ),
-            'daniellowtw/infboard'
-          ),
-          _react2.default.createElement(
-            'a',
-            { className: 'panel-block' },
-            _react2.default.createElement(
-              'span',
-              { className: 'panel-icon' },
-              _react2.default.createElement('i', { className: 'fa fa-code-fork' })
-            ),
-            'mojs'
-          ),
-          _react2.default.createElement(
-            'label',
-            { className: 'panel-block' },
-            _react2.default.createElement('input', { type: 'checkbox' }),
-            'remember me'
-          ),
-          _react2.default.createElement(
-            'p',
-            { className: 'control has-icons-left' },
-            _react2.default.createElement('textarea', { className: 'textarea', placeholder: this.props.user.name + ', what do you think?' }),
-            _react2.default.createElement('span', { className: 'icon is-small is-left' })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'panel-block' },
-            _react2.default.createElement(
-              'button',
-              { className: 'button is-primary is-outlined is-fullwidth' },
-              'Submit Comment'
+              'div',
+              { className: 'media-content' },
+              _react2.default.createElement(
+                'form',
+                { id: 'formSubmission' },
+                _react2.default.createElement(
+                  'div',
+                  { className: 'field' },
+                  _react2.default.createElement(
+                    'p',
+                    { className: 'control rightBuffer' },
+                    _react2.default.createElement('textarea', {
+                      id: 'commentSubmission',
+                      className: 'textarea is-size-7',
+                      placeholder: this.props.user.name + ', what do you think?'
+                    })
+                  )
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'field' },
+                  _react2.default.createElement(
+                    'p',
+                    { className: 'control rightBuffer' },
+                    _react2.default.createElement('input', { type: submit, className: 'button is-size-7' })
+                  )
+                )
+              )
             )
           )
         )
@@ -43034,138 +43009,6 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 var commentsContainer = (0, _reactRedux.connect)(mapStateToProps, null)(Comments);
 
 exports.default = commentsContainer;
-
-/*import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { render } from 'react-dom'
-import Login from './Login'
-import WhoAmI from './WhoAmI'
-
-class Comments extends Component {
-  constructor(props) {
-    super(props)
-      this.renderLoggedIn = this.renderLoggedIn.bind(this)
-      this.renderLoggedOut = this.renderLoggedOut.bind(this)
-  }
-
-renderLoggedIn(){
-  return (
-     <div className="column">
-		      <nav className="panel">
-			      <p className="panel-heading">
-              Comments
-            </p>
-
-            <a className="panel-block is-active">
-              <span className="panel-icon">
-                <i className="fa fa-book"></i>
-              </span>
-              HELLOO....
-            </a>
-
-			      <form id='formSubmission'>
-				    <input className='annotate-text-entry' placeholder='what do you think?' />
-			      </form>
-
-		      </nav>
-	  </div>
-  )
-}
-
-renderLoggedOut(){
-  return (
-    <div className="column">
-              <nav className="panel">
-                <p className="panel-heading">
-                  <center>PLEASE LOG IN TO <br />COMMENT</center>
-                </p>
-              </nav>
-    </div>
-  )
-}
-  render() {
-    console.log("this.props.user", this.props.user)
-    let userInfo = this.props.user
-    return (
-      <div>
-      { userInfo ? this.renderLoggedIn() : this.renderLoggedOut() }
-      </div>
-    )
-  }
-}
-
-const mapStateToProps = (state) => ({
-  user: state.auth
-})
-
-
-const commentsContainer = connect(mapStateToProps, null)(Comments)
-
-export default commentsContainer*/
-
-/*<div className="column is-3">
-              <nav className="panel">
-                <p className="panel-heading">
-                  Comments
-                </p>
-                <p className="panel-tabs">
-                  <a className="is-active">all</a>
-                  <a>public</a>
-                  <a>private</a>
-                </p>
-                <a className="panel-block is-active">
-                  <span className="panel-icon">
-                    <i className="fa fa-book"></i>
-                  </span>
-                  bulma
-                </a>
-                <a className="panel-block">
-                  <span className="panel-icon">
-                    <i className="fa fa-book"></i>
-                  </span>
-                  marksheet
-                </a>
-                <a className="panel-block">
-                  <span className="panel-icon">
-                    <i className="fa fa-book"></i>
-                  </span>
-                  minireset.css
-                </a>
-                <a className="panel-block">
-                  <span className="panel-icon">
-                    <i className="fa fa-book"></i>
-                  </span>
-                  jgthms.github.io
-                </a>
-                <a className="panel-block">
-                  <span className="panel-icon">
-                    <i className="fa fa-code-fork"></i>
-                  </span>
-                  daniellowtw/infboard
-                </a>
-                <a className="panel-block">
-                  <span className="panel-icon">
-                    <i className="fa fa-code-fork"></i>
-                  </span>
-                  mojs
-                </a>
-                <label className="panel-block">
-                  <input type="checkbox" />
-                  remember me
-                </label>
-                <p className="control has-icons-left">
-                  <input className="input is-small" type="text" />
-                  <span className="icon is-small is-left">
-                    <i className="fa fa-search"></i>
-                  </span>
-                </p>
-                <div className="panel-block">
-                  <button className="button is-primary is-outlined is-fullwidth">
-                    Submit Comment
-                  </button>
-                </div>
-              </nav>
-            </div>*/
 
 /***/ }),
 /* 418 */
@@ -43649,7 +43492,7 @@ var SingleArticle = function (_Component) {
               'div',
               { className: 'column' },
               _react2.default.createElement(_radarChart2.default, { singleArticle: this.props.singleArticle }),
-              _react2.default.createElement(_Comments2.default, null)
+              _react2.default.createElement(_Comments2.default, { singleArticle: this.props.singleArticle })
             )
           )
         )
@@ -43706,6 +43549,8 @@ var _reactRedux = __webpack_require__(19);
 var _reactDom = __webpack_require__(121);
 
 var _topStories = __webpack_require__(189);
+
+var _reactRouterDom = __webpack_require__(27);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43767,7 +43612,7 @@ var TopStories = function (_Component) {
                       'td',
                       null,
                       _react2.default.createElement(
-                        NavLink,
+                        _reactRouterDom.NavLink,
                         { to: '/SingleArticle/' + story.id, className: '' },
                         story.title
                       )

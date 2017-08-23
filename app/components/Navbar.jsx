@@ -103,7 +103,7 @@ class Navbar extends Component {
   }
 }
 
-const mapState = (state, componentProps) => ({
+const mapState = (state) => ({
   user: state.auth
 })
 

@@ -39,7 +39,7 @@ class SingleArticle extends Component {
               </div>
               <div className="column">
                 <RadarChart singleArticle={this.props.singleArticle} />
-              <Comments />
+              <Comments singleArticle={this.props.singleArticle}/>
               </div>
             </div>
           }
