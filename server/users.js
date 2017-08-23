@@ -14,6 +14,12 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
+router.get('/:userId', (req, res, next) => {
+  User.findById(req.params.userId)
+    .then(user => res.json(user))
+    .catch(next)
+})
+
 // POST /api/users
 router.post('/', (req, res, next) => {
   console.log('req.body:', req.body)

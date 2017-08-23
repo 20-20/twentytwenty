@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"version": "0.0.2",
 	"browser_action": {
-		"default_icon": "images/eye_icon.png",
+		"default_icon": "images/favicon.png",
 		"default_title": "20-20",
 		"default_popup": "popup.html"
 	},
