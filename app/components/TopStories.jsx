@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom'
 import { render } from 'react-dom'
 import { fetchTopStories } from '../reducers/topStories'
 
