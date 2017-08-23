@@ -1,5 +1,4 @@
 'use strict'
-
 const db = require('APP/db')
 const Article = db.model('articles')
 const Paragraph = db.model('paragraphs')
@@ -11,10 +10,8 @@ const request = require('request')
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 const sentimentAnalysis = require('./sentiment')
 const axios = require('axios')
-
 /* Event Registry Api Functions */
-const eventRegistryFull = (url, trending) => {
-  return eventRegistryUri(url)
+const eventRegistryFull = (url, trending) => eventRegistryUri(url)
     .then(uri => {
       if (uri === null) throw new Error('This article cannot be found')
       else return uri
@@ -31,22 +28,17 @@ const eventRegistryFull = (url, trending) => {
       where: { id: paragraphs[0].article_id },
       include: [{ model: Paragraph, include: [Comment] }, { model: Topic }, { model: Relevance }]
     }))
-}
 
-const eventRegistryUri = (url) => {
-  return axios.get('http://eventregistry.org/json/articleMapper?articleUrl=' + url + `&includeAllVersions=false&deep=true`)
+const eventRegistryUri = (url) => axios.get('http://eventregistry.org/json/articleMapper?articleUrl=' + url + `&includeAllVersions=false&deep=true`)
     .then(result => {
       const uriObj = result.data
       return uriObj[Object.keys(uriObj)[0]]
     })
-}
 
-const eventRegistryContent = (uri) => {
-  return axios.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
+const eventRegistryContent = (uri) => axios.get('http://eventregistry.org/json/article?action=getArticle&articleUri=' + uri +
     '&resultType=info&infoIncludeArticleCategories=true&infoIncludeArticleLocation=true&infoIncludeArticleImage=true&infoArticleBodyLen=10000')
-}
 
-const createArticle = async (article, trending) => {
+const createArticle = async(article, trending) => {
   const articleProps = article[Object.keys(article)[0]].info
   const watson = await sentimentAnalysis(articleProps.url)
   const keywordTopics = watson.keywords.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
@@ -84,8 +76,7 @@ const createArticle = async (article, trending) => {
   ]
 }
 
-const createSentimentDataInInstance = (article, topics) => {
-  return topics.forEach(topic => {
+const createSentimentDataInInstance = (article, topics) => topics.forEach(topic => {
     console.log("TOPICS", topic.relevance, topic.text, article.id)
     Relevance.findOrCreate({
       where: {
@@ -95,7 +86,6 @@ const createSentimentDataInInstance = (article, topics) => {
       }
     })
   })
-}
 
 const createArticleParagraphs = (text, url, articleId) => {
   let allParagraphs = text.split('\n')
@@ -111,11 +101,8 @@ const createArticleParagraphs = (text, url, articleId) => {
   })
   return Promise.all(promises)
 }
-
 /*       Article Creation Functions till here       */
-
 /********        Routes        ********/
-
 // route for chrome extension
 router.post(`/:url`, (req, res, next) => {
   const decodedUrl = req.params.url.includes('html')
@@ -129,12 +116,9 @@ router.post(`/:url`, (req, res, next) => {
       if (retObj) return retObj
       else return eventRegistryFull(req.params.url, req.query.trending)
     })
-    .then(articleWithParagraphs => {
-      return res.json(articleWithParagraphs)
-    }
+    .then(articleWithParagraphs => res.json(articleWithParagraphs)
     ).catch(error => console.log(error.message))
 })
-
 router.get('/:articleId', (req, res, next) => {
   Article.findOne({
     where: {
@@ -145,7 +129,5 @@ router.get('/:articleId', (req, res, next) => {
     .then(article => res.json(article))
     .catch('Error fetching article with provided Id')
 })
-
 /********        Routes till here        ********/
-
 module.exports = { router, createArticle, createArticleParagraphs }
