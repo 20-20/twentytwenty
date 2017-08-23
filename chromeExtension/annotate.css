@@ -6,7 +6,7 @@
 	position: fixed;
 	text-align: center;
 	top: 5%;
-	right: 25%;
+	right: 30%;
 	width: 10%;
 	height: 5%;
 	z-index: 2147483647;
@@ -26,7 +26,7 @@ span.marked {
 	position: fixed;
 	bottom: 0px;
 	right: 0px;
-	width: 25%;
+	width: 30%;
 	height: 100%;
 	z-index: 2147483646;
 	border-left: 1px solid #000022;
@@ -100,4 +100,16 @@ span.marked {
 
 .fa-comment-o {
 	color: black
+}
+
+.scroll {
+	overflow-y: scroll
+}
+
+.leftBuffer {
+	padding-left: 10%
+}
+
+.rightBuffer {
+	padding-right: 5%
 }
