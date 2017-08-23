@@ -66,24 +66,13 @@ class SingleArticle extends Component{
                 key: 'me',
                 label: 'My Scores',
                 values: {
-                  joy: .4,
-                  anger: .6,
-                  disgust: .7,
-                  sadness: .2,
-                  fear: .8,
+                  joy: `${singleArticle.joy}`,
+                  anger: `${singleArticle.anger}`,
+                  disgust: `${singleArticle.disgust}`,
+                  sadness: `${singleArticle.sadness}`,
+                  fear: `${singleArticle.fear}`,
                 },
-              },
-              {
-                key: 'everyone',
-                label: 'Everyone',
-                values: {
-                  joy: 1,
-                  anger: .8,
-                  disgust: .6,
-                  sadness: .4,
-                  fear: .2
-                },
-              },
+              }
             ],
           }}
         />
