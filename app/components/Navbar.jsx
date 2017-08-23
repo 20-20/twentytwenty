@@ -35,16 +35,16 @@ class Navbar extends Component {
 
           <div className="navbar-menu">
             <div className="navbar-start">
-              <a className="navbar-item " href="#Trending">
+              <a className="navbar-item " href="/#Trending">
                 Trending
               </a>
-              <a className="navbar-item " href="#TopStories">
+              <a className="navbar-item " href="/#TopStories">
                 Top Stories
               </a>
               <a className="navbar-item " href="#GlobalConversation">
                 Global Conversation
               </a>
-              <a className="navbar-item " href="#History">
+              <a className="navbar-item " href="/#History">
                 History
               </a>
               <a className="navbar-item " href="#Community">
