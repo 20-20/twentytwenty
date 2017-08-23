@@ -5,8 +5,8 @@ export default function RadarChart({singleArticle}) {
 
   return (
     <Radar
-      width={500}
-      height={500}
+      width={450}
+      height={450}
       padding={70}
       domainMax={1}
       highlighted={null}

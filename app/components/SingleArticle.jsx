@@ -37,11 +37,10 @@ class SingleArticle extends Component {
                   )
                 }
               </div>
-              <Comments />
               <div className="column">
                 <RadarChart singleArticle={this.props.singleArticle} />
+              <Comments />
               </div>
-
             </div>
           }
         </div>
@@ -51,7 +50,7 @@ class SingleArticle extends Component {
   }
 }
 
-const mapStateToProps = function ({ trending, comments, singleArticle }) {
+const mapStateToProps = ({ trending, comments, singleArticle }) => {
   return {
     trending,
     comments,
