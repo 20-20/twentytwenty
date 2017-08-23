@@ -118,8 +118,9 @@ span.marked {
 	flex-grow: 1
 }
 
-.noBulmaSpace {
-	margin-top: 0;
-	border: none;
-	padding-top: 0;
+.media+.media {
+	margin-top: 0 !important;
+	border: none !important;
+	padding-top: 0 !important;
 }
+
