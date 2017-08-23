@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { render } from 'react-dom'
+import { NavLink } from 'react-router-dom'
 import { fetchTopStories } from '../reducers/topStories'
+
 
 class TopStories extends Component {
   componentDidMount() {
