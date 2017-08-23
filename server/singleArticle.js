@@ -88,11 +88,13 @@ const createArticle = async (article, trending) => {
 
 const createSentimentDataInInstance = (article, topics) => {
   return topics.forEach(topic => {
-    console.log("TOPICSSSSS", topic.relevance, topic.text, article.id)
-    Relevance.create({
-      score: topic.relevance,
-      topic_name: topic.text,
-      article_id: article.id
+    console.log("TOPICS", topic.relevance, topic.text, article.id)
+    Relevance.findOrCreate({
+      where: {
+        score: topic.relevance,
+        topic_name: topic.text,
+        article_id: article.id
+      }
     })
   })
 }
@@ -129,8 +131,9 @@ router.post(`/:url`, (req, res, next) => {
       if (retObj) return retObj
       else return eventRegistryFull(req.params.url, req.query.trending)
     })
-    .then(articleWithParagraphs =>
-      res.json(articleWithParagraphs)
+    .then(articleWithParagraphs => {
+      return res.json(articleWithParagraphs)
+    }
     ).catch(error => console.log(error.message))
 })
 
