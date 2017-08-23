@@ -20,16 +20,16 @@ function fetchArticleData(article) {
       fetchCommenter(comment.user_id)
         .then(user => {
           $('.annotate-list').append(
-            commentDisplay(user.name, comment.text)
+            commentDisplay(user.name, comment.text, comment.id)
           )
         })
     })
   })
 }
 
-export function commentDisplay(userName, commentText) {
+export function commentDisplay(userName, commentText, commentId) {
   return (
-    `<a class="panel-block is-active">
+    `<a id=${commentId} class="panel-block is-active">
       <span class="panel-icon">
         <i class="fa fa-comment-o"></i>
       </span>
@@ -48,7 +48,6 @@ export function postComment(comment) {
 }
 
 function fetchCommenter(userId) {
-  console.log("entered fetch function. Here is user id", userId)
   return axios.get(`http://localhost:1337/api/users/${userId}`)
     .then(user => user.data)
 }

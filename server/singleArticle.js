@@ -81,7 +81,6 @@ const createArticleParagraphs = function(text, url, articleId) {
 /********        Routes        ********/
 // route for chrome extension
 router.post(`/:url`, (req, res, next) => {
-  console.log("ENTERED AXIOS POST")
   const decodedUrl = req.params.url.includes('html')
     ? decodeURIComponent(req.params.url).split(`html`)[0] + `html`
     : decodeURIComponent(req.params.url)

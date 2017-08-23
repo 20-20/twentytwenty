@@ -24,6 +24,7 @@ function renderChrExt(currentUser) {
 	renderComments()
 	showButton(currentUser.name)
 	appendFormSubmission()
+	clickHandler()
 }
 
 function storeCurrentUser(currentUser) {
@@ -57,14 +58,6 @@ function appendFormSubmission() {
 		chrome.storage.local.get('currentUser', currentUser => {
 			const comment = $('.annotate-text-entry').val()
 			const commentHTML = commentDisplay(currentUser.currentUser.name, comment)
-			// const commentHTML = `
-			// 	<a class="panel-block is-active">
-			// 		<span class="panel-icon">
-			// 			<i class="fa fa-book"></i>
-			// 		</span>
-			// 		<strong>${currentUser.currentUser.name}</strong>
-			// 		: ${comment}
-			// 	</a>`
 			$('.annotate-list').append($(`${commentHTML}`))
 			$('.annotate-text-entry').val('')
 			sendPostComment(comment, currentUser.currentUser)
@@ -93,3 +86,11 @@ function sendPostComment(comment, currentUser) {
 		}
 	)
 }
+
+function clickHandler() {
+	$('.panel').on('click', evt => {
+		console.log("event target", evt.target)
+		// console.log("LOOKY HERE:", evt)
+	})
+}
+
