@@ -1,44 +1,109 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Navlink } from 'react-router-dom'
+import { fetchArticle } from '../reducers/singleArticle'
 import Comments from './Comments.jsx'
+import Radar from 'react-d3-radar'
 
-function SingleArticle({ trending, comments, singleArticle, componentProps }) {
+class SingleArticle extends Component{
 
-  const article = singleArticle && singleArticle.id
+  componentDidMount() {
+    console.log('componentProps', this.props)
+    const articleId = +this.props.match.params.id
+    this.props.fetchArticle(articleId)
+  }
 
-  return (
-    <div className="container" >
-      <hr />
-      <div>
-        {trending.length &&
-        <div className="columns">
-            <div className="column is-two-thirds">
-              <h1 className="title is-1">{article && singleArticle.title}</h1>
-              <hr />
-              <h2 className="subtitle is-3">{article && singleArticle.publication}</h2>
-              <a href={article && singleArticle.url}>Link to Article</a>
-              <figure className="image">
-                <img style={{ maxWidth: '100%', height: 'auto' }} src={article && singleArticle.urlToImage} className="" />
-              </figure>
-              {
-                singleArticle.paragraphs && singleArticle.paragraphs.map(para => (
-                  <div><p key={para.index}>{para.text}</p><br /></div>)
-                )
-              }
+  render(){
+    const singleArticle = this.props.singleArticle
+
+    return (
+      <div className="container" >
+        <hr />
+        <div>
+          {
+            <div className="columns">
+              <div className="column is-two-thirds">
+                <h1 className="title is-1">{ singleArticle && singleArticle.title}</h1>
+                <hr />
+                <h2 className="subtitle is-3">{singleArticle && singleArticle.publication}</h2>
+                <a href={singleArticle && singleArticle.url}>Link to Article</a>
+                <figure className="image">
+                  <img style={{ maxWidth: '100%', height: 'auto' }} src={singleArticle && singleArticle.urlToImage} className="" />
+                </figure>
+                {
+                  singleArticle.paragraphs && singleArticle.paragraphs.map(para => (
+                    <div><p key={para.index}>{para.text}</p><br /></div>)
+                  )
+                }
+              </div>
+              <Comments />
             </div>
-            <Comments/>
+          }
         </div>
-        }
+        <Radar
+          width={500}
+          height={500}
+          padding={70}
+          domainMax={1}
+          highlighted={null}
+          onHover={(point) => {
+            if (point) {
+              console.log('hovered over a data point');
+            } else {
+              console.log('not over anything');
+            }
+          }}
+          data={{
+            variables: [
+              { key: 'joy', label: 'Joy' },
+              { key: 'anger', label: 'Anger' },
+              { key: 'disgust', label: 'Disgust' },
+              { key: 'sadness', label: 'Sadness' },
+              { key: 'fear', label: 'Fear' }
+            ],
+            sets: [
+              {
+                key: 'me',
+                label: 'My Scores',
+                values: {
+                  joy: .4,
+                  anger: .6,
+                  disgust: .7,
+                  sadness: .2,
+                  fear: .8,
+                },
+              },
+              {
+                key: 'everyone',
+                label: 'Everyone',
+                values: {
+                  joy: 1,
+                  anger: .8,
+                  disgust: .6,
+                  sadness: .4,
+                  fear: .2
+                },
+              },
+            ],
+          }}
+        />
       </div>
-    </div>
-  )
+    )
+  }
 }
 
-const mapState = ({ trending, comments, singleArticle }, componentProps) => ({
-  trending,
-  comments,
-  singleArticle: trending.find(article => article.id === +componentProps.match.params.id)
+const mapStateToProps = function({ trending, comments, singleArticle }) {
+  return {
+    trending,
+    comments,
+    singleArticle
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchArticle: ( articleId ) => dispatch(fetchArticle( articleId ))
 })
 
-export default connect(mapState)(SingleArticle)
+const singleArticleContainer = connect(mapStateToProps, mapDispatchToProps)(SingleArticle)
+
+export default singleArticleContainer
