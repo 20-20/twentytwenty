@@ -37,54 +37,64 @@ function showButton(name) {
 	appendSidebar(name)
 	$('body').append(sidebarToggle)
 	$('.annotate-toggle').append(toggleButton)
-	appendToggle()
+	$('.annotate-toggle').click(extensionToggle)
 }
 
-function appendToggle() {
-	$('.annotate-toggle').click(function() {
-		$('.annotate-sidebar').toggle()
-		$('.annotate-toggle').toggleClass('far-right')
-		if ($('.iconText').text().length) {
-			$('.iconText').text('')
-			$('.iconText').append(`<i class='fa fa-globe'></i>`)
-		} else $('.iconText').append(`20-20`)
-	})
+export function extensionToggle() {
+	$('.annotate-sidebar').toggle()
+	$('.annotate-toggle').toggleClass('far-right')
+	if ($('.iconText').text().length) {
+		$('.iconText').text('')
+		$('.iconText').append(`<i class='fa fa-globe'></i>`)
+	} else $('.iconText').append(`20-20`)
+  // focus user input into comment text box
+  $('.annotate-text-entry').focus()
 }
 
 function appendFormSubmission() {
 	$('#formSubmission').submit(function(evt) {
-		// Visually display comment in chrome extension
 		evt.preventDefault()
-		chrome.storage.local.get('currentUser', currentUser => {
-			const comment = $('.annotate-text-entry').val()
-			const commentHTML = commentDisplay(currentUser.currentUser.name, comment)
-			$('.annotate-list').append($(`${commentHTML}`))
-			$('.annotate-text-entry').val('')
-			sendPostComment(comment, currentUser.currentUser)
-		})
+		secureCommentContext()
 	})
 }
 
-function sendPostComment(comment, currentUser) {
-	// Post comment to database
+// maybe move secureCommentContext and paragraphMatch to new file -Jason
+function secureCommentContext(currentUser) {
+	const commentText = $('.annotate-text-entry').val()
 	chrome.storage.local.get(
-		['selectedText', 'paragraphs'], ({ selectedText, paragraphs}) => {
-			const paragraphText = paragraphs.map(paragraph => paragraph.text)
-			const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
-			const selectedParagraph = paragraphs.filter(
-				(paragraph) => paragraph.text === bestMatch.target
-			)
-			console.log("here is the currentUser", currentUser)
-			console.log("selecte par", selectedParagraph[0])
-			console.log("comment", comment)
-			postComment({
-				article_id: selectedParagraph[0].article_id,
-				paragraph_id: selectedParagraph[0].id,
-				text: comment,
-				user_id: currentUser.id
-			})
+		['currentUser', 'currentArticle', 'selectedText', 'paragraphs'],
+			({ currentUser, currentArticle, selectedText, paragraphs}) => {
+			const articleId = currentArticle.id
+			const paragraphId = (selectedText === null)
+				? 999
+				: paragraphMatch(paragraphs, selectedText)
+			postAndDisplayComment(currentUser, commentText, articleId, paragraphId)
 		}
 	)
+}
+
+function paragraphMatch(paragraphs, selectedText) {
+	const paragraphText = paragraphs.map(paragraph => paragraph.text)
+	const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
+	const selectedParagraph = paragraphs.filter(
+		(paragraph) => paragraph.text === bestMatch.target
+	)
+	return selectedParagraph[0].id
+}
+
+function postAndDisplayComment(currentUser, text, article_id, paragraph_id) {
+	postComment({
+		article_id,
+		paragraph_id,
+		text,
+		user_id: currentUser.id
+	})
+		.then(newComment => newComment.data)
+		.then(newComment => {
+			const commentHTML = commentDisplay(currentUser.name, newComment)
+			$('.annotate-list').append($(`${commentHTML}`))
+			$('.annotate-text-entry').val('')
+		})
 }
 
 function clickHandler() {

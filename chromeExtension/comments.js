@@ -8,7 +8,7 @@ export default function renderComments() {
   // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(article => {
     console.log("HERE IS THE ARTICLE", article)
-    chrome.storage.local.set(article.data)
+    chrome.storage.local.set({ 'currentArticle': article.data })
     fetchArticleData(article.data)
   })
   .catch('Could not fetch article data')
@@ -16,25 +16,26 @@ export default function renderComments() {
 
 function fetchArticleData(article) {
   article.paragraphs.forEach(paragraph => {
+    // sort comment order -Jason
     paragraph.comments.forEach(comment => {
       fetchCommenter(comment.user_id)
         .then(user => {
           $('.annotate-list').append(
-            commentDisplay(user.name, comment.text, comment.id)
+            commentDisplay(user.name, comment)
           )
         })
     })
   })
 }
 
-export function commentDisplay(userName, commentText, commentId) {
+export function commentDisplay(userName, comment) {
   return (
-    `<a id=${commentId} class="panel-block is-active">
+    `<a id=${comment.id} class="panel-block is-active">
       <span class="panel-icon">
         <i class="fa fa-comment-o"></i>
       </span>
       <strong>${userName}</strong>
-      : ${commentText}
+      : ${comment.text}
     </a>`
   )
 }
@@ -42,8 +43,9 @@ export function commentDisplay(userName, commentText, commentId) {
 /* Axios requests below */
 
 export function postComment(comment) {
-	axios.post(`http://localhost:1337/api/comments`, comment)
-	// `http://localhost:1337/api/comments` commented out for ngrok
+	return axios.post(`http://localhost:1337/api/comments`, comment)
+  // `http://localhost:1337/api/comments` commented out for ngrok
+    // .then(newComment => newComment.data)
 		.catch('Comment was NOT successfully added to db')
 }
 
