@@ -1,60 +1,14 @@
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import renderLoginPrompt from './loginPrompt'
-
-const style =
-  `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
-
-// const button = '<a class="button is-dark">20-20</a>'
-
-const sidebar =
-	`
-	<div class='annotate-sidebar' style='display: none'>
-		<nav class="panel">
-			<p class="panel-heading annotate-header">
-				Comments
-			</p>
-			<div class='annotate-list'>
-			</div>
-			<form id='formSubmission'>
-				<input type=submit class='annotate-save' value='Comment'>
-				<input class='annotate-text-entry' placeholder='What do you think?'>
-			</form>
-		</nav>
-	</div>
-	`
-
-const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
-const toggleButton =
-`
-<a
-	class='button is-dark is-medium is-focused'>
-	<i class="fa fa-globe"></i>
-	20-20
-</a>
-`
-
-
-// const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
-// const sidebarToggle =
-// 	`<button
-// 		class='annotate-toggle far-right'>
-// 		<i class="fa fa-globe"></i>
-// 		20-20
-// 	</button>`
-
-
-
-
-
-
+import renderComments, { postComment, commentDisplay } from './comments'
+import { style, appendSidebar, sidebarToggle, toggleButton } from './domAdditions'
 
 $(document).ready(function() {
 	axios.get(`http://localhost:1337/api/auth/whoami`)
 		.then(res => {
 			res.data
-				? renderChrExt()
+				? renderChrExt(res.data)
 				: renderLoginPrompt()
 		})
 })
@@ -62,128 +16,91 @@ $(document).ready(function() {
 function checkLogin() {
 	axios.get(`http://localhost:1337/api/auth/whoami`)
 		.then(res => res.data)
-    .catch(err => console.error('Problem fetching current user', err))
+		.catch(err => console.error('Problem fetching current user', err))
 }
 
-function renderChrExt() {
-	// showButton()
-	appendExt()
+function renderChrExt(currentUser) {
+	storeCurrentUser(currentUser)
+	renderComments()
+	showButton(currentUser.name)
 	appendFormSubmission()
+	clickHandler()
 }
 
+function storeCurrentUser(currentUser) {
+	chrome.storage.local.set(currentUser)
+}
 
-function showButton() {
+function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style)
-	$('body').append(sidebar)
+	appendSidebar(name)
 	$('body').append(sidebarToggle)
 	$('.annotate-toggle').append(toggleButton)
+	$('.annotate-toggle').click(extensionToggle)
 }
 
-
-
-
-
-function createComment(comment) {
-  axios.post(`http://localhost:1337/api/comments`, comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
-		.catch('Comment was NOT successfully added to db')
-}
-
-function appendExt() {
-	// Add the sidebar to the page
-  $('head').append(style)
-  $('body').append(sidebar)
-	// Add the Toggle (Hide) Button to the page
-	$('body').append(sidebarToggle)
-	$('.annotate-toggle').append(toggleButton)
-	// Toggle sidebar
-  $('.annotate-toggle').click(function() {
-    $('.annotate-sidebar').toggle()
-		$('.annotate-toggle').toggleClass('far-right')
-
-    if ($('.annotate-toggle').text() === 'X') {
-      $('.annotate-toggle').text('<')
-    } else {
-      $('.annotate-toggle').text('X')
-    }
-  })
+export function extensionToggle() {
+	$('.annotate-sidebar').toggle()
+	$('.annotate-toggle').toggleClass('far-right')
+	if ($('.iconText').text().length) {
+		$('.iconText').text('')
+		$('.iconText').append(`<i class='fa fa-globe'></i>`)
+	} else $('.iconText').append(`20-20`)
+  // focus user input into comment text box
+  $('.annotate-text-entry').focus()
 }
 
 function appendFormSubmission() {
 	$('#formSubmission').submit(function(evt) {
-		// Visually display comment in chrome extension
-    evt.preventDefault()
-    const comment = $('.annotate-text-entry').val()
-    const commentHTML = `
-			<a class="panel-block is-active">
-				<span class="panel-icon">
-					<i class="fa fa-book"></i>
-				</span>
-				${comment}
-			</a>`
-    $('.annotate-list').append($(`${commentHTML}`))
-    $('.annotate-text-entry').val('')
-		// Post comment to database
-    chrome.storage.local.get(
-    	['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
-				const paragraphText = paragraphs.map(paragraph => paragraph.text)
-				const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
-				const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
-				createComment({
-					article_id: selectedParagraph[0].article_id,
-					paragraph_id: selectedParagraph[0].id,
-					text: comment
-				})
-			}
-		)
+		evt.preventDefault()
+		secureCommentContext()
 	})
 }
 
-// $(document).ready(function() {
-// 	// Add the sidebar to the page
-//   $('head').append(style)
-//   $('body').append(sidebar)
-// 	// Add the Toggle (Hide) Button to the page
-//   $('body').append(sidebarToggle)
+// maybe move secureCommentContext and paragraphMatch to new file -Jason
+function secureCommentContext(currentUser) {
+	const commentText = $('.annotate-text-entry').val()
+	chrome.storage.local.get(
+		['currentUser', 'currentArticle', 'selectedText', 'paragraphs'],
+			({ currentUser, currentArticle, selectedText, paragraphs}) => {
+			const articleId = currentArticle.id
+			const paragraphId = (selectedText === null)
+				? 999
+				: paragraphMatch(paragraphs, selectedText)
+			postAndDisplayComment(currentUser, commentText, articleId, paragraphId)
+		}
+	)
+}
 
-// 	// Toggle sidebar
-//   $('.annotate-toggle').click(function() {
-//     $('.annotate-sidebar').toggle()
-//     $('.annotate-toggle').toggleClass('far-right')
+function paragraphMatch(paragraphs, selectedText) {
+	const paragraphText = paragraphs.map(paragraph => paragraph.text)
+	const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
+	const selectedParagraph = paragraphs.filter(
+		(paragraph) => paragraph.text === bestMatch.target
+	)
+	return selectedParagraph[0].id
+}
 
-//     if ($('.annotate-toggle').text() === 'X') {
-//       $('.annotate-toggle').text('<')
-//     } else {
-//       $('.annotate-toggle').text('X')
-//     }
-//   })
+function postAndDisplayComment(currentUser, text, article_id, paragraph_id) {
+	postComment({
+		article_id,
+		paragraph_id,
+		text,
+		user_id: currentUser.id
+	})
+		.then(newComment => newComment.data)
+		.then(newComment => {
+			const commentHTML = commentDisplay(currentUser.name, newComment)
+			$('.annotate-list').append($(`${commentHTML}`))
+			$('.annotate-text-entry').val('')
+		})
+}
 
-//   $('#formSubmission').submit(function(evt) {
-// 	// Visually display comment in chrome extension
-//     evt.preventDefault()
-//     const comment = $('.annotate-text-entry').val()
-//     const commentHTML = `
-// 			<a class="panel-block is-active">
-// 				<span class="panel-icon">
-// 					<i class="fa fa-book"></i>
-// 				</span>
-// 				${comment}
-// 			</a>`
-//     $('.annotate-list').append($(`${commentHTML}`))
-//     $('.annotate-text-entry').val('')
-// 	// Post comment to database
-//     chrome.storage.local.get(
-//       ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
-//         console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs)
-//         const paragraphText = paragraphs.map(paragraph => paragraph.text)
-//         const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
-//         const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
-//         createComment({
-//           article_id: selectedParagraph[0].article_id,
-//           paragraph_id: selectedParagraph[0].id,
-//           text: comment
-//         })
-//       }
-// )
-//   })
-// })
+function clickHandler() {
+	$('.panel').on('click', evt => {
+		console.log("event target", evt.target)
+		// console.log("LOOKY HERE:", evt)
+	})
+}
+

@@ -83,7 +83,7 @@ span.marked {
 }
 
 .twentyHighlight {
-    background: rgba(135, 200, 250, .2)
+    background: rgba(135, 200, 250, .5)
 }
 
 .marginTop {
@@ -96,4 +96,8 @@ span.marked {
 
 .largeZ {
 	z-index: 2147483646;
+}
+
+.fa-comment-o {
+	color: black
 }
