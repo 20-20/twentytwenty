@@ -11,4 +11,3 @@ module.exports.associations = (Relevance, { Article, Topic }) => {
   Article.hasMany(Relevance)
   Topic.hasMany(Relevance)
 }
-
