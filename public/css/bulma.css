@@ -5593,15 +5593,7 @@ label.panel-block {
   background-color: whitesmoke;
   padding: 3rem 1.5rem 6rem; }
 
-.blur {
-  filter: url(#blur);
-  filter: blur(1.5px);
-  transition: 1s;
-}
-
-.blur:hover {
-  filter: blur(0px);
-}
-
-
 /*# sourceMappingURL=bulma.css.map */
+
+
+

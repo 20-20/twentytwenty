@@ -1,0 +1,11 @@
+/*adds image blurring... */
+
+.is-ancestor:hover .blur:not(:hover){
+  filter: blur(4px) brightness(1.6) opacity(.5);
+  transition: 1s;
+}
+
+.is-ancestor:not(:hover){
+  filter: blur(0px);
+  transition: 2s;
+}
