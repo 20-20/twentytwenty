@@ -64,6 +64,7 @@ function secureCommentContext() {
 	chrome.storage.local.get(
 		['currentUser', 'currentArticle', 'selectedText'],
 			({ currentUser, currentArticle, selectedText}) => {
+				console.log("HERE IS THE SELECTED TEXT", selectedText)
 			const paragraphId = (selectedText === null)
 				? null
 				: paragraphMatch(currentArticle.paragraphs, selectedText)
