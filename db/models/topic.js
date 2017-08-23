@@ -5,7 +5,7 @@ const {STRING} = require('sequelize')
 module.exports = db => db.define('topics', {
   name: {
     type: STRING,
-    allowNull: false,
+    primaryKey: true,
     validate: {
       notEmpty: true
     }

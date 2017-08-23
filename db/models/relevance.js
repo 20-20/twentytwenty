@@ -6,3 +6,8 @@ module.exports = db => db.define('relevances', {
     defaultValue: 0
   }
 })
+
+module.exports.associations = (Relevance, { Article, Topic }) => {
+  Article.hasMany(Relevance)
+  Topic.hasMany(Relevance)
+}

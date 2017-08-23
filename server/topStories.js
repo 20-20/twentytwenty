@@ -2,6 +2,9 @@
 
 const db = require('APP/db')
 const Article = db.model('articles')
+const Topic = db.model('topics')
+const Paragraph = db.model('paragraphs')
+const Comment = db.model('comments')
 const router = require('express').Router()
 
 
@@ -10,8 +13,9 @@ module.exports = router
     Article.findAll({
       limit: 5,
       order: [
-        [ `${req.query.sortBy}`, 'DESC' ]
-      ]
+        [`${req.query.sortBy}`, 'DESC']
+      ],
+      include: [{ model: Paragraph, include: [Comment] }, { model: Topic }]
     }).then(story => res.json(story))
-    .catch(next)
+      .catch(next)
   })
