@@ -43,7 +43,7 @@ renderLoggedIn(){
               </div>
               <div className='field'>
                 <p className='control rightBuffer'>
-                  <input type={submit} className='button is-size-7'/>
+                  <input type={`submit`} className='button is-size-7'/>
                 </p>
               </div>
             </form>

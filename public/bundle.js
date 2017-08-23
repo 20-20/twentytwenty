@@ -38913,6 +38913,8 @@ var _Signup = __webpack_require__(421);
 
 var _Signup2 = _interopRequireDefault(_Signup);
 
+var _topStories = __webpack_require__(189);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38934,6 +38936,7 @@ var Routes = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.props.fetchInitialData();
+      this.props.fetchTopStories();
     }
   }, {
     key: 'render',
@@ -38961,6 +38964,7 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     fetchInitialData: function fetchInitialData() {
       dispatch((0, _trending.fetchTrending)());
+      dispatch((0, _topStories.fetchTopStories)());
     }
   };
 };
@@ -42944,7 +42948,7 @@ var Comments = function (_Component) {
                   _react2.default.createElement(
                     'p',
                     { className: 'control rightBuffer' },
-                    _react2.default.createElement('input', { type: submit, className: 'button is-size-7' })
+                    _react2.default.createElement('input', { type: 'submit', className: 'button is-size-7' })
                   )
                 )
               )
