@@ -20,7 +20,7 @@ function fetchArticleData(article) {
     paragraph.comments.forEach(comment => {
       fetchCommenter(comment.user_id)
         .then(user => {
-          $('.annotate-list').append(
+          $('.media-content').append(
             commentDisplay(user.name, comment)
           )
         })
@@ -30,6 +30,26 @@ function fetchArticleData(article) {
 
 export function commentDisplay(userName, comment) {
   return (
+    `
+
+    <div class='content'>
+      <p class='is-size-7 rightBuffer'>
+        <strong>${userName}</strong>
+        <br>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
+        <br>
+        <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
+      </p>
+    </div>
+
+    `
+
+
+
+
+
+
+
     `<a id=${comment.id} class="panel-block is-active">
       <span class="panel-icon">
         <i class="fa fa-comment-o"></i>
@@ -43,9 +63,9 @@ export function commentDisplay(userName, comment) {
 /* Axios requests below */
 
 export function postComment(comment) {
-	return axios.post(`http://localhost:1337/api/comments`, comment)
+  return axios.post(`http://localhost:1337/api/comments`, comment)
   // `http://localhost:1337/api/comments` commented out for ngrok
-    // .then(newComment => newComment.data)
+    .then(newComment => newComment.data)
 		.catch('Comment was NOT successfully added to db')
 }
 

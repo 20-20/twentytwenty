@@ -7,33 +7,50 @@ export function appendSidebar(name) {
 	`
 	<div class='annotate-sidebar' style='display: none'>
 		<nav class="panel">
-			<p class="panel-heading annotate-header">Comments</p>
+			<p class="panel-heading annotate-header">
+				<strong>Comments</strong>
+			</p>
 		</nav>
 
 		<article class='media'>
-			<figure class='media-left leftBuffer'>
-				<p class='image is-48x48'>
+			<figure class='media-left'>
+				<p class='image is-48x48 leftBuffer'>
 					<img src='http://bulma.io/images/placeholders/128x128.png'>
 				</p>
 			</figure>
+
 			<div class='media-content'>
-				<div class='field'>
-					<p class='control rightBuffer'>
-						<textarea class='textarea is-size-7' placeholder='Add a comment...'></textarea>
-					</p>
-				</div>
-				<div class='field'>
-					<p class='control'>
-						<button class='button is-size-7'>Post comment</button>
-					</p>
-				</div>
+				<form id='formSubmission'>
+					<div class='field'>
+						<p class='control rightBuffer'>
+							<textarea
+							id='commentSubmission'
+								class='textarea is-size-7'
+								placeholder='${name}, what do you think?'
+						></textarea>
+						</p>
+					</div>
+					<div class='field'>
+						<p class='control rightBuffer'>
+							<input type=submit class='button is-size-7'>
+						</p>
+					</div>
+				</form>
 			</div>
+
 		</article>
 
 	</div>
 	`
 	$('body').append(sidebar)
 }
+
+
+
+
+
+
+
 			// <form id='formSubmission'>
 			// 	<input type=submit class='annotate-save' value='Comment'>
 			// 	<input class='annotate-text-entry' placeholder='${name}, what do you think?'>
