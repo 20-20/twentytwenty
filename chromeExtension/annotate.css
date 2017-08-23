@@ -83,7 +83,7 @@ span.marked {
 }
 
 .twentyHighlight {
-    background: rgba(135, 200, 250, .5)
+    background: rgba(135, 200, 250, .25)
 }
 
 .marginTop {
@@ -117,3 +117,10 @@ span.marked {
 .consumeSpace {
 	flex-grow: 1
 }
+
+.media+.media {
+	margin-top: 0 !important;
+	border: none !important;
+	padding-top: 0 !important;
+}
+
