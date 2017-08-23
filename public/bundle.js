@@ -62,17 +62,6 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
-/******/ 	// webpack-livereload-plugin
-/******/ 	(function() {
-/******/ 	  if (typeof window === "undefined") { return };
-/******/ 	  var id = "webpack-livereload-plugin-script";
-/******/ 	  if (document.getElementById(id)) { return; }
-/******/ 	  var el = document.createElement("script");
-/******/ 	  el.id = id;
-/******/ 	  el.async = true;
-/******/ 	  el.src = "http://localhost:35729/livereload.js";
-/******/ 	  document.getElementsByTagName("head")[0].appendChild(el);
-/******/ 	}());
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 330);
 /******/ })
@@ -21346,6 +21335,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function Trending(_ref) {
   var trending = _ref.trending;
 
+
+  var tileClasses = ['tile is-parent is-4', 'tile is-parent is-8 is-vertical', 'tile', ''];
+
   return _react2.default.createElement(
     'div',
     { className: 'section' },
@@ -21367,11 +21359,9 @@ function Trending(_ref) {
           _react2.default.createElement(
             'div',
             { className: 'tile is-parent is-4' },
-            console.log('*************************'),
-            console.log('trending[0].id', trending[0].id),
             _react2.default.createElement(
               _reactRouterDom.NavLink,
-              { to: '/SingleArticle/' + trending[0].id, id: trending[0].id, className: 'tile is-child box notification is-primary', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[0].urlToImage + '\')', backgroundPosition: 'center' } },
+              { to: '/SingleArticle/' + trending[0].id, id: trending[0].id, className: 'tile is-child box notification is-primary blur', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[0].urlToImage + '\')', backgroundPosition: 'center' } },
               _react2.default.createElement(
                 'div',
                 { style: { alignSelf: 'flex-end' } },
@@ -21394,7 +21384,7 @@ function Trending(_ref) {
             { className: 'tile is-parent is-8 is-vertical' },
             _react2.default.createElement(
               _reactRouterDom.NavLink,
-              { to: '/SingleArticle/' + trending[1].id, id: trending[1].id, className: 'tile is-child notification is-primary box', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[1].urlToImage + '\')', backgroundPosition: 'center' } },
+              { to: '/SingleArticle/' + trending[1].id, id: trending[1].id, className: 'tile is-child notification is-primary box blur', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[1].urlToImage + '\')', backgroundPosition: 'center' } },
               _react2.default.createElement(
                 'p',
                 { className: 'title' },
@@ -21409,10 +21399,10 @@ function Trending(_ref) {
             ),
             _react2.default.createElement(
               'div',
-              { className: 'tile' },
+              { className: 'tile is-child' },
               _react2.default.createElement(
                 _reactRouterDom.NavLink,
-                { to: '/SingleArticle/' + trending[2].id, id: trending[2].id, className: 'tile is-child notification is-primary box', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[2].urlToImage + '\')', backgroundPosition: 'center' } },
+                { to: '/SingleArticle/' + trending[2].id, id: trending[2].id, className: 'tile is-child notification is-primary box blur', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[2].urlToImage + '\')', backgroundPosition: 'center' } },
                 _react2.default.createElement(
                   'p',
                   { className: 'title' },
@@ -21424,10 +21414,14 @@ function Trending(_ref) {
                   trending[2].body.slice(0, 250),
                   '...'
                 )
-              ),
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'tile is-child' },
               _react2.default.createElement(
                 _reactRouterDom.NavLink,
-                { to: '/SingleArticle/' + trending[3].id, id: trending[3].id, className: 'tile is-child notification is-primary box', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[3].urlToImage + '\')', backgroundPosition: 'center' } },
+                { to: '/SingleArticle/' + trending[3].id, id: trending[3].id, className: 'tile is-child notification is-primary box blur', style: { backgroundImage: 'linear-gradient(black, transparent), url(\'' + trending[3].urlToImage + '\')', backgroundPosition: 'center' } },
                 _react2.default.createElement(
                   'p',
                   { className: 'title' },

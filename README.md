@@ -1,9 +1,9 @@
 # 20-20
 
-Jason Lerner
-Andrew Atkinson
-Ezra Shamie
-Darryn Wu
+- Jason Lerner
+- Andrew Atkinson
+- Ezra Shamie
+- Darryn Wu
 
 # Description
 
