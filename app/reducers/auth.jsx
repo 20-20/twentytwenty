@@ -37,12 +37,21 @@ export default function reducer(user = null, action) {
 const resToData = res => res.data
 
 // a "simple" thunk creator which uses API, changes state, and returns a promise.
-export const login = credentials => dispatch => axios.put('/api/auth/me', credentials)
-  .then(resToData)
-  .then(user => {
-    dispatch(set(user))
-    return user
-  })
+// export const login = credentials => dispatch => axios.put('/api/auth/me', credentials)
+//   .then(resToData)
+//   .then(user => {
+//     dispatch(set(user))
+//     return user
+//   })
+
+export const login = (username, password) =>
+  dispatch =>
+    axios.post('/api/auth/login/local',
+      {username, password})
+      .then(() => dispatch(whoami()))
+      .catch(() => dispatch(whoami()))
+
+
 
 // a "composed" thunk creator which uses the "simple" one, then routes to a page.
 export const loginAndGoToUser = credentials => dispatch => {
@@ -71,12 +80,11 @@ export const retrieveLoggedInUser = () => dispatch => {
     .catch(err => console.error('Problem fetching current user', err))
 }
 
-// optimistic
-export const logout = () => dispatch => {
-  dispatch(remove())
-  axios.delete('/api/auth/me')
-    .catch(err => console.error('logout unsuccessful', err))
-}
+export const logout = () =>
+  dispatch =>
+    axios.post('/api/auth/logout')
+      .then(() => dispatch(whoami()))
+      .catch(() => dispatch(whoami()))
 
 export const whoami = () =>
   dispatch =>

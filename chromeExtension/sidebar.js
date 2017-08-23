@@ -1,12 +1,17 @@
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
+import renderLoginPrompt from './loginPrompt'
+
+const style =
+  `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
+
+// const button = '<a class="button is-dark">20-20</a>'
 
 const sidebar =
-	`<div class='annotate-sidebar' style='display: none'>
+	`
+	<div class='annotate-sidebar' style='display: none'>
 		<nav class="panel">
-		<p id="userInfo">Not Logged In</p>
-		<button id="signin">sign in</button>
-		<button id="signout">sign out</button>
 			<p class="panel-heading annotate-header">
 				Comments
 			</p>
@@ -17,50 +22,84 @@ const sidebar =
 				<input class='annotate-text-entry' placeholder='What do you think?'>
 			</form>
 		</nav>
-	</div>`
+	</div>
+	`
 
-const style =
-  `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">`
+const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
+const toggleButton =
+`
+<a
+	class='button is-dark is-medium is-focused'>
+	<i class="fa fa-globe"></i>
+	20-20
+</a>
+`
 
-var sidebarToggle = `<div class='annotate-toggle far-right'>X</div>`
+
+// const sidebarToggle = '<div class="annotate-toggle far-right "></div>'
+// const sidebarToggle =
+// 	`<button
+// 		class='annotate-toggle far-right'>
+// 		<i class="fa fa-globe"></i>
+// 		20-20
+// 	</button>`
+
+
+
+
+
+
+
+$(document).ready(function() {
+	axios.get(`http://localhost:1337/api/auth/whoami`)
+		.then(res => {
+			res.data
+				? renderChrExt()
+				: renderLoginPrompt()
+		})
+})
+
+function checkLogin() {
+	axios.get(`http://localhost:1337/api/auth/whoami`)
+		.then(res => res.data)
+    .catch(err => console.error('Problem fetching current user', err))
+}
+
+function renderChrExt() {
+	// showButton()
+	appendExt()
+	appendFormSubmission()
+}
+
+
+function showButton() {
+	// Add the sidebar to the page
+	$('head').append(style)
+	$('body').append(sidebar)
+	$('body').append(sidebarToggle)
+	$('.annotate-toggle').append(toggleButton)
+}
+
+
+
+
 
 function createComment(comment) {
   axios.post(`http://localhost:1337/api/comments`, comment) // `http://localhost:1337/api/comments` ocmmented out for ngrok
 		.catch('Comment was NOT successfully added to db')
 }
 
-$(document).ready(function() {
+function appendExt() {
 	// Add the sidebar to the page
   $('head').append(style)
   $('body').append(sidebar)
-// Add the Toggle (Hide) Button to the page
-  $('body').append(sidebarToggle)
-// Toggle sidebar
-
-	// Sign in/out
-  $('#signin').click(function() {
-	  chrome.runtime.sendMessage(
-		'signin',
-	  async function(response) {
-    await	response ? $('#userInfo').text(response.displayName) : null
-  }
-	)
-  })
-
-  $('#signout').click(function() {
-    chrome.runtime.sendMessage(
-			'signout',
-        function(response) {
-          userInfo = 'User Signed Out'
-          $('#userInfo').text(userInfo)
-        }
-      )
-  })
-
+	// Add the Toggle (Hide) Button to the page
+	$('body').append(sidebarToggle)
+	$('.annotate-toggle').append(toggleButton)
+	// Toggle sidebar
   $('.annotate-toggle').click(function() {
     $('.annotate-sidebar').toggle()
-    $('.annotate-toggle').toggleClass('far-right')
+		$('.annotate-toggle').toggleClass('far-right')
 
     if ($('.annotate-toggle').text() === 'X') {
       $('.annotate-toggle').text('<')
@@ -68,9 +107,11 @@ $(document).ready(function() {
       $('.annotate-toggle').text('X')
     }
   })
+}
 
-  $('#formSubmission').submit(function(evt) {
-// Visually display comment in chrome extension
+function appendFormSubmission() {
+	$('#formSubmission').submit(function(evt) {
+		// Visually display comment in chrome extension
     evt.preventDefault()
     const comment = $('.annotate-text-entry').val()
     const commentHTML = `
@@ -82,111 +123,67 @@ $(document).ready(function() {
 			</a>`
     $('.annotate-list').append($(`${commentHTML}`))
     $('.annotate-text-entry').val('')
-// Post comment to database
+		// Post comment to database
     chrome.storage.local.get(
-      ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
-        const paragraphText = paragraphs.map(paragraph => paragraph.text)
-        const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
-        const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
-        createComment({
-          article_id: selectedParagraph[0].article_id,
-          paragraph_id: selectedParagraph[0].id,
-          text: comment
-        })
-      }
-)
-  })
-})
+    	['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
+				const paragraphText = paragraphs.map(paragraph => paragraph.text)
+				const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
+				const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
+				createComment({
+					article_id: selectedParagraph[0].article_id,
+					paragraph_id: selectedParagraph[0].id,
+					text: comment
+				})
+			}
+		)
+	})
+}
 
-// submitForm function
-	// let submitForm = function(evt) {
-	// 	evt.preventDefault()
-	// 	console.log("Clicked on Save Button")
-	// 	const comment = $('.annotate-text-entry').val()
-	// 	const commentHTML = `
-	// 	<a class="panel-block is-active">
-	// 		<span class="panel-icon">
-	// 			<i class="fa fa-book"></i>
-	// 		</span>
-	// 		${comment}
-	// 	</a>`
-	// 	$('.annotate-list').append($(`${commentHTML}`))
-	// 	$('.annotate-text-entry').val("")
-	// }
-
-// keypress trial
-	// When the save button is clicked, save the text as a note
-	// $('.annotate-save').keypress(function (key) {
-	// 	if (key.which === 13) {
-	// 		console.log("Clicked on Save Button")
-	// 		const comment = $('.annotate-text-entry').val()
-	// 		const commentHTML = `
-	// 		<a class="panel-block is-active">
-	// 			<span class="panel-icon">
-	// 				<i class="fa fa-book"></i>
-	// 			</span>
-	// 			${comment}
-	// 		</a>`
-	// 		$('.annotate-list').append($(`${commentHTML}`))
-	// 		$('.annotate-text-entry').val("")
-	// 	}
-	// })
-	// $('.annotate-save').click(submitForm())
-
-	// OLD VERSION
-	// $('.annotate-save').click(function() {
-	// 	console.log("Clicked on Save Button")
-	// 	const comment = $('.annotate-text-entry').val()
-	// 	const commentHTML = `
-	// 	<a class="panel-block is-active">
-	// 		<span class="panel-icon">
-	// 			<i class="fa fa-book"></i>
-	// 		</span>
-	// 		${comment}
-	// 	</a>`
-	// 	$('.annotate-list').append($(`${commentHTML}`))
-	// 	$('.annotate-text-entry').val("")
-	// })
-
-/* saving / rendering notes */
-
-// 	// Load the notes that have been saved for the current page, and then render them in the sidebar.
-// 	// getNotes(renderNotes)
-// })
-
-// var saveNotes = function(list) {
-// 	var save = {}
-// 	save[getCurrentPage()] = list
-// 	chrome.storage.sync.set(save, function(){})
-// }
-
-// // Given the `text` of a new note (after Save was clicked), save it to the list.
-// var saveNote = function(text) {
-// 		console.log("saveNote... here")
-// }
-
-/* Darryn's Version */
-
-// // on document ready, load button
 // $(document).ready(function() {
-
-// 	$('body').append(sidebarToggle)
-
+// 	// Add the sidebar to the page
+//   $('head').append(style)
+//   $('body').append(sidebar)
 // 	// Add the Toggle (Hide) Button to the page
-// 	// When the toggle button is clicked, hide the sidebar. Toggle the text shown.
+//   $('body').append(sidebarToggle)
 
-// 	$('.annotate-toggle').click(function() {
+// 	// Toggle sidebar
+//   $('.annotate-toggle').click(function() {
+//     $('.annotate-sidebar').toggle()
+//     $('.annotate-toggle').toggleClass('far-right')
 
-// 		$('.annotate-toggle').toggleClass('far-right')
+//     if ($('.annotate-toggle').text() === 'X') {
+//       $('.annotate-toggle').text('<')
+//     } else {
+//       $('.annotate-toggle').text('X')
+//     }
+//   })
 
-// 		if ($('.annotate-toggle').text() == "X") {
-// 			$('.annotate-sidebar').toggle()
-// 			$('.annotate-toggle').text("<")
-// 		} else {
-// 			$('body').append(sidebar)
-// 			$('.annotate-toggle').text("X")
-// 		}
-// 	})
+//   $('#formSubmission').submit(function(evt) {
+// 	// Visually display comment in chrome extension
+//     evt.preventDefault()
+//     const comment = $('.annotate-text-entry').val()
+//     const commentHTML = `
+// 			<a class="panel-block is-active">
+// 				<span class="panel-icon">
+// 					<i class="fa fa-book"></i>
+// 				</span>
+// 				${comment}
+// 			</a>`
+//     $('.annotate-list').append($(`${commentHTML}`))
+//     $('.annotate-text-entry').val('')
+// 	// Post comment to database
+//     chrome.storage.local.get(
+//       ['selectedText', 'paragraphs'], ({selectedText, paragraphs}) => {
+//         console.log('MAP OBJECT HERE', 'select text:', selectedText, 'paragraphs:', paragraphs)
+//         const paragraphText = paragraphs.map(paragraph => paragraph.text)
+//         const {bestMatch} = stringSimilarity.findBestMatch(selectedText, paragraphText)
+//         const selectedParagraph = paragraphs.filter((paragraph) => paragraph.text === bestMatch.target)
+//         createComment({
+//           article_id: selectedParagraph[0].article_id,
+//           paragraph_id: selectedParagraph[0].id,
+//           text: comment
+//         })
+//       }
+// )
+//   })
 // })
-
-			// <form onsubmit=${(() => submitForm())}>

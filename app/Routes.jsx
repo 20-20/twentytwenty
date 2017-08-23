@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import SingleArticle from './components/SingleArticle'
 import { fetchTrending } from './reducers/trending'
 import Login from './components/Login'
+import Signup from './components/Signup'
 
 
 class Routes extends Component {
@@ -21,6 +22,7 @@ class Routes extends Component {
             <Route exact path='/' component={Home} />
             <Route exact path='/SingleArticle/:id' component={SingleArticle} />
             <Route exact path="/LogIn" component={Login} />
+            <Route exact path="/Signup" component={Signup} />
         </div>
       </Router>
     )

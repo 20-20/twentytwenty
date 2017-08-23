@@ -20,7 +20,6 @@ function eventregistryTrendingCall() {
     console.log(promises)
     return Promise.all(promises)
   })
-  .then(res => console.log('this is my awesome response', res))
 }
 
 module.exports = eventregistryTrendingCall
