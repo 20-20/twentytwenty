@@ -11,7 +11,8 @@ const UPDATE = 'UPDATE_COMMENT'
 /* ------------   ACTION CREATORS     ------------------ */
 
 const init = comments => ({ type: INITIALIZE, comments })
-export const create = comment => ({ type: CREATE, comment })
+// export const create = comment => ({ type: CREATE, comment })
+const create = comment => ({ type: CREATE, comment })
 const remove = id => ({ type: REMOVE, id })
 const update = comment => ({ type: UPDATE, comment })
 
