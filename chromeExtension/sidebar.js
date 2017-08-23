@@ -48,7 +48,7 @@ export function extensionToggle() {
 		$('.iconText').append(`<i class='fa fa-globe'></i>`)
 	} else $('.iconText').append(`20-20`)
   // focus user input into comment text box
-  $('.annotate-text-entry').focus()
+  $('#commentSubmission').focus()
 }
 
 function appendFormSubmission() {
@@ -62,11 +62,12 @@ function appendFormSubmission() {
 function secureCommentContext() {
 	const commentText = $('#commentSubmission').val()
 	chrome.storage.local.get(
-		['currentUser', 'currentArticle', 'selectedText', 'paragraphs'],
-			({ currentUser, currentArticle, selectedText, paragraphs}) => {
+		['currentUser', 'currentArticle', 'selectedText'],
+			({ currentUser, currentArticle, selectedText}) => {
 			const paragraphId = (selectedText === null)
-				? 999
-				: paragraphMatch(paragraphs, selectedText)
+				? null
+				: paragraphMatch(currentArticle.paragraphs, selectedText)
+			console.log("post attr", currentUser.id, commentText, currentArticle.id, paragraphId)
 			postAndDisplayComment(currentUser, commentText, currentArticle.id, paragraphId)
 		}
 	)
@@ -88,12 +89,12 @@ function postAndDisplayComment(user, text, article_id, paragraph_id) {
 		text,
 		user_id: user.id
 	})
-		.then(newComment => newComment.data)
 		.then(newComment => {
 			console.log("new comment", newComment)
-			const commentHTML = commentDisplay(currentUser.name, newComment)
-			$('.annotate-list').append($(`${commentHTML}`))
-			$('.annotate-text-entry').val('')
+			const commentHTML = commentDisplay(user.name, newComment)
+			$('.contentHere').append($(`${commentHTML}`))
+			console.log($('#commentSubmission').val())
+			$('#commentSubmission').val('')
 		})
 }
 

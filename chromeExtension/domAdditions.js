@@ -5,12 +5,14 @@ export const style =
 export function appendSidebar(name) {
 	const sidebar =
 	`
-	<div class='annotate-sidebar' style='display: none'>
+	<div class='scroll annotate-sidebar' style='display: none'>
 		<nav class="panel">
 			<p class="panel-heading annotate-header">
 				<strong>Comments</strong>
 			</p>
 		</nav>
+
+		<article class='contentHere'></article>
 
 		<article class='media'>
 			<figure class='media-left'>
@@ -18,7 +20,6 @@ export function appendSidebar(name) {
 					<img src='http://bulma.io/images/placeholders/128x128.png'>
 				</p>
 			</figure>
-
 			<div class='media-content'>
 				<form id='formSubmission'>
 					<div class='field'>
@@ -37,14 +38,13 @@ export function appendSidebar(name) {
 					</div>
 				</form>
 			</div>
-
 		</article>
-
 	</div>
 	`
 	$('body').append(sidebar)
 }
 
+		// <article class='contentHere'></article>
 
 
 

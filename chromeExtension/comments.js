@@ -15,12 +15,16 @@ export default function renderComments() {
 }
 
 function fetchArticleData(article) {
+  console.log("inside fetch")
   article.paragraphs.forEach(paragraph => {
     // sort comment order -Jason
+    console.log("this is a paragraph", paragraph)
     paragraph.comments.forEach(comment => {
+      console.log("fetching user for comment", comment)
       fetchCommenter(comment.user_id)
         .then(user => {
-          $('.media-content').append(
+          console.log("displaying comment", comment)
+          $('.contentHere').append(
             commentDisplay(user.name, comment)
           )
         })
@@ -31,40 +35,34 @@ function fetchArticleData(article) {
 export function commentDisplay(userName, comment) {
   return (
     `
-
-    <div class='content'>
-      <p class='is-size-7 rightBuffer'>
-        <strong>${userName}</strong>
-        <br>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
-        <br>
-        <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
-      </p>
-    </div>
-
+    <article class='media'>
+      <figure class='media-left'>
+        <p class='image is-48x48 leftBuffer'>
+          <img src='http://bulma.io/images/placeholders/128x128.png'>
+        </p>
+      </figure>
+      <div class='media-content' id=${comment && comment.id}>
+        <div class='content'>
+          <p class='is-size-7 rightBuffer'>
+            <strong>${userName}</strong>
+            <br>${comment.text}<br>
+            <small><a>Like</a> · <a>Reply</a>
+            <br>
+          </p>
+        </div>
+      </div>
+    </article>
     `
-
-
-
-
-
-
-
-    `<a id=${comment.id} class="panel-block is-active">
-      <span class="panel-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <strong>${userName}</strong>
-      : ${comment.text}
-    </a>`
   )
 }
 
 /* Axios requests below */
 
 export function postComment(comment) {
+  console.log("here is the comment", comment)
   return axios.post(`http://localhost:1337/api/comments`, comment)
   // `http://localhost:1337/api/comments` commented out for ngrok
+    // .then(newComment => console.log("HERE IS THE NEW COMMENT:", newComment.data))
     .then(newComment => newComment.data)
 		.catch('Comment was NOT successfully added to db')
 }
