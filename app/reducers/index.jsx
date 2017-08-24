@@ -5,6 +5,7 @@ import comments from './comments'
 import auth from './auth'
 import users from './users'
 import topStories from './topStories'
+import topics from './topics'
 
 const rootReducer = combineReducers({
   auth,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   trending,
   comments,
   singleArticle,
-  topStories
+  topStories,
+  topics
 })
 
 export default rootReducer

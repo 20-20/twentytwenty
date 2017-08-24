@@ -11,6 +11,7 @@ api
   .use('/comments', require('./comments'))
   .use('/trending', require('./trending'))
   .use('/topStories', require('./topStories'))
+  .use('/topics', require('./topics'))
   .use('/singleArticle', require('./singleArticle').router)
   .get('/news', require('./news'))
 

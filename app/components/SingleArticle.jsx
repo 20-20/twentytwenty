@@ -5,6 +5,7 @@ import { fetchArticle } from '../reducers/singleArticle'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
+import { fetchArticlesByTopics } from '../reducers/topics'
 
 class SingleArticle extends Component {
 
@@ -14,9 +15,10 @@ class SingleArticle extends Component {
   }
 
   mostReleventTopic() {
-    const test = this.props.singleArticle.topics.reduce((acc, topic) => {
+    const mostReleventTopic = this.props.singleArticle.topics.reduce((acc, topic) => {
       return (acc.relevances.score > topic.relevances.score) ? acc : topic
     })
+    this.props.fetchArticlesByTopics(mostReleventTopic.name)
   }
 
   render() {
@@ -65,7 +67,8 @@ const mapStateToProps = ({ trending, comments, singleArticle }) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchArticle: (articleId) => dispatch(fetchArticle(articleId))
+  fetchArticle: (articleId) => dispatch(fetchArticle(articleId)),
+  fetchArticlesByTopics: (topic) => dispatch(fetchArticlesByTopics(topic))
 })
 
 const singleArticleContainer = connect(mapStateToProps, mapDispatchToProps)(SingleArticle)
