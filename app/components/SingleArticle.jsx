@@ -6,16 +6,18 @@ import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 import { fetchArticlesByTopics } from '../reducers/topics'
-
+import RelatedArticle from './RelatedArticle'
+ 
 class SingleArticle extends Component {
 
   componentDidMount() {
     const articleId = +this.props.match.params.id
     this.props.fetchArticle(articleId)
+    this.mostReleventTopic()
   }
 
   mostReleventTopic() {
-    const mostReleventTopic = this.props.singleArticle.topics.reduce((acc, topic) => {
+    const mostReleventTopic = this.props.topics.reduce((acc, topic) => {
       return (acc.relevances.score > topic.relevances.score) ? acc : topic
     })
     this.props.fetchArticlesByTopics(mostReleventTopic.name)
@@ -23,7 +25,7 @@ class SingleArticle extends Component {
 
   render() {
     const singleArticle = this.props.singleArticle
-    this.props.singleArticle.topics && this.mostReleventTopic()
+    const topics = this.props.topics
 
     return (
       <div className="container" >
@@ -52,17 +54,32 @@ class SingleArticle extends Component {
             </div>
           }
         </div>
-
+        <hr />
+        
+          <div className="container">
+            <p className="title">Related Articles</p>
+            <hr/>
+            <div className="columns is-multiline">
+            {
+              topics && topics.map(topic =>
+                {<div className="column is-one-quarter box"><RelatedArticle topic={topic}/></div>}
+              )
+            }
+            <hr/>
+          </div>
+          <hr/>
+        </div>
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ trending, comments, singleArticle }) => {
+const mapStateToProps = ({ trending, comments, singleArticle, topics }) => {
   return {
     trending,
     comments,
-    singleArticle
+    singleArticle,
+    topics
   }
 }
 
