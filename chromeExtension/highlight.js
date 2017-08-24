@@ -38,6 +38,8 @@ export function toggleSelectionAndHighlight(parentEl) {
       $(parentEl).addClass('twentyHighlight')
       const storageObj = { 'selectedText': parentEl.innerHTML }
       chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
+      // focus user input into comment text box
+      $('#commentSubmission').focus()
       // chrome.storage.local.set({ 'selectionParentEl': parentEl})
       chrome.storage.local.get('selectedText', (selectedText) => console.log("full???", selectedText))
   }
