@@ -9,10 +9,10 @@ export default function RadarChart({singleArticle}) {
       height={450}
       padding={70}
       domainMax={1}
-      highlighted={null}
+      highlighted={true}
       onHover={(point) => {
         if (point) {
-          console.log('hovered over a data point');
+          console.log('hovered over a data point', point);
         } else {
           console.log('not over anything');
         }
@@ -27,7 +27,7 @@ export default function RadarChart({singleArticle}) {
         ],
         sets: [
           {
-            key: 'me',
+            key: `${singleArticle.id}`,
             label: 'My Scores',
             values: {
               joy: `${singleArticle.joy}`,
@@ -36,7 +36,7 @@ export default function RadarChart({singleArticle}) {
               sadness: `${singleArticle.sadness}`,
               fear: `${singleArticle.fear}`,
             },
-          }
+          },
         ],
       }}
     />
