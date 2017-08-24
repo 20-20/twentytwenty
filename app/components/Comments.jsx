@@ -67,8 +67,7 @@ renderLoggedOut(){
   )
 }
   render() {
-    console.log("this.props.user", this.props.user)
-    let userInfo = this.props.user
+    const userInfo = this.props.user
     return (
       <div>
       { userInfo ? this.renderLoggedIn() : this.renderLoggedOut() }

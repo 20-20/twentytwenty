@@ -29,6 +29,7 @@ export default function reducer(singleArticle = {}, action) {
 /* ------------   THUNK CREATORS     ------------------ */
 
 export const fetchArticle = (id) => dispatch => {
+  console.log('fetch article thunk called')
   axios.get(`/api/singleArticle/${id}`)
        .then(res => dispatch(init(res.data)))
 }

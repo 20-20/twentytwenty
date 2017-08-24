@@ -9,13 +9,19 @@ import RadarChart from './radarChart'
 class SingleArticle extends Component {
 
   componentDidMount() {
-    console.log('componentProps', this.props)
     const articleId = +this.props.match.params.id
     this.props.fetchArticle(articleId)
   }
 
+  mostReleventTopic() {
+    const test = this.props.singleArticle.topics.reduce((acc, topic) => {
+      return (acc.relevances.score > topic.relevances.score) ? acc : topic
+    })
+  }
+
   render() {
     const singleArticle = this.props.singleArticle
+    this.props.singleArticle.topics && this.mostReleventTopic()
 
     return (
       <div className="container" >
@@ -39,7 +45,7 @@ class SingleArticle extends Component {
               </div>
               <div className="column">
                 <RadarChart singleArticle={this.props.singleArticle} />
-              <Comments singleArticle={this.props.singleArticle}/>
+                <Comments singleArticle={this.props.singleArticle} />
               </div>
             </div>
           }
