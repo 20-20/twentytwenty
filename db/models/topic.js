@@ -13,6 +13,5 @@ module.exports = db => db.define('topics', {
 })
 
 module.exports.associations = (Topic, {Comment, Article, Relevance}) => {
-  Topic.hasMany(Comment)
   Topic.belongsToMany(Article, {through: Relevance})
 }

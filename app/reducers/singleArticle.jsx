@@ -3,28 +3,26 @@ import axios from 'axios'
 
 /* -----------------    ACTIONS     ------------------ */
 
-const INITIALIZE = 'INITIALIZE_ARTICLES'
+const INITIALIZE = 'INITIALIZE_ARTICLE'
 const UPDATE = 'UPDATE_ARTICLE'
 
 /* ------------   ACTION CREATORS     ------------------ */
 
-const init = articles => ({ type: INITIALIZE, articles })
-const update = article => ({ type: UPDATE, article })
+const init = singleArticle => ({ type: INITIALIZE, singleArticle })
+const update = singleArticle => ({ type: UPDATE, singleArticle })
 
 /* ------------       REDUCER     ------------------ */
 
-export default function reducer(articles = [], action) {
+export default function reducer(singleArticle = {}, action) {
   switch (action.type) {
   case INITIALIZE:
-    return action.articles
+    return action.singleArticle
 
   case UPDATE:
-    return articles.map(article => (
-      action.article.id === article.id ? action.article : article
-    ))
+    return action.singleArticle
 
   default:
-    return articles
+    return singleArticle
   }
 }
 
