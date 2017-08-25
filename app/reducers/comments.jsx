@@ -22,18 +22,14 @@ export default function reducer(comments = [], action) {
   switch (action.type) {
   case INITIALIZE:
     return action.comments
-
   case CREATE:
-    return [action.comment, ...comments]
-
+    return [...comments, action.comment]
   case REMOVE:
     return comments.filter(comment => comment.id !== action.id)
-
   case UPDATE:
     return comments.map(comment => (
       action.comment.id === comment.id ? action.comment : comment
     ))
-
   default:
     return comments
   }
@@ -41,24 +37,17 @@ export default function reducer(comments = [], action) {
 
 /* ------------   THUNK CREATORS     ------------------ */
 
-export const fetchcomments = () => dispatch => {
-  axios.get('/api/comments')
+export const fetchcomments = articleId => dispatch => {
+  axios.get(`/api/comments/${articleId}`)
        .then(res => dispatch(init(res.data)))
+       .catch(err => console.error(`Getting comments was unsuccesful`, err))
 }
 
 export const addcomment = comment => dispatch => {
-  axios.post('/api/comments', comment)
+  axios.post(`/api/comments`, comment)
        .then(res => dispatch(create(res.data)))
        .catch(err => console.error(`Creating comment: ${comment} unsuccesful`, err))
 }
-
-/* ORIGINAL CODE
-export const addcomment = comment => dispatch => {
-  axios.post('/api/comments', comment)
-       .then(res => dispatch(create(res.data)))
-       .catch(err => console.error(`Creating comment: ${comment} unsuccesful`, err))
-}
-*/
 
 export const updatecomment = (id, comment) => dispatch => {
   axios.put(`/api/comments/${id}`, comment)

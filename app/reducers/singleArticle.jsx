@@ -26,4 +26,5 @@ export default function reducer(singleArticle = null, action) {
 export const fetchArticle = (id) => dispatch => {
   axios.get(`/api/singleArticle/${id}`)
        .then(res => dispatch(init(res.data)))
+       .catch(err => console.error(`Getting the article was unsuccesful`, err))
 }

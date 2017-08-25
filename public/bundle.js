@@ -30417,20 +30417,16 @@ function reducer() {
   switch (action.type) {
     case INITIALIZE:
       return action.comments;
-
     case CREATE:
-      return [action.comment].concat(_toConsumableArray(comments));
-
+      return [].concat(_toConsumableArray(comments), [action.comment]);
     case REMOVE:
       return comments.filter(function (comment) {
         return comment.id !== action.id;
       });
-
     case UPDATE:
       return comments.map(function (comment) {
         return action.comment.id === comment.id ? action.comment : comment;
       });
-
     default:
       return comments;
   }
@@ -30438,10 +30434,12 @@ function reducer() {
 
 /* ------------   THUNK CREATORS     ------------------ */
 
-var fetchcomments = exports.fetchcomments = function fetchcomments() {
+var fetchcomments = exports.fetchcomments = function fetchcomments(articleId) {
   return function (dispatch) {
-    _axios2.default.get('/api/comments').then(function (res) {
+    _axios2.default.get('/api/comments/' + articleId).then(function (res) {
       return dispatch(init(res.data));
+    }).catch(function (err) {
+      return console.error('Getting comments was unsuccesful', err);
     });
   };
 };
@@ -30455,14 +30453,6 @@ var addcomment = exports.addcomment = function addcomment(comment) {
     });
   };
 };
-
-/* ORIGINAL CODE
-export const addcomment = comment => dispatch => {
-  axios.post('/api/comments', comment)
-       .then(res => dispatch(create(res.data)))
-       .catch(err => console.error(`Creating comment: ${comment} unsuccesful`, err))
-}
-*/
 
 var updatecomment = exports.updatecomment = function updatecomment(id, comment) {
   return function (dispatch) {
@@ -30534,77 +30524,14 @@ var fetchArticle = exports.fetchArticle = function fetchArticle(id) {
   return function (dispatch) {
     _axios2.default.get('/api/singleArticle/' + id).then(function (res) {
       return dispatch(init(res.data));
+    }).catch(function (err) {
+      return console.error('Getting the article was unsuccesful', err);
     });
   };
 };
 
 /***/ }),
-/* 195 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.resetArticlesByTopics = exports.fetchArticlesByTopics = undefined;
-exports.default = reducer;
-
-var _axios = __webpack_require__(42);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* -----------------    ACTIONS     ------------------ */
-
-var INITIALIZE = 'INITIALIZE_TOPICS';
-var RESET = 'RESET_TOPICS';
-
-/* ------------   ACTION CREATORS     ------------------ */
-
-var init = function init(topics) {
-  return { type: INITIALIZE, topics: topics };
-};
-var reset = function reset() {
-  return { type: RESET };
-};
-
-/* ------------       REDUCER     ------------------ */
-
-function reducer() {
-  var topics = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var action = arguments[1];
-
-  switch (action.type) {
-    case INITIALIZE:
-      return action.topics;
-    case RESET:
-      return [];
-    default:
-      return topics;
-  }
-}
-
-/* ------------   THUNK CREATORS     ------------------ */
-
-var fetchArticlesByTopics = exports.fetchArticlesByTopics = function fetchArticlesByTopics(topic) {
-  return function (dispatch) {
-    _axios2.default.get('/api/topics/' + topic).then(function (res) {
-      console.log('res', res.data);
-      return dispatch(init(res.data));
-    });
-  };
-};
-
-var resetArticlesByTopics = exports.resetArticlesByTopics = function resetArticlesByTopics() {
-  return function (dispatch) {
-    return dispatch(reset());
-  };
-};
-
-/***/ }),
+/* 195 */,
 /* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -42467,7 +42394,7 @@ var _reactRouterDom = __webpack_require__(20);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function RelatedArticle(_ref) {
-  var topic = _ref.topic;
+  var article = _ref.article;
 
 
   return _react2.default.createElement(
@@ -42475,7 +42402,7 @@ function RelatedArticle(_ref) {
     { className: 'column is-one-quarter' },
     _react2.default.createElement(
       _reactRouterDom.NavLink,
-      { to: '/SingleArticle/' + topic.id },
+      { to: '/SingleArticle/' + article.id },
       _react2.default.createElement(
         'div',
         { className: 'card' },
@@ -42485,7 +42412,7 @@ function RelatedArticle(_ref) {
           _react2.default.createElement(
             'figure',
             { className: 'image' },
-            _react2.default.createElement('img', { src: topic.urlToImage, alt: 'Image' })
+            _react2.default.createElement('img', { src: article.urlToImage, alt: 'Image' })
           )
         ),
         _react2.default.createElement(
@@ -42500,26 +42427,26 @@ function RelatedArticle(_ref) {
               _react2.default.createElement(
                 'p',
                 { className: 'title is-4' },
-                topic.title
+                article.title
               ),
               _react2.default.createElement(
                 'p',
                 { className: 'subtitle is-6' },
-                topic.publication
+                article.publication
               )
             )
           ),
           _react2.default.createElement(
             'div',
             { className: 'content' },
-            topic.body.slice(0, 50),
+            article.body.slice(0, 50),
             '...',
             _react2.default.createElement('br', null),
             _react2.default.createElement(
               'small',
               null,
               'Published ',
-              topic.date.slice(0, 10)
+              article.date.slice(0, 10)
             )
           )
         )
@@ -42722,6 +42649,12 @@ var _reactRouterDom = __webpack_require__(20);
 
 var _singleArticle = __webpack_require__(194);
 
+var _relatedArticles = __webpack_require__(714);
+
+var _paragraphs = __webpack_require__(713);
+
+var _comments = __webpack_require__(193);
+
 var _Comments = __webpack_require__(418);
 
 var _Comments2 = _interopRequireDefault(_Comments);
@@ -42733,8 +42666,6 @@ var _reactD3Radar2 = _interopRequireDefault(_reactD3Radar);
 var _radarChart = __webpack_require__(427);
 
 var _radarChart2 = _interopRequireDefault(_radarChart);
-
-var _topics = __webpack_require__(195);
 
 var _RelatedArticle = __webpack_require__(422);
 
@@ -42762,27 +42693,19 @@ var SingleArticle = function (_Component) {
     value: function componentDidMount() {
       var articleId = +this.props.match.params.id;
       this.props.fetchArticle(articleId);
-    }
-  }, {
-    key: 'mostReleventTopic',
-    value: function mostReleventTopic() {
-      var mostReleventTopic = this.props.singleArticle.topics.reduce(function (acc, topic) {
-        return acc.relevances.score > topic.relevances.score ? acc : topic;
-      });
-      this.props.fetchArticlesByTopics(mostReleventTopic.name);
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.props.resetArticlesByTopics();
+      this.props.fetchRelatedArticles(articleId);
+      this.props.fetchParagraphs(articleId);
+      this.props.fetchComments(articleId);
     }
   }, {
     key: 'render',
     value: function render() {
       var singleArticle = this.props.singleArticle;
-      this.props.singleArticle && !this.props.topics.length && this.mostReleventTopic();
+      var paragraphs = this.props.paragraphs;
+      var comments = this.props.comments;
+      var relatedArticles = this.props.relatedArticles;
 
-      return _react2.default.createElement(
+      return singleArticle && _react2.default.createElement(
         'div',
         { className: 'container' },
         _react2.default.createElement('hr', null),
@@ -42798,25 +42721,25 @@ var SingleArticle = function (_Component) {
               _react2.default.createElement(
                 'h1',
                 { className: 'title is-1' },
-                singleArticle && singleArticle.title
+                singleArticle.title
               ),
               _react2.default.createElement('hr', null),
               _react2.default.createElement(
                 'h2',
                 { className: 'subtitle is-3' },
-                singleArticle && singleArticle.publication
+                singleArticle.publication
               ),
               _react2.default.createElement(
                 'a',
-                { href: singleArticle && singleArticle.url },
+                { href: singleArticle.url },
                 'Link to Article'
               ),
               _react2.default.createElement(
                 'figure',
                 { className: 'image' },
-                _react2.default.createElement('img', { style: { maxWidth: '100%', height: 'auto' }, src: singleArticle && singleArticle.urlToImage, className: '' })
+                _react2.default.createElement('img', { style: { maxWidth: '100%', height: 'auto' }, src: singleArticle.urlToImage, className: '' })
               ),
-              singleArticle && singleArticle.paragraphs.map(function (para) {
+              paragraphs.map(function (para, index) {
                 return _react2.default.createElement(
                   'div',
                   null,
@@ -42832,7 +42755,8 @@ var SingleArticle = function (_Component) {
             _react2.default.createElement(
               'div',
               { className: 'column is-multiline' },
-              singleArticle && _react2.default.createElement(_radarChart2.default, { singleArticle: this.props.singleArticle })
+              _react2.default.createElement(_radarChart2.default, { singleArticle: singleArticle }),
+              ' }'
             )
           )
         ),
@@ -42849,8 +42773,8 @@ var SingleArticle = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'columns is-multiline' },
-            this.props.topics.length && this.props.topics.map(function (topic) {
-              return _react2.default.createElement(_RelatedArticle2.default, { topic: topic });
+            relatedArticles.map(function (article) {
+              return _react2.default.createElement(_RelatedArticle2.default, { article: article });
             }),
             _react2.default.createElement('hr', null)
           ),
@@ -42864,16 +42788,16 @@ var SingleArticle = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(_ref) {
-  var trending = _ref.trending,
-      comments = _ref.comments,
+  var comments = _ref.comments,
+      paragraphs = _ref.paragraphs,
       singleArticle = _ref.singleArticle,
-      topics = _ref.topics;
+      relatedArticles = _ref.relatedArticles;
 
   return {
-    trending: trending,
     comments: comments,
+    paragraphs: paragraphs,
     singleArticle: singleArticle,
-    topics: topics
+    relatedArticles: relatedArticles
   };
 };
 
@@ -42882,12 +42806,28 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     fetchArticle: function fetchArticle(articleId) {
       return dispatch((0, _singleArticle.fetchArticle)(articleId));
     },
-    fetchArticlesByTopics: function fetchArticlesByTopics(topic) {
-      return dispatch((0, _topics.fetchArticlesByTopics)(topic));
+    fetchRelatedArticles: function fetchRelatedArticles(articleId) {
+      return dispatch((0, _relatedArticles.fetchRelatedArticles)(articleId));
     },
-    resetArticlesByTopics: function resetArticlesByTopics() {
-      return dispatch((0, _topics.resetArticlesByTopics)());
-    }
+    fetchParagraphs: function fetchParagraphs(articleId) {
+      return dispatch((0, _paragraphs.fetchParagraphs)(articleId));
+    },
+    fetchComments: function fetchComments(articleId) {
+      return dispatch((0, _comments.fetchComments)(articleId));
+    },
+    addComment: function (_addComment) {
+      function addComment(_x, _x2) {
+        return _addComment.apply(this, arguments);
+      }
+
+      addComment.toString = function () {
+        return _addComment.toString();
+      };
+
+      return addComment;
+    }(function (articleId, paragraphId) {
+      return dispatch(addComment(articleId, paragraphId));
+    })
   };
 };
 
@@ -43265,18 +43205,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(115);
 
-var _trending = __webpack_require__(122);
-
-var _trending2 = _interopRequireDefault(_trending);
-
-var _singleArticle = __webpack_require__(194);
-
-var _singleArticle2 = _interopRequireDefault(_singleArticle);
-
-var _comments = __webpack_require__(193);
-
-var _comments2 = _interopRequireDefault(_comments);
-
 var _auth = __webpack_require__(67);
 
 var _auth2 = _interopRequireDefault(_auth);
@@ -43285,24 +43213,40 @@ var _users = __webpack_require__(123);
 
 var _users2 = _interopRequireDefault(_users);
 
+var _trending = __webpack_require__(122);
+
+var _trending2 = _interopRequireDefault(_trending);
+
 var _topStories = __webpack_require__(121);
 
 var _topStories2 = _interopRequireDefault(_topStories);
 
-var _topics = __webpack_require__(195);
+var _singleArticle = __webpack_require__(194);
 
-var _topics2 = _interopRequireDefault(_topics);
+var _singleArticle2 = _interopRequireDefault(_singleArticle);
+
+var _relatedArticles = __webpack_require__(714);
+
+var _relatedArticles2 = _interopRequireDefault(_relatedArticles);
+
+var _comments = __webpack_require__(193);
+
+var _comments2 = _interopRequireDefault(_comments);
+
+var _paragraphs = __webpack_require__(713);
+
+var _paragraphs2 = _interopRequireDefault(_paragraphs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
   auth: _auth2.default,
-  users: _users2.default,
   trending: _trending2.default,
-  comments: _comments2.default,
-  singleArticle: _singleArticle2.default,
   topStories: _topStories2.default,
-  topics: _topics2.default
+  comments: _comments2.default,
+  paragraphs: _paragraphs2.default,
+  singleArticle: _singleArticle2.default,
+  relatedArticles: _relatedArticles2.default
 });
 
 exports.default = rootReducer;
@@ -65922,6 +65866,116 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   { store: _store2.default },
   _react2.default.createElement(_Routes2.default, null)
 ), document.getElementById('main'));
+
+/***/ }),
+/* 713 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchParagraphs = undefined;
+exports.default = reducer;
+
+var _axios = __webpack_require__(42);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* -----------------    ACTIONS     ------------------ */
+
+var INITIALIZE = 'INITIALIZE_PARAGRAPHS';
+
+/* ------------   ACTION CREATORS     ------------------ */
+
+var init = function init(paragraphs) {
+  return { type: INITIALIZE, paragraphs: paragraphs };
+};
+
+/* ------------       REDUCER     ------------------ */
+
+function reducer() {
+  var paragraphs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  switch (action.type) {
+    case INITIALIZE:
+      return action.paragraphs;
+    default:
+      return paragraphs;
+  }
+}
+
+/* ------------   THUNK CREATORS     ------------------ */
+
+var fetchParagraphs = exports.fetchParagraphs = function fetchParagraphs(articleId) {
+  return function (dispatch) {
+    _axios2.default.get('/api/paragraphs/' + articleId).then(function (res) {
+      return dispatch(init(res.data));
+    }).catch(function (err) {
+      return console.error('Getting paragraphs was unsuccesful', err);
+    });
+  };
+};
+
+/***/ }),
+/* 714 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchRelatedArticles = undefined;
+exports.default = reducer;
+
+var _axios = __webpack_require__(42);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* -----------------    ACTIONS     ------------------ */
+
+var INITIALIZE = 'INITIALIZE_RELATED_ARTICLES';
+
+/* ------------   ACTION CREATORS     ------------------ */
+
+var init = function init(relatedArticles) {
+  return { type: INITIALIZE, relatedArticles: relatedArticles };
+};
+
+/* ------------       REDUCER     ------------------ */
+
+function reducer() {
+  var relatedArticles = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  switch (action.type) {
+    case INITIALIZE:
+      return action.relatedArticles;
+    default:
+      return relatedArticles;
+  }
+}
+
+/* ------------   THUNK CREATORS     ------------------ */
+
+var fetchRelatedArticles = exports.fetchRelatedArticles = function fetchRelatedArticles(articleId) {
+  return function (dispatch) {
+    _axios2.default.get('/api/relatedArticles/' + articleId).then(function (res) {
+      return dispatch(init(res.data));
+    }).catch(function (err) {
+      return console.error('Getting related articles was unsuccesful', err);
+    });
+  };
+};
 
 /***/ })
 /******/ ]);
