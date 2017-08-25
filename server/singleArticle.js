@@ -131,3 +131,30 @@ router.get('/:articleId', (req, res, next) => {
 })
 /********        Routes till here        ********/
 module.exports = { router, createArticle, createArticleParagraphs }
+
+
+// router.post(`/:url`, (req, res, next) => {
+//   const decodedUrl = req.params.url.includes('html')
+//     ? decodeURIComponent(req.params.url).split(`html`)[0] + `html`
+//     : decodeURIComponent(req.params.url)
+//   Article.findOne({
+//     where: { url: decodedUrl },
+//     include: [{ model: Paragraph, include: [Comment] }, {model: Topic }, {model: Comment}]
+//   })
+//     .then(retObj => {
+//       if (retObj) return retObj
+//       else return eventRegistryFull(req.params.url, req.query.trending)
+//     })
+//     .then(articleWithParagraphs => res.json(articleWithParagraphs)
+//     ).catch(error => console.log(error.message))
+// })
+// router.get('/:articleId', (req, res, next) => {
+//   Article.findOne({
+//     where: {
+//       id: req.params.articleId
+//     },
+//     include: [{ model: Paragraph, include: [Comment] }, {model: Topic }]
+//   })
+//     .then(article => res.json(article))
+//     .catch('Error fetching article with provided Id')
+// })

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Navlink } from 'react-router-dom'
 import { fetchArticle } from '../reducers/singleArticle'
 import Comments from './Comments.jsx'
+import UpDownVote from './UpDownVote.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 
@@ -39,7 +40,8 @@ class SingleArticle extends Component {
               </div>
               <div className="column">
                 <RadarChart singleArticle={this.props.singleArticle} />
-              <Comments singleArticle={this.props.singleArticle}/>
+              {/*<Comments singleArticle={this.props.singleArticle}/>*/}
+               <Comments/>
               </div>
             </div>
           }

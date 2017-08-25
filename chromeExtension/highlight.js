@@ -10,7 +10,8 @@ $(() => {
   })
 })
 
-function getSelectionTextAndHighlight() {
+export function getSelectionTextAndHighlight() {
+  console.log("highlight.js hit!")
   let text = ''
   if (window.getSelection) {
     text = window.getSelection().toString() // string generation
