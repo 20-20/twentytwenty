@@ -65,39 +65,12 @@ function secureCommentContext() {
 	chrome.storage.local.get(
 		['currentUser', 'currentArticle', 'selectedText', 'selectType'],
 			({ currentUser, currentArticle, selectedText, selectType}) => {
-				// console.log("selected text:", selectedText)
-				// console.log("includes &nbsp", selectedText.includes('&nbsp'))
-				// console.log("includes nbsp", selectedText.includes('nbsp'))
-				// console.log("did we remove nbsp?", selectedText.replace(/&nbsp;/g, ' '))
-				// const new = selectedText.replace(/&nbsp;/g, ' ')
-				// console.log("new string", new)
-
-
 			let domElText = null
 			if (selectedText) {
 				domElText = selectedText.includes(`&nbsp`)
 					? selectedText.slice(0,selectedText.indexOf(`&nbsp`))
 					: selectedText
 			}
-
-
-					// ? selectedText.replace(/&nbsp;/g, ' ')
-
-			// let domElText = null
-			// if (selectedText) {
-			// 	domElText = selectedText.includes('&nbsp')
-			// 		? selectedText.replace(/&nbsp;/g, ' ')
-			// 		: selectedText
-			// }
-
-			// const domElement = selectedText
-			// 	? selectedText.includes('&nbsp')
-			// 		? selectedText.slice('&bnsp')[0]
-			// 		: selectedText
-			// 	: null
-			// const domElement = selectedText.includes('&nbsp')
-			// 	? selectedText.slice('&bnsp')
-			// 	: selectedText
 			const paragraphId = (selectedText === null)
 				? null
 				: paragraphMatch(currentArticle.paragraphs, selectedText)
@@ -119,8 +92,6 @@ function paragraphMatch(paragraphs, selectedText) {
 
 function postAndDisplayComment(
 	user, text, article_id, paragraph_id, domElText, domElType) {
-	// const paragraph_id = paragraph ? paragraph.id : null
-	// const paragraphText = paragraph ? paragraph.text : null
 	postComment({
 		article_id,
 		paragraph_id,
@@ -130,42 +101,11 @@ function postAndDisplayComment(
 		domElType
 	})
 		.then(newComment => {
-			// const storageId = String(newComment.id)
-			// const storedParagraph = { storageId : paragraphText }
-			// console.log("here is the comment id", storageId)
-			// chrome.storage.local.set({ 'storedParagraphs': storedParagraph })
-			// chrome.storage.local.get('storedParagraphs', (ret) => console.log("return here", ret))
 			commentDisplay(user.name, newComment)
 			$('#commentSubmission').val('')
-			// const commentHTML = commentDisplay(user.name, newComment)
-			// Promise.resolve($('.contentHere').append($(`${commentHTML}`)))
-			// 	.then(() => {
-			// 		$('#commentSubmission').val('')
-			// 		addHoverHandler()
-			// 	})
 		})
 }
 
 function storeCurrentUser(currentUser) {
 	chrome.storage.local.set({ 'currentUser': currentUser })
 }
-
-
-
-			// Promise.resolve(commentDisplay(user.name, newComment))
-			// 	.then(commentHTML => {
-			// 		$('.contentHere').append($(`${commentHTML}`))
-			// 		$('#commentSubmission').val('')
-			// 		addHoverHandler()
-
-			// const commentHTML = commentDisplay(user.name, newComment)
-			// $('.contentHere').append($(`${commentHTML}`))
-			// $('#commentSubmission').val('')
-
-			// function clickHandler() {
-// 	$('.annotate-sidebar').on('click', evt => {
-// 		console.log("event target", evt.target)
-// 		// console.log("LOOKY HERE:", evt)
-// 	})
-// }
-

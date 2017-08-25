@@ -5,8 +5,6 @@ import { extensionToggle } from './sidebar'
 $(() => {
   $('html').dblclick(() => {
     selectionTextAndHighlight()
-    // extensionToggle()
-    // if ($('.iconText').text().length) extensionToggle()
   })
 })
 
@@ -50,20 +48,3 @@ export function removeSelection() {
   $('.twentyHighlight').removeClass('twentyHighlight')
   chrome.storage.local.set({ 'selectedText': null})
 }
-
-// function showExt() {
-//   // if style.cssText exists (is diplay: none), toggle sidebar
-//   if ($('.annotate-sidebar')[0].style.cssText) {
-//     $('.annotate-sidebar').toggle()
-//     $('.annotate-toggle').toggleClass('far-right')
-
-//     if ($('.annotate-toggle').text() === 'X') {
-//       $('.annotate-toggle').text('<')
-//     } else {
-//       $('.annotate-toggle').text('X')
-//     }
-//   }
-
-//   // focus user input into comment text box
-//   $('.annotate-text-entry').focus()
-// }
