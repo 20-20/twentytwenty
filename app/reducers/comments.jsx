@@ -37,26 +37,26 @@ export default function reducer(comments = [], action) {
 
 /* ------------   THUNK CREATORS     ------------------ */
 
-export const fetchcomments = articleId => dispatch => {
+export const fetchComments = articleId => dispatch => {
   axios.get(`/api/comments/${articleId}`)
        .then(res => dispatch(init(res.data)))
        .catch(err => console.error(`Getting comments was unsuccesful`, err))
 }
 
-export const addcomment = comment => dispatch => {
+export const addComment = comment => dispatch => {
   axios.post(`/api/comments`, comment)
        .then(res => dispatch(create(res.data)))
        .catch(err => console.error(`Creating comment: ${comment} unsuccesful`, err))
 }
 
-export const updatecomment = (id, comment) => dispatch => {
+export const updateComment = (id, comment) => dispatch => {
   axios.put(`/api/comments/${id}`, comment)
        .then(res => dispatch(update(res.data)))
        .catch(err => console.error(`Updating comment: ${comment} unsuccesful`, err))
 }
 
 // optimistic
-export const removecomment = id => dispatch => {
+export const removeComment = id => dispatch => {
   dispatch(remove(id))
   axios.delete(`/api/comments/${id}`)
        .catch(err => console.error(`Removing comment: ${id} unsuccesful`, err))

@@ -6,9 +6,13 @@ const router = require('express').Router()
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 
 
-// Single comment Route
+// All comments Route
 router.get('/:articleId', (req, res, next) => {
-  Comment.findById(req.params.id)
+  Comment.findAll({
+    where:{
+      article_id: req.params.articleId
+    }
+  })
   .then(comment => res.json(comment))
   .catch(next)
 })

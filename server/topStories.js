@@ -14,7 +14,7 @@ module.exports = router
       order: [
         [`${req.query.sortBy}`, 'DESC']
       ],
-      include: [{ model: Paragraph, include: [Comment] }, { model: Topic }]
+      include: [{ model: Paragraph, include: [Comment] }]
     }).then(story => res.json(story))
       .catch(next)
   })

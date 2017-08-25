@@ -25493,7 +25493,6 @@ function reducer() {
 var fetchTopStories = exports.fetchTopStories = function fetchTopStories() {
   return function (dispatch) {
     _axios2.default.get('/api/topStories?sortBy=commentsCount').then(function (res) {
-      console.log('res.data:', res.data);
       dispatch(init(res.data));
     });
   };
@@ -30374,7 +30373,7 @@ module.exports = function bind(fn, thisArg) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removecomment = exports.updatecomment = exports.addcomment = exports.fetchcomments = exports.REMOVE = undefined;
+exports.removeComment = exports.updateComment = exports.addComment = exports.fetchComments = exports.REMOVE = undefined;
 exports.default = reducer;
 
 var _axios = __webpack_require__(42);
@@ -30434,7 +30433,7 @@ function reducer() {
 
 /* ------------   THUNK CREATORS     ------------------ */
 
-var fetchcomments = exports.fetchcomments = function fetchcomments(articleId) {
+var fetchComments = exports.fetchComments = function fetchComments(articleId) {
   return function (dispatch) {
     _axios2.default.get('/api/comments/' + articleId).then(function (res) {
       return dispatch(init(res.data));
@@ -30444,7 +30443,7 @@ var fetchcomments = exports.fetchcomments = function fetchcomments(articleId) {
   };
 };
 
-var addcomment = exports.addcomment = function addcomment(comment) {
+var addComment = exports.addComment = function addComment(comment) {
   return function (dispatch) {
     _axios2.default.post('/api/comments', comment).then(function (res) {
       return dispatch(create(res.data));
@@ -30454,7 +30453,7 @@ var addcomment = exports.addcomment = function addcomment(comment) {
   };
 };
 
-var updatecomment = exports.updatecomment = function updatecomment(id, comment) {
+var updateComment = exports.updateComment = function updateComment(id, comment) {
   return function (dispatch) {
     _axios2.default.put('/api/comments/' + id, comment).then(function (res) {
       return dispatch(update(res.data));
@@ -30465,7 +30464,7 @@ var updatecomment = exports.updatecomment = function updatecomment(id, comment) 
 };
 
 // optimistic
-var removecomment = exports.removecomment = function removecomment(id) {
+var removeComment = exports.removeComment = function removeComment(id) {
   return function (dispatch) {
     dispatch(remove(id));
     _axios2.default.delete('/api/comments/' + id).catch(function (err) {
@@ -38249,7 +38248,7 @@ var Routes = function (_Component) {
           null,
           _react2.default.createElement(_Navbar2.default, null),
           _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default }),
-          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/SingleArticle/:id', component: _SingleArticle2.default }),
+          _react2.default.createElement(_reactRouterDom.Route, { path: '/SingleArticle/:id', component: _SingleArticle2.default }),
           _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/LogIn', component: _Login2.default }),
           _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/Signup', component: _Signup2.default })
         )
@@ -42402,52 +42401,48 @@ function RelatedArticle(_ref) {
     { className: 'column is-one-quarter' },
     _react2.default.createElement(
       _reactRouterDom.NavLink,
-      { to: '/SingleArticle/' + article.id },
+      { to: '/SingleArticle/' + article.id, id: article.id, className: 'card' },
       _react2.default.createElement(
         'div',
-        { className: 'card' },
+        { className: 'card-image' },
+        _react2.default.createElement(
+          'figure',
+          { className: 'image' },
+          _react2.default.createElement('img', { src: article.urlToImage, alt: 'Image' })
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'card-content' },
         _react2.default.createElement(
           'div',
-          { className: 'card-image' },
+          { className: 'media' },
           _react2.default.createElement(
-            'figure',
-            { className: 'image' },
-            _react2.default.createElement('img', { src: article.urlToImage, alt: 'Image' })
+            'div',
+            { className: 'media-content' },
+            _react2.default.createElement(
+              'p',
+              { className: 'title is-4' },
+              article.title
+            ),
+            _react2.default.createElement(
+              'p',
+              { className: 'subtitle is-6' },
+              article.publication
+            )
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'card-content' },
+          { className: 'content' },
+          article.body.slice(0, 50),
+          '...',
+          _react2.default.createElement('br', null),
           _react2.default.createElement(
-            'div',
-            { className: 'media' },
-            _react2.default.createElement(
-              'div',
-              { className: 'media-content' },
-              _react2.default.createElement(
-                'p',
-                { className: 'title is-4' },
-                article.title
-              ),
-              _react2.default.createElement(
-                'p',
-                { className: 'subtitle is-6' },
-                article.publication
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'content' },
-            article.body.slice(0, 50),
-            '...',
-            _react2.default.createElement('br', null),
-            _react2.default.createElement(
-              'small',
-              null,
-              'Published ',
-              article.date.slice(0, 10)
-            )
+            'small',
+            null,
+            'Published ',
+            article.date.slice(0, 10)
           )
         )
       )
@@ -42671,6 +42666,10 @@ var _RelatedArticle = __webpack_require__(422);
 
 var _RelatedArticle2 = _interopRequireDefault(_RelatedArticle);
 
+var _Comments3 = __webpack_require__(715);
+
+var _Comments4 = _interopRequireDefault(_Comments3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -42704,6 +42703,7 @@ var SingleArticle = function (_Component) {
       var paragraphs = this.props.paragraphs;
       var comments = this.props.comments;
       var relatedArticles = this.props.relatedArticles;
+      var commments = this.props.comments;
 
       return singleArticle && _react2.default.createElement(
         'div',
@@ -42742,10 +42742,10 @@ var SingleArticle = function (_Component) {
               paragraphs.map(function (para, index) {
                 return _react2.default.createElement(
                   'div',
-                  null,
+                  { key: para.index },
                   _react2.default.createElement(
                     'p',
-                    { key: para.index },
+                    null,
                     para.text
                   ),
                   _react2.default.createElement('br', null)
@@ -42756,7 +42756,7 @@ var SingleArticle = function (_Component) {
               'div',
               { className: 'column is-multiline' },
               _react2.default.createElement(_radarChart2.default, { singleArticle: singleArticle }),
-              ' }'
+              _react2.default.createElement(_Comments4.default, { comments: comments })
             )
           )
         ),
@@ -42774,7 +42774,7 @@ var SingleArticle = function (_Component) {
             'div',
             { className: 'columns is-multiline' },
             relatedArticles.map(function (article) {
-              return _react2.default.createElement(_RelatedArticle2.default, { article: article });
+              return _react2.default.createElement(_RelatedArticle2.default, { key: article.id, article: article });
             }),
             _react2.default.createElement('hr', null)
           ),
@@ -42815,19 +42815,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     fetchComments: function fetchComments(articleId) {
       return dispatch((0, _comments.fetchComments)(articleId));
     },
-    addComment: function (_addComment) {
-      function addComment(_x, _x2) {
-        return _addComment.apply(this, arguments);
-      }
-
-      addComment.toString = function () {
-        return _addComment.toString();
-      };
-
-      return addComment;
-    }(function (articleId, paragraphId) {
-      return dispatch(addComment(articleId, paragraphId));
-    })
+    addComment: function addComment(articleId, paragraphId) {
+      return dispatch((0, _comments.addComment)(articleId, paragraphId));
+    }
   };
 };
 
@@ -43141,13 +43131,6 @@ function RadarChart(_ref) {
     padding: 70,
     domainMax: 1,
     highlighted: null,
-    onHover: function onHover(point) {
-      if (point) {
-        console.log('hovered over a data point');
-      } else {
-        console.log('not over anything');
-      }
-    },
     data: {
       variables: [{ key: 'joy', label: 'Joy' }, { key: 'anger', label: 'Anger' }, { key: 'disgust', label: 'Disgust' }, { key: 'sadness', label: 'Sadness' }, { key: 'fear', label: 'Fear' }],
       sets: [{
@@ -65976,6 +65959,86 @@ var fetchRelatedArticles = exports.fetchRelatedArticles = function fetchRelatedA
     });
   };
 };
+
+/***/ }),
+/* 715 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(16);
+
+var _reactDom = __webpack_require__(119);
+
+var _Login = __webpack_require__(93);
+
+var _Login2 = _interopRequireDefault(_Login);
+
+var _WhoAmI = __webpack_require__(117);
+
+var _WhoAmI2 = _interopRequireDefault(_WhoAmI);
+
+var _comments = __webpack_require__(193);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Comments2(_ref) {
+  var comments = _ref.comments;
+
+  return _react2.default.createElement(
+    'article',
+    { className: 'media' },
+    _react2.default.createElement(
+      'figure',
+      { className: 'media-left' },
+      _react2.default.createElement(
+        'p',
+        { className: 'image is-48x48 leftBuffer' },
+        _react2.default.createElement('img', { src: 'http://bulma.io/images/placeholders/128x128.png' })
+      )
+    ),
+    comments.map(function (comment) {
+      return _react2.default.createElement(
+        'div',
+        { className: 'media-content', id: comment.id },
+        _react2.default.createElement(
+          'div',
+          { className: 'content' },
+          _react2.default.createElement(
+            'p',
+            { className: 'is-size-7 rightBuffer' },
+            _react2.default.createElement(
+              'p',
+              null,
+              comment.text
+            ),
+            _react2.default.createElement(
+              'a',
+              null,
+              'Like'
+            ),
+            _react2.default.createElement(
+              'a',
+              null,
+              'Reply'
+            )
+          )
+        )
+      );
+    })
+  );
+}
+
+exports.default = Comments2;
 
 /***/ })
 /******/ ]);

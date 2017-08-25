@@ -6,8 +6,7 @@ function RelatedArticle({ article }) {
 
   return (
     <div className="column is-one-quarter">
-      <NavLink to={`/SingleArticle/${article.id}`}>
-        <div className='card'>
+      <NavLink to={`/SingleArticle/${article.id}`} id={article.id} className='card'>
           <div className='card-image'>
             <figure className='image'>
               <img src={article.urlToImage} alt='Image' />
@@ -26,7 +25,6 @@ function RelatedArticle({ article }) {
               <small>Published {article.date.slice(0, 10)}</small>
             </div>
           </div>
-        </div>
       </NavLink>
     </div>
   )

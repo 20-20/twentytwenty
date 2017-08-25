@@ -4,11 +4,12 @@ import { Navlink } from 'react-router-dom'
 import { fetchArticle } from '../reducers/singleArticle'
 import { fetchRelatedArticles } from '../reducers/relatedArticles'
 import { fetchParagraphs } from '../reducers/paragraphs'
-import { fetchComments, addComent } from '../reducers/comments'
+import { fetchComments, addComment } from '../reducers/comments'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 import RelatedArticle from './RelatedArticle'
+import Comments2 from './Comments2'
 
 class SingleArticle extends Component {
 
@@ -25,6 +26,7 @@ class SingleArticle extends Component {
     const paragraphs = this.props.paragraphs
     const comments = this.props.comments
     const relatedArticles = this.props.relatedArticles
+    const commments = this.props.comments
 
     return (
       singleArticle &&
@@ -43,13 +45,15 @@ class SingleArticle extends Component {
                 </figure>
                 {
                   paragraphs.map((para, index) => (
-                    <div><p key={para.index}>{para.text}</p><br /></div>)
+                    <div key={para.index}>
+                      <p >{para.text}</p>
+                      <br /></div>)
                   )
                 }
               </div>
               <div className="column is-multiline">
-                <RadarChart singleArticle={singleArticle} /> }
-                {/* <Comments singleArticle={this.props.singleArticle} /> */}
+                <RadarChart singleArticle={singleArticle} />
+                 <Comments2 comments={comments}/>
               </div>
             </div>
           }
@@ -61,7 +65,7 @@ class SingleArticle extends Component {
             <div className="columns is-multiline">
              {
               relatedArticles.map(article =>
-                <RelatedArticle article={article}/>
+              <RelatedArticle key={article.id} article={article}/>
               )
             }
             <hr/>

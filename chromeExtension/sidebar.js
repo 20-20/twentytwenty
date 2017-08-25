@@ -64,11 +64,9 @@ function secureCommentContext() {
 	chrome.storage.local.get(
 		['currentUser', 'currentArticle', 'selectedText'],
 			({ currentUser, currentArticle, selectedText}) => {
-				console.log("HERE IS THE SELECTED TEXT", selectedText)
 			const paragraphId = (selectedText === null)
 				? null
 				: paragraphMatch(currentArticle.paragraphs, selectedText)
-			console.log("post attr", currentUser.id, commentText, currentArticle.id, paragraphId)
 			postAndDisplayComment(currentUser, commentText, currentArticle.id, paragraphId)
 		}
 	)
@@ -91,10 +89,8 @@ function postAndDisplayComment(user, text, article_id, paragraph_id) {
 		user_id: user.id
 	})
 		.then(newComment => {
-			console.log("new comment", newComment)
 			const commentHTML = commentDisplay(user.name, newComment)
 			$('.contentHere').append($(`${commentHTML}`))
-			console.log($('#commentSubmission').val())
 			$('#commentSubmission').val('')
 		})
 }
