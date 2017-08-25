@@ -50,7 +50,7 @@ class SingleArticle extends Component {
                   )
                 }
               </div>
-              <div className="column">
+              <div className="column is-multiline">
                 {singleArticle && <RadarChart singleArticle={this.props.singleArticle} /> }
                 <Comments singleArticle={this.props.singleArticle} />
               </div>
