@@ -27,6 +27,7 @@ class SingleArticle extends Component {
     const comments = this.props.comments
     const relatedArticles = this.props.relatedArticles
     const commments = this.props.comments
+    const auth = this.props.auth
 
     return (
       singleArticle &&
@@ -53,7 +54,7 @@ class SingleArticle extends Component {
               </div>
               <div className="column is-multiline">
                 <RadarChart singleArticle={singleArticle} />
-                 <Comments2 comments={comments}/>
+                 <Comments comments={comments} auth={auth}/>
               </div>
             </div>
           }
@@ -77,13 +78,14 @@ class SingleArticle extends Component {
   }
 }
 
-const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles }) => {
+const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles, auth }) => {
   return {
     comments,
     paragraphs,
     singleArticle,
-    relatedArticles
-  }
+    relatedArticles,
+    auth
+    }
 }
 
 const mapDispatchToProps = (dispatch) => ({

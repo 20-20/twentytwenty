@@ -7,29 +7,76 @@ import singleArticle from '../reducers/singleArticle'
 
 // import getSelectionTextAndHighlight from '../../chromeExtension/highlight'
 
-class Comments extends Component {
-  constructor(props) {
-    super(props)
-  }
+function Comments({ comments, auth }) {
 
-  render() {
-    let userInfo = this.props.user ? this.props.user.name : ''
+    const userName = auth ? auth.name : ''
     return (
-     <div className="column">
-       {/*{this.getSelectionTextAndHighlight}*/}
-       {console.log("single article:", this.props.singleArticle.id)}
+      <div>
+        <nav className="panel">
+          <p className="panel-heading annotate-header">
+            <strong>Comments</strong>
+          </p>
+        </nav>
+
+        <article className='contentHere'></article>
+
+        {
+          comments.map(comment => (
+            <article className='media indComment' key={comment.id}>
+              <figure className='media-left'></figure>
+              <div className='media-content'>
+                <div className='content'>
+                  <p className='is-size-7 rightBuffer'>
+                    <strong>{userName}</strong>
+                    <br/>{comment.text}<br/>
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+
+        <article className='media'>
+          <div className='media-content'>
+            <form id='formSubmission'>
+              <div className='field'>
+                <p className='control rightBuffer'>
+                  <textarea
+                  id='commentSubmission'
+                    className='textarea is-size-7'
+                    placeholder={`${userName}, what do you think?`}
+                ></textarea>
+                </p>
+              </div>
+              <div className='field'>
+                <p className='control rightBuffer'>
+                  <input type='submit' className='button is-size-7'/>
+                </p>
+              </div>
+            </form>
+          </div>
+        </article>
+      </div>
+    )
+}
+
+export default Comments
+
+
+     /*<div className="column">
           <nav className="panel">
             <p className="panel-heading">
               <center><strong>Comments</strong></center>
             </p>
           </nav>
       <article className='media'>
+
         {
-                  this.props.singleArticle.comments.map((comments, index) => (
-                    <tr key={comments.id}>
-                     </tr>
-                  ))
+              comments.map((comment, index) => (
+              <tr key={comments.id}>{comment.text}</tr>
+              ))
         }
+
             <div className='media-content'>
               <form id='formSubmission'>
                 <nav className="panel">
@@ -54,14 +101,4 @@ class Comments extends Component {
       </article>
      </div>
     )
-  }
-}
-
-const mapStateToProps = (state) => ({
-  user: state.auth,
-  singleArticle: state.singleArticle
-})
-
-const commentsContainer = connect(mapStateToProps, null)(Comments)
-
-export default commentsContainer
+}*/
