@@ -4,7 +4,6 @@ import { render } from 'react-dom'
 import { NavLink } from 'react-router-dom'
 import { fetchTopStories } from '../reducers/topStories'
 
-
 class TopStories extends Component {
   componentDidMount() {
     this.props.loadTopStories()
