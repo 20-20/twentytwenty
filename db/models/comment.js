@@ -19,6 +19,14 @@ module.exports = db => db.define('comments', {
     type: DATE,
     field: 'created_at'
   },
+  domElType: {
+    type: STRING,
+    allowNull: true
+  },
+  domElText: {
+    type: TEXT,
+    allowNull: true
+  }
 })
 
 module.exports.associations = (Comment, { Paragraph, User, Article }) => {

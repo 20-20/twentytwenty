@@ -87,7 +87,7 @@ router.post(`/:url`, (req, res, next) => {
     : decodeURIComponent(req.params.url)
   Article.findOne({
     where: { url: decodedUrl },
-    include: [{ model: Paragraph, include: [Comment] }]
+    include: [{ model: Paragraph, include: [Comment] }, {model: Topic }, {model: Comment}]
   })
     .then(retObj => {
       if (retObj) return retObj
