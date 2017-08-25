@@ -15,6 +15,7 @@ export default function renderComments() {
 }
 
 function fetchArticleData(article) {
+  article.comments.sort((c1,c2) => c1.paragraph_id-c2.paragraph_id)
   article.comments.forEach(comment => {
     fetchCommenter(comment.user_id)
       .then(user => {
