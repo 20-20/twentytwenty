@@ -15,12 +15,9 @@ export default function renderComments() {
 }
 
 function fetchArticleData(article) {
-  console.log("inside fetch")
   article.comments.forEach(comment => {
-    console.log("fetching user for comment", comment)
     fetchCommenter(comment.user_id)
       .then(user => {
-        console.log("displaying comment", comment)
         commentDisplay(user.name, comment)
       })
   })
