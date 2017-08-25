@@ -2,7 +2,6 @@
 
 const db = require('APP/db')
 const Article = db.model('articles')
-const Topic = db.model('topics')
 const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
 const router = require('express').Router()

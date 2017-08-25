@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { render } from 'react-dom'
 import { NavLink } from 'react-router-dom'
 import { fetchTopStories } from '../reducers/topStories'
-import { NavLink } from 'react-router-dom'
 
 
 class TopStories extends Component {

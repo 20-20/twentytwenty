@@ -6,7 +6,6 @@ const router = require('express').Router()
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
-const Topic = db.model('topics')
 
 // All trending route
 module.exports = router.get('/', (req, res, next) => {
