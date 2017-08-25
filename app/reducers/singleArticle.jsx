@@ -13,7 +13,7 @@ const update = singleArticle => ({ type: UPDATE, singleArticle })
 
 /* ------------       REDUCER     ------------------ */
 
-export default function reducer(singleArticle = {}, action) {
+export default function reducer(singleArticle = null, action) {
   switch (action.type) {
   case INITIALIZE:
     return action.singleArticle
