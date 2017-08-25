@@ -61,9 +61,9 @@ class SingleArticle extends Component {
             <div className="columns is-multiline">
              {
                relatedArticles
-              .filter(article=> article.id !== +this.props.match.params.id)
+              .filter(relatedArticle=> relatedArticle.id !== +this.props.match.params.id)
               .sort((a,b)=> a.sentimentScore - b.sentimentScore)
-              .map(article => <RelatedArticle  key={article.id} article={article}/>)
+              .map(relatedArticle => <RelatedArticle  key={relatedArticle.id} relatedArticle={relatedArticle}/>)
             }
             <hr/>
           </div>
