@@ -17,7 +17,6 @@ function eventregistryTrendingCall() {
        axios.post(`http://localhost:1337/api/singleArticle/${encodeURIComponent(result.url)}?trending=true`)
       )
     })
-    console.log(promises)
     return Promise.all(promises)
   })
 }

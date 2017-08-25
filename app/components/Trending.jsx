@@ -4,13 +4,6 @@ import { NavLink } from 'react-router-dom'
 
 function Trending({ trending }) {
 
-  const tileClasses = [
-    'tile is-parent is-4',
-    'tile is-parent is-8 is-vertical',
-    'tile',
-    ''
-  ]
-
   return (
     <div className="section">
       <div className="container" >

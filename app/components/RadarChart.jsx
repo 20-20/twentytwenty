@@ -10,13 +10,6 @@ export default function RadarChart({singleArticle}) {
       padding={70}
       domainMax={1}
       highlighted={null}
-      onHover={(point) => {
-        if (point) {
-          console.log('hovered over a data point');
-        } else {
-          console.log('not over anything');
-        }
-      }}
       data={{
         variables: [
           { key: 'joy', label: 'Joy' },

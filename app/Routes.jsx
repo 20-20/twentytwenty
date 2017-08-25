@@ -22,7 +22,7 @@ class Routes extends Component {
         <div>
             <Navbar />
             <Route exact path='/' component={Home} />
-            <Route exact path='/SingleArticle/:id' component={SingleArticle} />
+            <Route path='/SingleArticle/:id' component={SingleArticle} />
             <Route exact path="/LogIn" component={Login} />
             <Route exact path="/Signup" component={Signup} />
         </div>
