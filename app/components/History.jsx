@@ -10,11 +10,11 @@ export default function History() {
         <hr/>
         <div className="columns is-multiline">
           <div className="column is-one-quarter box"><p className="title">content</p></div>
-          <div className="column is-one-quarter box"><p className="title">content</p></div>
-          <div className="column is-one-quarter box"><p className="title">content</p></div>
-          <div className="column is-one-quarter box"><p className="title">content</p></div>
-          <div className="column is-one-quarter box"><p className="title">content</p></div>
-          <div className="column is-one-quarter box"><p className="title">content</p></div>
+          <div className="column is-one-quarter box"><p className="title">content1</p></div>
+          <div className="column is-one-quarter box"><p className="title">content2</p></div>
+          <div className="column is-one-quarter box"><p className="title">content3</p></div>
+          <div className="column is-one-quarter box"><p className="title">content4</p></div>
+          <div className="column is-one-quarter box"><p className="title">content6</p></div>
           <hr/>
         </div>
         <hr/>

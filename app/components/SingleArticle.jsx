@@ -5,7 +5,8 @@ import { fetchArticle } from '../reducers/singleArticle'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
-import { fetchArticlesByTopics } from '../reducers/topics'
+import { fetchArticlesByTopics, resetArticlesByTopics } from '../reducers/topics'
+import RelatedArticle from './RelatedArticle'
 
 class SingleArticle extends Component {
 
@@ -21,9 +22,13 @@ class SingleArticle extends Component {
     this.props.fetchArticlesByTopics(mostReleventTopic.name)
   }
 
+  componentWillUnmount() {
+    this.props.resetArticlesByTopics()
+  }
+
   render() {
     const singleArticle = this.props.singleArticle
-    this.props.singleArticle.topics && this.mostReleventTopic()
+    this.props.singleArticle && !this.props.topics.length && this.mostReleventTopic()
 
     return (
       <div className="container" >
@@ -40,35 +45,51 @@ class SingleArticle extends Component {
                   <img style={{ maxWidth: '100%', height: 'auto' }} src={singleArticle && singleArticle.urlToImage} className="" />
                 </figure>
                 {
-                  singleArticle.paragraphs && singleArticle.paragraphs.map(para => (
+                  singleArticle && singleArticle.paragraphs.map(para => (
                     <div><p key={para.index}>{para.text}</p><br /></div>)
                   )
                 }
               </div>
-              <div className="column">
-                <RadarChart singleArticle={this.props.singleArticle} />
-                <Comments singleArticle={this.props.singleArticle} />
+              <div className="column is-multiline">
+                {singleArticle && <RadarChart singleArticle={this.props.singleArticle} /> }
+                {/*<Comments singleArticle={this.props.singleArticle} />*/}
               </div>
             </div>
           }
         </div>
+        <hr />
 
+          <div className="container">
+            <p className="title">Related Articles</p>
+            <hr/>
+            <div className="columns is-multiline">
+             {
+              this.props.topics.length && this.props.topics.map(topic =>
+                <RelatedArticle topic={topic}/>
+              )
+            }
+            <hr/>
+          </div>
+          <hr/>
+        </div>
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ trending, comments, singleArticle }) => {
+const mapStateToProps = ({ trending, comments, singleArticle, topics }) => {
   return {
     trending,
     comments,
-    singleArticle
+    singleArticle,
+    topics
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   fetchArticle: (articleId) => dispatch(fetchArticle(articleId)),
-  fetchArticlesByTopics: (topic) => dispatch(fetchArticlesByTopics(topic))
+  fetchArticlesByTopics: (topic) => dispatch(fetchArticlesByTopics(topic)),
+  resetArticlesByTopics: () => dispatch(resetArticlesByTopics())
 })
 
 const singleArticleContainer = connect(mapStateToProps, mapDispatchToProps)(SingleArticle)
