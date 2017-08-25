@@ -3,27 +3,31 @@ import { connect } from 'react-redux'
 import { render } from 'react-dom'
 import { NavLink, withRouter } from 'react-router-dom'
 import addComment from '../reducers/comments'
-//import getSelectionTextAndHighlight from '../../chromeExtension/highlight'
+// import getSelectionTextAndHighlight from '../../chromeExtension/highlight'
 
 class Comments extends Component {
   constructor(props) {
     super(props)
-      // this.getSelectionTextAndHighlight = this.getSelectionTextAndHighlight.bind(this)
   }
 
   render() {
-    console.log("this.props.user", this.props.user)
     let userInfo = this.props.user ? this.props.user.name : ''
-    console.log("single article:", this.props.singleArticle)
     return (
      <div className="column">
        {/*{this.getSelectionTextAndHighlight}*/}
+       {/*{console.log("single article:", this.props.singleArticle.id)}*/}
           <nav className="panel">
             <p className="panel-heading">
               <center><strong>Comments</strong></center>
             </p>
           </nav>
       <article className='media'>
+        {
+                  this.props.singleArticle.comments.map((comments, index) => (
+                    <tr key={comments.id}>
+                     </tr>
+                  ))
+        }
             <div className='media-content'>
               <form id='formSubmission'>
                 <nav className="panel">
