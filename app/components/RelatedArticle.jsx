@@ -20,9 +20,10 @@ function RelatedArticle({ article }) {
               </div>
             </div>
             <div className='content'>
-              {article.body.slice(0, 50)}...
+              {topic.body.slice(0, 50)}...
               <br />
-              <small>Published {article.date.slice(0, 10)}</small>
+              <RadarChart singleArticle={topic} width={250} height={250} padding={30}/>
+              <small>Published {topic.date.slice(0, 10)}</small>
             </div>
           </div>
       </NavLink>
