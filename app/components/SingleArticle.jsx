@@ -53,6 +53,7 @@ class SingleArticle extends Component {
               <div className="column is-multiline">
                 {singleArticle && <RadarChart singleArticle={this.props.singleArticle} /> }
                 {/*<Comments singleArticle={this.props.singleArticle} />*/}
+                <Comments />
               </div>
             </div>
           }
