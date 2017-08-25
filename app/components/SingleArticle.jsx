@@ -10,9 +10,7 @@ import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 import RelatedArticle from './RelatedArticle'
 import Comments2 from './Comments2'
-
 class SingleArticle extends Component {
-
   componentDidMount() {
     const articleId = +this.props.match.params.id
     this.props.fetchArticle(articleId)
@@ -20,14 +18,12 @@ class SingleArticle extends Component {
     this.props.fetchParagraphs(articleId)
     this.props.fetchComments(articleId)
   }
-
   render() {
     const singleArticle = this.props.singleArticle
     const paragraphs = this.props.paragraphs
     const comments = this.props.comments
     const relatedArticles = this.props.relatedArticles
     const commments = this.props.comments
-
     return (
       singleArticle &&
       <div className="container" >
@@ -60,13 +56,14 @@ class SingleArticle extends Component {
         </div>
         <hr />
           <div className="container">
-            <p className="title">Related Articles</p>
+            <p className="title">Related Articles on {singleArticle.topics[0]}</p>
             <hr/>
             <div className="columns is-multiline">
              {
-              relatedArticles.map(article =>
-              <RelatedArticle key={article.id} article={article}/>
-              )
+               relatedArticles
+              .filter(article=> article.id !== +this.props.match.params.id)
+              .sort((a,b)=> a.sentimentScore - b.sentimentScore)
+              .map(article => <RelatedArticle  key={article.id} article={article}/>)
             }
             <hr/>
           </div>
@@ -76,7 +73,6 @@ class SingleArticle extends Component {
     )
   }
 }
-
 const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles }) => {
   return {
     comments,
@@ -85,7 +81,6 @@ const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles 
     relatedArticles
   }
 }
-
 const mapDispatchToProps = (dispatch) => ({
   fetchArticle: (articleId) => dispatch(fetchArticle(articleId)),
   fetchRelatedArticles: (articleId) => dispatch(fetchRelatedArticles(articleId)),
@@ -93,7 +88,5 @@ const mapDispatchToProps = (dispatch) => ({
   fetchComments: (articleId) => dispatch(fetchComments(articleId)),
   addComment: (articleId, paragraphId) => dispatch(addComment(articleId, paragraphId))
 })
-
 const singleArticleContainer = connect(mapStateToProps, mapDispatchToProps)(SingleArticle)
-
 export default singleArticleContainer
