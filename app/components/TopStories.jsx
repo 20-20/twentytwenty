@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { render } from 'react-dom'
 import { NavLink } from 'react-router-dom'
 import { fetchTopStories } from '../reducers/topStories'
+import { NavLink } from 'react-router-dom'
 
 
 class TopStories extends Component {
@@ -47,14 +48,13 @@ class TopStories extends Component {
   }
 }
 
-const mapStateToProps = function (state) {
-  console.log('state.topStories', state.topStories)
+const mapStateToProps = (state) => {
   return {
     topStory: state.topStories
   }
 }
 
-const mapDispatchToProps = function (dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     loadTopStories: () => {
       dispatch(fetchTopStories())

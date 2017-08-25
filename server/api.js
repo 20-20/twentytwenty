@@ -2,7 +2,7 @@
 
 const api = module.exports = require('express').Router()
 const eventRegistryCaller = require('./news')
-eventRegistryCaller()
+// eventRegistryCaller()
 
 api
   .get('/heartbeat', (req, res) => res.send({ok: true}))
@@ -11,6 +11,7 @@ api
   .use('/comments', require('./comments'))
   .use('/trending', require('./trending'))
   .use('/topStories', require('./topStories'))
+  .use('/topics', require('./topics'))
   .use('/singleArticle', require('./singleArticle').router)
   .get('/news', require('./news'))
 

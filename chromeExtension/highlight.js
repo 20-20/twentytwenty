@@ -4,12 +4,13 @@ import { extensionToggle } from './sidebar'
 
 $(() => {
   $('html').dblclick(() => {
-    getSelectionText()
-    extensionToggle()
+    getSelectionTextAndHighlight()
+    // extensionToggle()
+    // if ($('.iconText').text().length) extensionToggle()
   })
 })
 
-function getSelectionText() {
+function getSelectionTextAndHighlight() {
   let text = ''
   if (window.getSelection) {
     text = window.getSelection().toString() // string generation
@@ -20,14 +21,16 @@ function getSelectionText() {
   const parentEl = window.getSelection().anchorNode.parentElement
   if ($(parentEl).attr('class')
     && $(parentEl).attr('class').includes('twentyHighlight')) {
+      if (!$('.iconText').text()) extensionToggle()
       $(parentEl).removeClass('twentyHighlight')
       chrome.storage.local.set({ 'selectedText': null})
       chrome.storage.local.get('selectedText', (selectedText) => console.log("empty???", selectedText))
     } else {
-    $(parentEl).addClass('twentyHighlight')
-    const storageObj = { 'selectedText': parentEl.innerHTML }
-    chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
-    chrome.storage.local.get('selectedText', (selectedText) => console.log("full???", selectedText))
+      if ($('.iconText').text().length) extensionToggle()
+      $(parentEl).addClass('twentyHighlight')
+      const storageObj = { 'selectedText': parentEl.innerHTML }
+      chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
+      chrome.storage.local.get('selectedText', (selectedText) => console.log("full???", selectedText))
   }
 }
 

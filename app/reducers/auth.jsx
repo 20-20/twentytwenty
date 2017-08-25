@@ -19,7 +19,6 @@ export const authenticated = user => ({
 /* ------------------    REDUCER    --------------------- */
 
 export default function reducer(user = null, action) {
-  console.log('user', user)
   switch (action.type) {
   case SET:
     return action.user
@@ -91,7 +90,6 @@ export const whoami = () =>
     axios.get('/api/auth/whoami')
       .then(response => {
         const user = response.data
-        console.log('user', user)
         dispatch(authenticated(user))
       })
       .catch(failed => dispatch(authenticated(null)))

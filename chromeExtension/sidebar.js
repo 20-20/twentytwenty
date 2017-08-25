@@ -28,7 +28,7 @@ function renderChrExt(currentUser) {
 }
 
 function storeCurrentUser(currentUser) {
-	chrome.storage.local.set(currentUser)
+	chrome.storage.local.set({ 'currentUser': currentUser })
 }
 
 function showButton(name) {
@@ -48,7 +48,7 @@ export function extensionToggle() {
 		$('.iconText').append(`<i class='fa fa-globe'></i>`)
 	} else $('.iconText').append(`20-20`)
   // focus user input into comment text box
-  $('.annotate-text-entry').focus()
+  $('#commentSubmission').focus()
 }
 
 function appendFormSubmission() {
@@ -59,16 +59,17 @@ function appendFormSubmission() {
 }
 
 // maybe move secureCommentContext and paragraphMatch to new file -Jason
-function secureCommentContext(currentUser) {
-	const commentText = $('.annotate-text-entry').val()
+function secureCommentContext() {
+	const commentText = $('#commentSubmission').val()
 	chrome.storage.local.get(
-		['currentUser', 'currentArticle', 'selectedText', 'paragraphs'],
-			({ currentUser, currentArticle, selectedText, paragraphs}) => {
-			const articleId = currentArticle.id
+		['currentUser', 'currentArticle', 'selectedText'],
+			({ currentUser, currentArticle, selectedText}) => {
+				console.log("HERE IS THE SELECTED TEXT", selectedText)
 			const paragraphId = (selectedText === null)
-				? 999
-				: paragraphMatch(paragraphs, selectedText)
-			postAndDisplayComment(currentUser, commentText, articleId, paragraphId)
+				? null
+				: paragraphMatch(currentArticle.paragraphs, selectedText)
+			console.log("post attr", currentUser.id, commentText, currentArticle.id, paragraphId)
+			postAndDisplayComment(currentUser, commentText, currentArticle.id, paragraphId)
 		}
 	)
 }
@@ -82,18 +83,19 @@ function paragraphMatch(paragraphs, selectedText) {
 	return selectedParagraph[0].id
 }
 
-function postAndDisplayComment(currentUser, text, article_id, paragraph_id) {
+function postAndDisplayComment(user, text, article_id, paragraph_id) {
 	postComment({
 		article_id,
 		paragraph_id,
 		text,
-		user_id: currentUser.id
+		user_id: user.id
 	})
-		.then(newComment => newComment.data)
 		.then(newComment => {
-			const commentHTML = commentDisplay(currentUser.name, newComment)
-			$('.annotate-list').append($(`${commentHTML}`))
-			$('.annotate-text-entry').val('')
+			console.log("new comment", newComment)
+			const commentHTML = commentDisplay(user.name, newComment)
+			$('.contentHere').append($(`${commentHTML}`))
+			console.log($('#commentSubmission').val())
+			$('#commentSubmission').val('')
 		})
 }
 
