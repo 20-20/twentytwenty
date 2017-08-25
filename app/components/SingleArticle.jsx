@@ -10,6 +10,7 @@ import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 import RelatedArticle from './RelatedArticle'
 import Comments2 from './Comments2'
+import selectionTextAndHighlight from '../../chromeExtension/highlight'
 
 class SingleArticle extends Component {
 
@@ -19,6 +20,18 @@ class SingleArticle extends Component {
     this.props.fetchRelatedArticles(articleId)
     this.props.fetchParagraphs(articleId)
     this.props.fetchComments(articleId)
+    // $(() => {
+    //   $('html').dblclick(() => selectionTextAndHighlight(false))
+    // })
+
+
+    // $(() => {
+
+    // })
+    // $('html').dblclick((evt) => {
+    //   evt.preventDefault()
+    //   selectionTextAndHighlight(false)
+    // })
   }
 
   render() {
@@ -47,7 +60,7 @@ class SingleArticle extends Component {
                 {
                   paragraphs.map((para, index) => (
                     <div key={para.index}>
-                      <p >{para.text}</p>
+                      <p id={para.id}>{para.text}</p>
                       <br /></div>)
                   )
                 }

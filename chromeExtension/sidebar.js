@@ -60,7 +60,7 @@ function appendFormSubmission() {
 	})
 }
 
-function secureCommentContext() {
+export function secureCommentContext() {
 	const commentText = $('#commentSubmission').val()
 	chrome.storage.local.get(
 		['currentUser', 'currentArticle', 'selectedText', 'selectType'],
@@ -108,7 +108,7 @@ function secureCommentContext() {
 	)
 }
 
-function paragraphMatch(paragraphs, selectedText) {
+export function paragraphMatch(paragraphs, selectedText) {
 	const paragraphText = paragraphs.map(paragraph => paragraph.text)
 	const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
 	const selectedParagraph = paragraphs.filter(
@@ -117,7 +117,7 @@ function paragraphMatch(paragraphs, selectedText) {
 	return selectedParagraph[0].id
 }
 
-function postAndDisplayComment(
+export function postAndDisplayComment(
 	user, text, article_id, paragraph_id, domElText, domElType) {
 	// const paragraph_id = paragraph ? paragraph.id : null
 	// const paragraphText = paragraph ? paragraph.text : null
