@@ -30329,7 +30329,7 @@ var removecomment = exports.removecomment = function removecomment(id) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateArticle = exports.fetchArticle = undefined;
+exports.fetchArticle = undefined;
 exports.default = reducer;
 
 var _axios = __webpack_require__(41);
@@ -30341,15 +30341,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* -----------------    ACTIONS     ------------------ */
 
 var INITIALIZE = 'INITIALIZE_ARTICLE';
-var UPDATE = 'UPDATE_ARTICLE';
 
 /* ------------   ACTION CREATORS     ------------------ */
 
 var init = function init(singleArticle) {
   return { type: INITIALIZE, singleArticle: singleArticle };
-};
-var update = function update(singleArticle) {
-  return { type: UPDATE, singleArticle: singleArticle };
 };
 
 /* ------------       REDUCER     ------------------ */
@@ -30362,9 +30358,6 @@ function reducer() {
     case INITIALIZE:
       return action.singleArticle;
 
-    case UPDATE:
-      return action.singleArticle;
-
     default:
       return singleArticle;
   }
@@ -30374,19 +30367,8 @@ function reducer() {
 
 var fetchArticle = exports.fetchArticle = function fetchArticle(id) {
   return function (dispatch) {
-    console.log('fetch article thunk called');
     _axios2.default.get('/api/singleArticle/' + id).then(function (res) {
       return dispatch(init(res.data));
-    });
-  };
-};
-
-var updateArticle = exports.updateArticle = function updateArticle(id, article) {
-  return function (dispatch) {
-    _axios2.default.put('/api/singleArticle/' + id, article).then(function (res) {
-      return dispatch(update(res.data));
-    }).catch(function (err) {
-      return console.error('Updating article: ' + article + ' unsuccesful', err);
     });
   };
 };
@@ -43425,49 +43407,53 @@ function RelatedArticle(_ref) {
     'div',
     { className: 'column is-one-quarter' },
     _react2.default.createElement(
-      'div',
-      { className: 'card' },
+      _reactRouterDom.NavLink,
+      { to: '/SingleArticle/' + topic.id },
       _react2.default.createElement(
         'div',
-        { className: 'card-image' },
-        _react2.default.createElement(
-          'figure',
-          { className: 'image' },
-          _react2.default.createElement('img', { src: topic.urlToImage, alt: 'Image' })
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'card-content' },
+        { className: 'card' },
         _react2.default.createElement(
           'div',
-          { className: 'media' },
+          { className: 'card-image' },
           _react2.default.createElement(
-            'div',
-            { className: 'media-content' },
-            _react2.default.createElement(
-              'p',
-              { className: 'title is-4' },
-              topic.title
-            ),
-            _react2.default.createElement(
-              'p',
-              { className: 'subtitle is-6' },
-              topic.publication
-            )
+            'figure',
+            { className: 'image' },
+            _react2.default.createElement('img', { src: topic.urlToImage, alt: 'Image' })
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'content' },
-          topic.body.slice(0, 50),
-          '...',
-          _react2.default.createElement('br', null),
+          { className: 'card-content' },
           _react2.default.createElement(
-            'small',
-            null,
-            'Published ',
-            topic.date.slice(0, 10)
+            'div',
+            { className: 'media' },
+            _react2.default.createElement(
+              'div',
+              { className: 'media-content' },
+              _react2.default.createElement(
+                'p',
+                { className: 'title is-4' },
+                topic.title
+              ),
+              _react2.default.createElement(
+                'p',
+                { className: 'subtitle is-6' },
+                topic.publication
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'content' },
+            topic.body.slice(0, 50),
+            '...',
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              'small',
+              null,
+              'Published ',
+              topic.date.slice(0, 10)
+            )
           )
         )
       )
@@ -43779,8 +43765,7 @@ var SingleArticle = function (_Component) {
             _react2.default.createElement(
               'div',
               { className: 'column is-multiline' },
-              singleArticle && _react2.default.createElement(_radarChart2.default, { singleArticle: this.props.singleArticle }),
-              _react2.default.createElement(_Comments2.default, { singleArticle: this.props.singleArticle })
+              singleArticle && _react2.default.createElement(_radarChart2.default, { singleArticle: this.props.singleArticle })
             )
           )
         ),
@@ -44424,21 +44409,6 @@ var _Routes = __webpack_require__(314);
 var _Routes2 = _interopRequireDefault(_Routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// const ExampleApp = connect(
-//   ({ auth }) => ({ user: auth })
-// )(
-//   ({ user, children }) =>
-//     <div>
-//       <Navbar user={user} />
-//       <main>
-//         <Switch>
-//           <Route path="/" component={Home} />
-//           <Route component={NotFound} />
-//         </Switch>
-//       </main>
-//     </div>
-// )
 
 (0, _reactDom.render)(_react2.default.createElement(
   _reactRedux.Provider,
