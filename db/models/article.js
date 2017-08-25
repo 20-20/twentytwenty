@@ -1,6 +1,6 @@
 'use strict'
 
-const { STRING, ENUM, TEXT, DATE, INTEGER, FLOAT, BOOLEAN } = require('sequelize')
+const { STRING, ENUM, TEXT, DATE, INTEGER, FLOAT, BOOLEAN, ARRAY } = require('sequelize')
 
 module.exports = db => db.define('articles', {
   url: {
@@ -89,6 +89,9 @@ module.exports = db => db.define('articles', {
   engagement: {
     type: INTEGER,
     defaultValue: 0
+  },
+  topics: {
+    type: ARRAY(STRING)
   }
 },
   {
@@ -101,9 +104,8 @@ module.exports = db => db.define('articles', {
   }
 )
 
-module.exports.associations = (Article, { Paragraph, Comment, Topic, User, History, Relevance }) => {
+module.exports.associations = (Article, { Paragraph, Comment, User, History }) => {
   Article.hasMany(Paragraph)
   Article.hasMany(Comment)
   Article.belongsToMany(User, { through: History })
-  Article.belongsToMany(Topic, { through: Relevance })
 }

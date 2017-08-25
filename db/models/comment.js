@@ -21,7 +21,7 @@ module.exports = db => db.define('comments', {
   },
 })
 
-module.exports.associations = (Comment, { Paragraph, User, Article, Topic }) => {
+module.exports.associations = (Comment, { Paragraph, User, Article }) => {
   Comment.belongsTo(User)
   Comment.belongsTo(Paragraph)
   Comment.belongsTo(Article)

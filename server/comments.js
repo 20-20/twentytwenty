@@ -1,10 +1,21 @@
 'use strict'
 
 const db = require('APP/db')
-const Comment = db.Comment
+const Comment = db.model('comments')
 const router = require('express').Router()
+const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 
-module.exports = router
+
+// All comments Route
+router.get('/:articleId', (req, res, next) => {
+  Comment.findAll({
+    where:{
+      article_id: req.params.articleId
+    }
+  })
+  .then(comment => res.json(comment))
+  .catch(next)
+})
 
 // post comment
 router.post('/', (req, res, next) => {
@@ -13,32 +24,4 @@ router.post('/', (req, res, next) => {
   .catch(next)
 })
 
-// update comment
-router.put('/:id', (req, res, next) => {
-  Comment.findById(req.params.id)
-  .then(comment => comment.update(req.body))
-  .then(updatedComment => res.json(updatedComment))
-  .catch(next)
-})
-
-// // Get all comments
-// router.post('/paragraphId', (req, res, next) => {
-//   Comment.findById(req.params.id)
-//     .then(comment => res.json(comment))
-//     .catch(next)
-// })
-
-// // Single comment Route
-// router.get('/:id', (req, res, next) => {
-//   Comment.findById(req.params.id)
-//     .then(comment => res.json(comment))
-//     .catch(next)
-// })
-
-// // Update comment
-// router.put('/:commentId', (req, res, next) => {
-//   Comment.findById(req.params.id)
-//   .then(comment => comment.update(req.body))
-//   .then(updatedcomment => res.json(updatedcomment))
-//   .catch(next)
-// })
+module.exports = router

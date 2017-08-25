@@ -17,12 +17,10 @@ const app = require('APP')
       User: require('./user'),
       Thing: require('./thing'),
       Favorite: require('./favorite'),
-      Topic: require('./topic'),
       History: require('./history'),
       Comment: require('./comment'),
       Article: require('./article'),
       Paragraph: require('./paragraph'),
-      Relevance: require('./relevance')
       // ---------- Add new models here ----------
     }
     , {mapValues} = require('lodash')
