@@ -22,7 +22,7 @@ function selectionTextAndHighlight() {
   toggleSelectionAndHighlight(parentEl)
 }
 
-export function toggleSelectionAndHighlight(parentEl) {
+function toggleSelectionAndHighlight(parentEl) {
   console.log("parentEl", parentEl)
   if ($(parentEl).attr('class')
     && $(parentEl).attr('class').includes('twentyHighlight')) {
@@ -30,19 +30,20 @@ export function toggleSelectionAndHighlight(parentEl) {
       if (!$('.iconText').text()) extensionToggle()
       $(parentEl).removeClass('twentyHighlight')
       chrome.storage.local.set({ 'selectedText': null})
-      // chrome.storage.local.set({ 'selectionParentEl': null})
-      chrome.storage.local.get('selectedText', (selectedText) => console.log("empty???", selectedText))
     } else {
       console.log("entered highlight addition")
       if ($('.iconText').text().length) extensionToggle()
       $(parentEl).addClass('twentyHighlight')
       const storageObj = { 'selectedText': parentEl.innerHTML }
       chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
-      // focus user input into comment text box
+      // focus user cursor on comment text box
       $('#commentSubmission').focus()
-      // chrome.storage.local.set({ 'selectionParentEl': parentEl})
-      chrome.storage.local.get('selectedText', (selectedText) => console.log("full???", selectedText))
   }
+}
+
+export function removeSelection() {
+  $('.twentyHighlight').removeClass('twentyHighlight')
+  chrome.storage.local.set({ 'selectedText': null})
 }
 
 // function showExt() {

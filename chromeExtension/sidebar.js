@@ -1,10 +1,12 @@
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import renderLoginPrompt from './loginPrompt'
-import renderComments, { postComment, commentDisplay } from './comments'
+import renderComments, { postComment, commentDisplay, addHoverHandler } from './comments'
 import { style, appendSidebar, sidebarToggle, toggleButton } from './domAdditions'
+import { removeSelection } from './highlight'
 
 $(document).ready(function() {
+	chrome.storage.local.get('selectedText', (selectedText) => console.log("HERE IS THE SELECTED TEXT:",selectedText))
 	axios.get(`http://localhost:1337/api/auth/whoami`)
 		.then(res => {
 			res.data
@@ -24,7 +26,6 @@ function renderChrExt(currentUser) {
 	renderComments()
 	showButton(currentUser.name)
 	appendFormSubmission()
-	clickHandler()
 }
 
 function storeCurrentUser(currentUser) {
@@ -55,7 +56,7 @@ function appendFormSubmission() {
 	$('#formSubmission').submit(function(evt) {
 		evt.preventDefault()
 		secureCommentContext()
-		$('.twentyHighlight').removeClass('twentyHighlight')
+		removeSelection()
 	})
 }
 
@@ -68,7 +69,7 @@ function secureCommentContext() {
 			const paragraphId = (selectedText === null)
 				? null
 				: paragraphMatch(currentArticle.paragraphs, selectedText)
-			postAndDisplayComment(currentUser, commentText, currentArticle.id, paragraphId)		}
+			postAndDisplayComment(currentUser, commentText, currentArticle.id, paragraphId) }
 	)
 }
 
@@ -82,6 +83,8 @@ function paragraphMatch(paragraphs, selectedText) {
 }
 
 function postAndDisplayComment(user, text, article_id, paragraph_id) {
+	// const paragraph_id = paragraph ? paragraph.id : null
+	// const paragraphText = paragraph ? paragraph.text : null
 	postComment({
 		article_id,
 		paragraph_id,
@@ -89,18 +92,42 @@ function postAndDisplayComment(user, text, article_id, paragraph_id) {
 		user_id: user.id
 	})
 		.then(newComment => {
-			console.log("new comment", newComment)
-			const commentHTML = commentDisplay(user.name, newComment)
-			$('.contentHere').append($(`${commentHTML}`))
-			console.log($('#commentSubmission').val())
+			// const storageId = String(newComment.id)
+			// const storedParagraph = { storageId : paragraphText }
+			// console.log("here is the comment id", storageId)
+			// chrome.storage.local.set({ 'storedParagraphs': storedParagraph })
+			// chrome.storage.local.get('storedParagraphs', (ret) => console.log("return here", ret))
+			commentDisplay(user.name, newComment)
 			$('#commentSubmission').val('')
+			// const commentHTML = commentDisplay(user.name, newComment)
+			// Promise.resolve($('.contentHere').append($(`${commentHTML}`)))
+			// 	.then(() => {
+			// 		$('#commentSubmission').val('')
+			// 		addHoverHandler()
+			// 	})
 		})
 }
 
-function clickHandler() {
-	$('.panel').on('click', evt => {
-		console.log("event target", evt.target)
-		// console.log("LOOKY HERE:", evt)
-	})
+function storeCurrentUser(currentUser) {
+	chrome.storage.local.set({ 'currentUser': currentUser })
 }
+
+
+
+			// Promise.resolve(commentDisplay(user.name, newComment))
+			// 	.then(commentHTML => {
+			// 		$('.contentHere').append($(`${commentHTML}`))
+			// 		$('#commentSubmission').val('')
+			// 		addHoverHandler()
+
+			// const commentHTML = commentDisplay(user.name, newComment)
+			// $('.contentHere').append($(`${commentHTML}`))
+			// $('#commentSubmission').val('')
+
+			// function clickHandler() {
+// 	$('.annotate-sidebar').on('click', evt => {
+// 		console.log("event target", evt.target)
+// 		// console.log("LOOKY HERE:", evt)
+// 	})
+// }
 

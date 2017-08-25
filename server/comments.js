@@ -21,6 +21,13 @@ router.put('/:id', (req, res, next) => {
   .catch(next)
 })
 
+// get comment
+router.get('/:id', (req, res, next) => {
+  Comment.findById(req.params.id)
+  .then(comment => res.json(comment))
+  .catch(next)
+})
+
 // // Get all comments
 // router.post('/paragraphId', (req, res, next) => {
 //   Comment.findById(req.params.id)
