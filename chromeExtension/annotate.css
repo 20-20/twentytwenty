@@ -124,3 +124,9 @@ span.marked {
 	padding-top: 0 !important;
 }
 
+.hoverHighlight {
+	background: rgba(195, 195, 195, .2) !important;
+	padding-top: 2% !important;
+	padding-bottom: 2% !important;
+}
+

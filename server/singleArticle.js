@@ -3,15 +3,13 @@ const db = require('APP/db')
 const Article = db.model('articles')
 const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
-const Topic = db.model('topics')
-const Relevance = db.model('relevances')
 const router = require('express').Router()
-const request = require('request')
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 const sentimentAnalysis = require('./sentiment')
 const axios = require('axios')
 /* Event Registry Api Functions */
-const eventRegistryFull = (url, trending) => eventRegistryUri(url)
+const eventRegistryFull = (url, trending) =>
+    eventRegistryUri(url)
     .then(uri => {
       if (uri === null) throw new Error('This article cannot be found')
       else return uri
@@ -20,13 +18,12 @@ const eventRegistryFull = (url, trending) => eventRegistryUri(url)
     ).then(result => {
       const articleInfo = result.data
       return createArticle(articleInfo, trending)
-    }).then(([article, topics]) => {
-      createSentimentDataInInstance(article, topics)
+    }).then((article) => {
       return createArticleParagraphs(article.body, article.url, article.id)
     }
     ).then(([...paragraphs]) => Article.findOne({
       where: { id: paragraphs[0].article_id },
-      include: [{ model: Paragraph, include: [Comment] }, { model: Topic }, { model: Relevance }]
+      include: [{ model: Paragraph }]
     }))
 
 const eventRegistryUri = (url) => axios.get('http://eventregistry.org/json/articleMapper?articleUrl=' + url + `&includeAllVersions=false&deep=true`)
@@ -44,48 +41,28 @@ const createArticle = async(article, trending) => {
   const keywordTopics = watson.keywords.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
   const entityTopics = watson.entities.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
   const conceptTopics = watson.concepts.map(keywords => ({ text: keywords.text, relevance: keywords.relevance }))
-  const topics = [...keywordTopics, ...entityTopics, ...conceptTopics]
+  let topics = [...keywordTopics, ...entityTopics, ...conceptTopics]
+  topics.sort((a, b) => b.relevance - a.relevance)
+  topics = topics.map(topic => topic.text)
   const emotion = watson.emotion.document.emotion
 
-  topics.forEach(topic => {
-    console.log('these are my topics', topic.text)
-    Topic.findOrCreate({
-      where: {
-        name: topic.text
-      }
-    })
-  })
-
-  return [
-    await Article.create({
-      url: articleProps.url,
-      title: articleProps.title,
-      body: articleProps.body,
-      urlToImage: articleProps.image,
-      publication: articleProps.source.title,
-      date: articleProps.date,
-      trending: trending,
-      sentimentScore: watson.sentiment.document.score,
-      sadness: emotion.sadness,
-      fear: emotion.fear,
-      anger: emotion.anger,
-      disgust: emotion.disgust,
-      joy: emotion.joy
-    }),
-    topics
-  ]
+  return Article.create({
+          url: articleProps.url,
+          title: articleProps.title,
+          body: articleProps.body,
+          urlToImage: articleProps.image,
+          publication: articleProps.source.title,
+          date: articleProps.date,
+          trending: trending,
+          sentimentScore: watson.sentiment.document.score,
+          sadness: emotion.sadness,
+          fear: emotion.fear,
+          anger: emotion.anger,
+          disgust: emotion.disgust,
+          joy: emotion.joy,
+          topics: topics
+        })
 }
-
-const createSentimentDataInInstance = (article, topics) => topics.forEach(topic => {
-    console.log("TOPICS", topic.relevance, topic.text, article.id)
-    Relevance.findOrCreate({
-      where: {
-        score: topic.relevance,
-        topic_name: topic.text,
-        article_id: article.id
-      }
-    })
-  })
 
 const createArticleParagraphs = (text, url, articleId) => {
   let allParagraphs = text.split('\n')
@@ -119,15 +96,15 @@ router.post(`/:url`, (req, res, next) => {
     .then(articleWithParagraphs => res.json(articleWithParagraphs)
     ).catch(error => console.log(error.message))
 })
+
 router.get('/:articleId', (req, res, next) => {
   Article.findOne({
     where: {
       id: req.params.articleId
     },
-    include: [{ model: Paragraph, include: [Comment] }, {model: Topic }, {model: Comment}]
   })
-    .then(article => res.json(article))
-    .catch('Error fetching article with provided Id')
+  .then(article => res.json(article))
+  .catch('Error fetching article with provided Id')
 })
 /********        Routes till here        ********/
 module.exports = { router, createArticle, createArticleParagraphs }
