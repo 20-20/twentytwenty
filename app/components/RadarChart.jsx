@@ -1,15 +1,22 @@
 import React, { Component } from 'react'
 import Radar from 'react-d3-radar'
 
-export default function RadarChart({singleArticle}) {
+export default function RadarChart({singleArticle, width, height, padding }) {
 
   return (
     <Radar
-      width={450}
-      height={450}
-      padding={70}
+      width={width || 450} 
+      height={height || 450}
+      padding={padding || 70}
       domainMax={1}
       highlighted={null}
+      onHover={(point) => {
+        if (point) {
+          console.log('hovered over a data point');
+        } else {
+          console.log('not over anything');
+        }
+      }}
       data={{
         variables: [
           { key: 'joy', label: 'Joy' },
