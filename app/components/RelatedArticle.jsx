@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import Radar from 'react-d3-radar'
+import RadarChart from './radarChart'
 
 function RelatedArticle({ topic }) {
 
@@ -23,6 +25,7 @@ function RelatedArticle({ topic }) {
             <div className='content'>
               {topic.body.slice(0, 50)}...
               <br />
+              <RadarChart singleArticle={topic} width={250} height={250} padding={30}/>
               <small>Published {topic.date.slice(0, 10)}</small>
             </div>
           </div>

@@ -9,6 +9,10 @@ import { fetchArticlesByTopics, resetArticlesByTopics } from '../reducers/topics
 import RelatedArticle from './RelatedArticle'
 
 class SingleArticle extends Component {
+  constructor(){
+    super()
+    this.mostReleventTopic;
+  }
 
   componentDidMount() {
     const articleId = +this.props.match.params.id
@@ -16,10 +20,10 @@ class SingleArticle extends Component {
   }
 
   mostReleventTopic() {
-    const mostReleventTopic = this.props.singleArticle.topics.reduce((acc, topic) => {
+    this.mostReleventTopic = this.props.singleArticle.topics.reduce((acc, topic) => {
       return (acc.relevances.score > topic.relevances.score) ? acc : topic
     })
-    this.props.fetchArticlesByTopics(mostReleventTopic.name)
+    this.props.fetchArticlesByTopics(this.mostReleventTopic.name)
   }
 
   componentWillUnmount() {
@@ -60,13 +64,15 @@ class SingleArticle extends Component {
         <hr />
 
           <div className="container">
-            <p className="title">Related Articles</p>
+            <p className="title">Related Articles on {this.mostReleventTopic.name}</p>
             <hr/>
             <div className="columns is-multiline">
              {
-              this.props.topics.length && this.props.topics.map(topic =>
-                <RelatedArticle topic={topic}/>
-              )
+              this.props.topics.length && 
+              this.props.topics
+              .filter(topic=> topic.id !== +this.props.match.params.id)
+              .sort((a,b)=> a.sentimentScore - b.sentimentScore)
+              .map(topic => <RelatedArticle topic={topic}/>)
             }
             <hr/>
           </div>
