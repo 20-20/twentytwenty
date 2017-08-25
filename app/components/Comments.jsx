@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { render } from 'react-dom'
 import { NavLink, withRouter } from 'react-router-dom'
 import addComment from '../reducers/comments'
+import singleArticle from '../reducers/singleArticle'
+
 // import getSelectionTextAndHighlight from '../../chromeExtension/highlight'
 
 class Comments extends Component {
@@ -15,7 +17,7 @@ class Comments extends Component {
     return (
      <div className="column">
        {/*{this.getSelectionTextAndHighlight}*/}
-       {/*{console.log("single article:", this.props.singleArticle.id)}*/}
+       {console.log("single article:", this.props.singleArticle.id)}
           <nav className="panel">
             <p className="panel-heading">
               <center><strong>Comments</strong></center>
