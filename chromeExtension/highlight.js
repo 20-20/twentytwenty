@@ -27,14 +27,19 @@ function toggleSelectionAndHighlight(parentEl) {
   if ($(parentEl).attr('class')
     && $(parentEl).attr('class').includes('twentyHighlight')) {
       console.log("entered highlight removal")
+      console.log("here is the parent el", parentEl)
       if (!$('.iconText').text()) extensionToggle()
       $(parentEl).removeClass('twentyHighlight')
       chrome.storage.local.set({ 'selectedText': null})
+      chrome.storage.local.set({ 'selectType': null })
     } else {
       console.log("entered highlight addition")
       if ($('.iconText').text().length) extensionToggle()
       $(parentEl).addClass('twentyHighlight')
-      const storageObj = { 'selectedText': parentEl.innerHTML }
+      // const storageObj = { 'selectedText': parentEl.innerHTML }
+      chrome.storage.local.set({
+        'selectType': $(parentEl).prop('nodeName')
+      })
       chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
       // focus user cursor on comment text box
       $('#commentSubmission').focus()

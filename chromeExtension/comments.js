@@ -74,23 +74,24 @@ export function commentDisplay(userName, comment) {
     </article>
     `
     Promise.resolve($('.contentHere').append(newHTML))
-      .then(() => addHoverHandler())
+      .then(() => addHoverHandler(comment))
 
 }
 
 
-function addHoverHandler() {
-  $('.indComment').hover(
+function addHoverHandler(comment) {
+  $(`article[commentId='${comment.id}']`).hover(
     (evt) => {
       const node = parentTraversal(evt)
       $(node).addClass('hoverHighlight')
-      // highlightParagh($(node).attr('commentId'))
+      comment.domElText && comment.domElType && highlightParagraph(comment)
     },
     (evt) => {
   		const node = parentTraversal(evt)
 			if ($(node).attr('class') &&
 				$(node).attr('class').includes('hoverHighlight')) {
-        $(node).removeClass('hoverHighlight')
+          $(node).removeClass('hoverHighlight')
+          comment.domElText && comment.domElType && unHighlightParagraph(comment)
         }
     }
   )
@@ -104,6 +105,18 @@ function parentTraversal(evt) {
 	}
 	return node
 }
+
+function highlightParagraph(comment) {
+  $(`${comment.domElType}:contains(${comment.domElText})`).addClass('hoverHighlight')
+  // add focus here...
+}
+
+function unHighlightParagraph(comment) {
+  $(`${comment.domElType}:contains(${comment.domElText})`).removeClass('hoverHighlight')
+  // add focus here...
+}
+
+
 
 // function highlightParagh(commentId) {
 //   const textCommentId = ''+commentId
