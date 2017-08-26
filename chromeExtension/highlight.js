@@ -10,8 +10,8 @@ $(() => {
   })
 })
 
-export default function selectionTextAndHighlight(args) {
-  const chrExt = args ? args : true
+// DETERMINE WHETHER TO KEEP ARGS OR NOT
+export default function selectionTextAndHighlight(chrExt) {
   console.log("entered, should be false", chrExt)
   let text = ''
   if (window.getSelection) {
@@ -21,10 +21,10 @@ export default function selectionTextAndHighlight(args) {
   }
   // let clickCount = {}
   const parentEl = window.getSelection().anchorNode.parentElement
-  toggleSelectionAndHighlight(parentEl)
+  toggleSelectionAndHighlight(parentEl, chrExt)
 }
 
-function toggleSelectionAndHighlight(parentEl) {
+function toggleSelectionAndHighlight(parentEl, chrExt) {
   console.log("parentEl", parentEl)
   if ($(parentEl).attr('class')
     && $(parentEl).attr('class').includes('twentyHighlight')) {

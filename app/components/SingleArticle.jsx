@@ -5,6 +5,7 @@ import { fetchArticle } from '../reducers/singleArticle'
 import { fetchRelatedArticles } from '../reducers/relatedArticles'
 import { fetchParagraphs } from '../reducers/paragraphs'
 import { fetchComments, addComment } from '../reducers/comments'
+import { setParagraph } from '../reducers/highlight'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
@@ -80,11 +81,17 @@ class SingleArticle extends Component {
   }
 
   addChrExtHighlight() {
-
+    $('html').dblclick((evt) => {
+      evt.preventDefault()
+      // this will call dispatch in highlight reducer
+      // selectionTextAndHighlight(false)
+    })
   }
 }
 
-const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles, auth }) => ({
+const mapStateToProps = ({
+  comments, paragraph, paragraphs, singleArticle, relatedArticles, auth
+}) => ({
     comments,
     paragraphs,
     singleArticle,
@@ -97,7 +104,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchRelatedArticles: (articleId) => dispatch(fetchRelatedArticles(articleId)),
   fetchParagraphs: (articleId) => dispatch(fetchParagraphs(articleId)),
   fetchComments: (articleId) => dispatch(fetchComments(articleId)),
-  addComment: (articleId, paragraphId) => dispatch(addComment(articleId, paragraphId))
+  addComment: (articleId, paragraphId) => dispatch(addComment(articleId, paragraphId)),
+  setParagraph: (paragraph) => dispatch(setParagraph(paragraph))
 })
 
 const singleArticleContainer = connect(mapStateToProps, mapDispatchToProps)(SingleArticle)
