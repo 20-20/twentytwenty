@@ -11,7 +11,7 @@ $(() => {
 })
 
 // DETERMINE WHETHER TO KEEP ARGS OR NOT
-export default function selectionTextAndHighlight(chrExt) {
+export default function selectionTextAndHighlight(chrExt=true) {
   console.log("entered, should be false", chrExt)
   let text = ''
   if (window.getSelection) {

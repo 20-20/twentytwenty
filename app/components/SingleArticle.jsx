@@ -21,7 +21,7 @@ class SingleArticle extends Component {
     this.props.fetchRelatedArticles(articleId)
     this.props.fetchParagraphs(articleId)
     this.props.fetchComments(articleId)
-    this.addChrExtHighlight()
+    // this.addChrExtHighlight()
   }
 
   render() {
@@ -80,13 +80,13 @@ class SingleArticle extends Component {
     )
   }
 
-  addChrExtHighlight() {
-    $('html').dblclick((evt) => {
-      evt.preventDefault()
-      // this will call dispatch in highlight reducer
-      // selectionTextAndHighlight(false)
-    })
-  }
+  // addChrExtHighlight() {
+  //   $('html').dblclick((evt) => {
+  //     evt.preventDefault()
+  //     // this will call dispatch in highlight reducer
+  //     // selectionTextAndHighlight(false)
+  //   })
+  // }
 }
 
 const mapStateToProps = ({

@@ -52,6 +52,7 @@ export function fetchArticleData(article) {
 // }
 
 export function commentDisplay(userName, comment) {
+  console.log("entered comment display")
   const newHTML =
     `
     <article class='media indComment' commentId=${comment && comment.id}>
@@ -78,15 +79,23 @@ export function commentDisplay(userName, comment) {
 }
 
 
-function addHoverHandler(comment) {
-  $(`article[commentId='${comment.id}']`).hover(
+export function addHoverHandler(comment, chrExt=true) {
+  console.log("inside add hover handler")
+  const hoverAppend = chrExt
+    ? $(`article[commentId='${comment.id}']`)
+    : $(`#${comment.id}`)
+  hoverAppend.hover(
     (evt) => {
+      console.log("inside highlighting")
       const node = parentTraversal(evt)
+      console.log("HERE IS THE FINAL NODE", node)
       $(node).addClass('hoverHighlight')
+      // $(node).css('background', 'rgba(195, 195, 195, .2) !important')
       comment.domElText && comment.domElType && highlightParagraph(comment)
     },
     (evt) => {
-  		const node = parentTraversal(evt)
+      console.log("leaving highlighting")
+      const node = parentTraversal(evt)
 			if ($(node).attr('class') &&
 				$(node).attr('class').includes('hoverHighlight')) {
           $(node).removeClass('hoverHighlight')
