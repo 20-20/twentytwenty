@@ -32,7 +32,7 @@ function storeCurrentUser(currentUser) {
 	chrome.storage.local.set({ 'currentUser': currentUser })
 }
 
-function showButton(name) {
+export function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style)
 	appendSidebar(name)
@@ -65,7 +65,7 @@ export function secureCommentContext() {
 	chrome.storage.local.get(
 		['currentUser', 'currentArticle', 'selectedText', 'selectType'],
 			({ currentUser, currentArticle, selectedText, selectType}) => {
-				// console.log("selected text:", selectedText)
+				console.log("selected text:", selectedText)
 				// console.log("includes &nbsp", selectedText.includes('&nbsp'))
 				// console.log("includes nbsp", selectedText.includes('nbsp'))
 				// console.log("did we remove nbsp?", selectedText.replace(/&nbsp;/g, ' '))

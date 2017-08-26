@@ -4,7 +4,8 @@ import { render } from 'react-dom'
 import { NavLink, withRouter } from 'react-router-dom'
 import addComment from '../reducers/comments'
 import singleArticle from '../reducers/singleArticle'
-import { secureCommentContext, paragraphMatch, postAndDisplayComment } from '../../chromeExtension/sidebar'
+import { appendFormSubmission } from '../../chromeExtension/sidebar'
+import { fetchArticleData } from '../../chromeExtension/comments'
 
 // import getSelectionTextAndHighlight from '../../chromeExtension/highlight'
 
@@ -12,14 +13,13 @@ import { secureCommentContext, paragraphMatch, postAndDisplayComment } from '../
 class Comments extends Component {
 
   componentDidMount() {
-    this.appendFormSubmission()
+    this.addChrExtComments()
   }
 
   render() {
-    console.log("here is the state", this.props.state)
-    const userName = this.props.auth ? this.props.auth.name : ''
+    const user = this.props.user ? this.props.user : {}
     const comments = this.props.comments ? this.props.comments : []
-    const divStyle = { paddingRight: '10%' }
+    const divStyle = { paddingRight: '10%', paddingTop: '10%' }
     return (
       <div style={divStyle}>
         <nav className="panel">
@@ -36,7 +36,7 @@ class Comments extends Component {
               <div className='media-content'>
                 <div className='content'>
                   <p className='is-size-7 rightBuffer'>
-                    <strong>{userName}</strong>
+                    <strong>{user.name}</strong>
                     <br/>{comment.text}<br/>
                   </p>
                 </div>
@@ -53,7 +53,7 @@ class Comments extends Component {
                   <textarea
                     id='commentSubmission'
                     className='textarea is-size-7'
-                    placeholder={`${userName}, what do you think?`}
+                    placeholder={`${user.name}, what do you think?`}
                 ></textarea>
                 </p>
               </div>
@@ -71,19 +71,24 @@ class Comments extends Component {
     )
   }
 
-  appendFormSubmission() {
-    $('#formSubmission').submit(function(evt) {
-  		evt.preventDefault()
-    })
+  addChrExtComments() {
+    if (this.props.comments) fetchArticleData(this.props.article)
+    appendFormSubmission()
   }
+
+}
+
+  // appendFormSubmission() {
+  //   $('#formSubmission').submit(function(evt) {
+  // 		evt.preventDefault()
+  //   })
+  // }
 
     // const newComment = {
     //   article_id:
     //   paragraph_id:
     //   text:
     //   user_id:
-
-}
 
 
 // comment format:
@@ -101,13 +106,11 @@ const mapStateToProps = (state) => ({
   article: state.singleArticle
 })
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = (dispatch) => ({
     loadTopStories: () => {
       dispatch(fetchTopStories())
     }
-  }
-}
+  })
 
 const commentsContainer = connect(mapStateToProps, mapDispatchToProps)(Comments)
 

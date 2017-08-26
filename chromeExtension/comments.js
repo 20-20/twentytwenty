@@ -13,8 +13,8 @@ export default function renderComments() {
     .catch('Could not fetch article data')
 }
 
-function fetchArticleData(article) {
-  console.log("inside fetch")
+export function fetchArticleData(article) {
+  console.log("inside fetch", article)
   article.comments.forEach(comment => {
     // sort comment order -Jason
     console.log("fetching user for comment", comment)
