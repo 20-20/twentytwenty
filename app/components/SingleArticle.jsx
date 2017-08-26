@@ -20,18 +20,7 @@ class SingleArticle extends Component {
     this.props.fetchRelatedArticles(articleId)
     this.props.fetchParagraphs(articleId)
     this.props.fetchComments(articleId)
-    // $(() => {
-    //   $('html').dblclick(() => selectionTextAndHighlight(false))
-    // })
-
-
-    // $(() => {
-
-    // })
-    // $('html').dblclick((evt) => {
-    //   evt.preventDefault()
-    //   selectionTextAndHighlight(false)
-    // })
+    this.addChrExtHighlight()
   }
 
   render() {
@@ -89,17 +78,19 @@ class SingleArticle extends Component {
       </div>
     )
   }
+
+  addChrExtHighlight() {
+
+  }
 }
 
-const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles, auth }) => {
-  return {
+const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles, auth }) => ({
     comments,
     paragraphs,
     singleArticle,
     relatedArticles,
     auth
-    }
-}
+    })
 
 const mapDispatchToProps = (dispatch) => ({
   fetchArticle: (articleId) => dispatch(fetchArticle(articleId)),

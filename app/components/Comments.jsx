@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { render } from 'react-dom'
 import { NavLink, withRouter } from 'react-router-dom'
-import addComment from '../reducers/comments'
+import { fetchComments, addComment } from '../reducers/comments'
 import singleArticle from '../reducers/singleArticle'
 import { appendFormSubmission } from '../../chromeExtension/sidebar'
 import { fetchArticleData } from '../../chromeExtension/comments'
@@ -13,15 +13,15 @@ import { fetchArticleData } from '../../chromeExtension/comments'
 class Comments extends Component {
 
   componentDidMount() {
-    this.addChrExtComments()
+    this.addChrExtComments(this.props)
   }
 
   render() {
     const user = this.props.user ? this.props.user : {}
     const comments = this.props.comments ? this.props.comments : []
-    const divStyle = { paddingRight: '10%', paddingTop: '10%' }
+    console.log("here are the comments", comments)
     return (
-      <div style={divStyle}>
+      <div >
         <nav className="panel">
           <p className="panel-heading annotate-header">
             <strong>Comments</strong>
@@ -71,9 +71,17 @@ class Comments extends Component {
     )
   }
 
-  addChrExtComments() {
-    if (this.props.comments) fetchArticleData(this.props.article)
-    appendFormSubmission()
+  addChrExtComments(props) {
+
+    $('#formSubmission').submit(function(evt) {
+      evt.preventDefault()
+      const newComment = {
+        article_id: props.article.id,
+        text: $('#commentSubmission').val(),
+        user_id: props.user.id
+      }
+      props.addComment(newComment)
+    })
   }
 
 }
@@ -103,14 +111,16 @@ class Comments extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.auth,
-  article: state.singleArticle
+  article: state.singleArticle,
+  comments: state.comments
 })
 
-const mapDispatchToProps = (dispatch) => ({
-    loadTopStories: () => {
-      dispatch(fetchTopStories())
-    }
-  })
+const mapDispatchToProps = ({ addComment });
+
+// const mapDispatchToProps = (dispatch) => ({
+//   addComment: (comment) => addComment,
+//   fetchComments: (articleId) => fetchComments
+// })
 
 const commentsContainer = connect(mapStateToProps, mapDispatchToProps)(Comments)
 

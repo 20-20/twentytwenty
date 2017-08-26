@@ -52,7 +52,7 @@ export function extensionToggle() {
   $('#commentSubmission').focus()
 }
 
-function appendFormSubmission() {
+export function appendFormSubmission() {
 	$('#formSubmission').submit(function(evt) {
 		evt.preventDefault()
 		secureCommentContext()
