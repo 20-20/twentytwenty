@@ -1,3 +1,4 @@
+
 'use strict'
 const db = require('APP/db')
 const Article = db.model('articles')
@@ -18,9 +19,7 @@ const eventRegistryFull = (url, trending) =>
     ).then(result => {
       const articleInfo = result.data
       return createArticle(articleInfo, trending)
-    }).then((article) => {
-      return createArticleParagraphs(article.body, article.url, article.id)
-    }
+    }).then((article) => createArticleParagraphs(article.body, article.url, article.id)
     ).then(([...paragraphs]) => Article.findOne({
       where: { id: paragraphs[0].article_id },
       include: [{ model: Paragraph }]
@@ -87,6 +86,7 @@ router.post(`/:url`, (req, res, next) => {
     : decodeURIComponent(req.params.url)
   Article.findOne({
     where: { url: decodedUrl },
+    include: [{ model: Paragraph, include: [Comment] }]
   })
     .then(retObj => {
       if (retObj) return retObj
