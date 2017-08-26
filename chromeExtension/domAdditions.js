@@ -28,7 +28,7 @@ export function appendSidebar(name) {
 							<textarea
 							id='commentSubmission'
 								class='textarea is-size-7'
-								placeholder='${name}, what do you think?'
+								placeholder='Darryn, what do you think?'
 						></textarea>
 						</p>
 					</div>

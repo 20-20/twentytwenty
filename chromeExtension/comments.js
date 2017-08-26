@@ -63,7 +63,7 @@ export function commentDisplay(userName, comment) {
       <div class='media-content'>
         <div class='content'>
           <p class='is-size-7 rightBuffer'>
-            <strong>${userName}</strong>
+            <strong>Darryn</strong>
             <br>${comment.text}<br>
             <small><a>Like</a> · <a>Reply</a>
             <br>
