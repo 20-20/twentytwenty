@@ -14,42 +14,14 @@ export default function renderComments() {
 }
 
 function fetchArticleData(article) {
-  console.log("inside fetch")
+  article.comments.sort((c1,c2) => c1.paragraph_id-c2.paragraph_id)
   article.comments.forEach(comment => {
-    // sort comment order -Jason
-    console.log("fetching user for comment", comment)
     fetchCommenter(comment.user_id)
       .then(user => {
-        console.log("displaying comment", comment)
-        // Use Promise.resolve b/c can only add handler
-        // once comment has rendered
         commentDisplay(user.name, comment)
-        // Promise.resolve($('.contentHere').append(
-        //   commentDisplay(user.name, comment)
-        // ))
-        //   .then(() => addHoverHandler())
       })
   })
 }
-
-// Keep in case want to add paragraph words in side panel...
-// function fetchArticleData(article) {
-//   console.log("inside fetch")
-//   article.paragraphs.forEach(paragraph => {
-//     // sort comment order -Jason
-//     console.log("this is a paragraph", paragraph)
-//     paragraph.comments.forEach(comment => {
-//       console.log("fetching user for comment", comment)
-//       fetchCommenter(comment.user_id)
-//         .then(user => {
-//           console.log("displaying comment", comment)
-//           $('.contentHere').append(
-//             commentDisplay(user.name, comment)
-//           )
-//         })
-//     })
-//   })
-// }
 
 export function commentDisplay(userName, comment) {
   const newHTML =
@@ -106,70 +78,20 @@ function parentTraversal(evt) {
 }
 
 function highlightParagraph(comment) {
-  $(`${comment.domElType}:contains(${comment.domElText})`).addClass('hoverHighlight')
-  // add focus here...
+  const element = $(`${comment.domElType}:contains(${comment.domElText})`)
+  element.addClass('hoverHighlight')
+  $('html, body').animate({ scrollTop: element.offset().top-100 }, 2000)
 }
 
 function unHighlightParagraph(comment) {
   $(`${comment.domElType}:contains(${comment.domElText})`).removeClass('hoverHighlight')
-  // add focus here...
 }
-
-
-
-// function highlightParagh(commentId) {
-//   const textCommentId = ''+commentId
-// 	chrome.storage.local.get(textCommentId, (selectedText) => console.log("HERE IS THE COMMENTID:",selectedText))
-//   // chrome.storage.local.get(textCommentId, (text) => {
-//   //   $(`:${text}`).addClass('.hoverHighlight')
-//   // })
-// }
-
-
-
-
-
-
-// function fetchParagraphId(commentId) {
-//   console.log("entered fetch paragraph id", commentId)
-//   axios.get(`http://localhost:1337/api/comments/${commentId}`)
-//     .then(res => console.log("HERE IS THE PARAGRAH ID:", res.data.paragraph_id))
-//     // .then(res => fetchParagraph(res.data.paragraph_id))
-// }
-
-// function fetchParagraph(paragraphId) {
-//   console.log("here")
-// }
-
-
-	// 	mouseenter: (evt) => {
-	// 		const node = parentTraversal(evt)
-	// 		$(node).addClass('hoverHighlight')
-	// 		console.log("entering", node)
-	// 	},
-	// 	mouseleave: (evt) => {
-	// 		const node = parentTraversal(evt)
-	// 		if ($(node).attr('class') &&
-	// 			$(node).attr('class').includes('hoverHighlight')) {
-	// 			$(node).removeClass('hoverHighlight')
-	// 		}
-
-
-
-
-
-// function addClickHandler(comment) {
-//   console.log(`commentId${comment.id}`)
-//   $(`#commentId${comment.id}`).mouseover(evt => {
-//     console.log("event target", evt.target)
-//   })
-
-// }
 
 /* Axios requests below */
 
 export function postComment(comment) {
   return axios.post(`http://localhost:1337/api/comments`, comment)
+  // `http://localhost:1337/api/comments` commented out for ngrok
     .then(newComment => newComment.data)
 		.catch('Comment was NOT successfully added to db')
 }
