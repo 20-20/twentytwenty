@@ -27,7 +27,7 @@ function Comments({ comments, auth }) {
               <div className='media-content'>
                 <div className='content'>
                   <p className='is-size-7 rightBuffer'>
-                    <strong>{userName}</strong>
+                    <strong>Darryn</strong>
                     <br/>{comment.text}<br/>
                   </p>
                 </div>
@@ -44,7 +44,7 @@ function Comments({ comments, auth }) {
                   <textarea
                   id='commentSubmission'
                     className='textarea is-size-7'
-                    placeholder={`${userName}, what do you think?`}
+                    placeholder={`Darryn, what do you think?`}
                 ></textarea>
                 </p>
               </div>
