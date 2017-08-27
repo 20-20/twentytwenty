@@ -5,11 +5,15 @@ import { fetchArticle } from '../reducers/singleArticle'
 import { fetchRelatedArticles } from '../reducers/relatedArticles'
 import { fetchParagraphs } from '../reducers/paragraphs'
 import { fetchComments, addComment } from '../reducers/comments'
+import { fetchUsers } from '../reducers/users'
+import { setParagraph } from '../reducers/highlight'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 import RelatedArticle from './RelatedArticle'
 import Comments2 from './Comments2'
+import selectionTextAndHighlight from '../../chromeExtension/highlight'
+
 class SingleArticle extends Component {
   componentDidMount() {
     const articleId = +this.props.match.params.id
@@ -17,13 +21,18 @@ class SingleArticle extends Component {
     this.props.fetchRelatedArticles(articleId)
     this.props.fetchParagraphs(articleId)
     this.props.fetchComments(articleId)
+    this.props.fetchUsers()
+    // this.addChrExtHighlight()
   }
   render() {
+    console.log("single artist users", this.props.users)
     const singleArticle = this.props.singleArticle
     const paragraphs = this.props.paragraphs
     const comments = this.props.comments
     const relatedArticles = this.props.relatedArticles
     const commments = this.props.comments
+    const auth = this.props.auth
+
     return (
       singleArticle &&
       <div className="container" >
@@ -42,14 +51,14 @@ class SingleArticle extends Component {
                 {
                   paragraphs.map((para, index) => (
                     <div key={para.index}>
-                      <p >{para.text}</p>
+                      <p id={para.id}>{para.text}</p>
                       <br /></div>)
                   )
                 }
               </div>
               <div className="column is-multiline">
                 <RadarChart singleArticle={singleArticle} />
-                 <Comments2 comments={comments}/>
+                 <Comments comments={comments} auth={auth}/>
               </div>
             </div>
           }
@@ -72,21 +81,28 @@ class SingleArticle extends Component {
       </div>
     )
   }
+
 }
-const mapStateToProps = ({ comments, paragraphs, singleArticle, relatedArticles }) => {
-  return {
+
+const mapStateToProps = ({
+  comments, paragraph, paragraphs, singleArticle, relatedArticles, auth, users
+}) => ({
     comments,
     paragraphs,
     singleArticle,
-    relatedArticles
-  }
-}
+    relatedArticles,
+    auth,
+    users
+    })
+
 const mapDispatchToProps = (dispatch) => ({
   fetchArticle: (articleId) => dispatch(fetchArticle(articleId)),
   fetchRelatedArticles: (articleId) => dispatch(fetchRelatedArticles(articleId)),
   fetchParagraphs: (articleId) => dispatch(fetchParagraphs(articleId)),
   fetchComments: (articleId) => dispatch(fetchComments(articleId)),
-  addComment: (articleId, paragraphId) => dispatch(addComment(articleId, paragraphId))
+  addComment: (articleId, paragraphId) => dispatch(addComment(articleId, paragraphId)),
+  setParagraph: (paragraph) => dispatch(setParagraph(paragraph)),
+  fetchUsers: () => dispatch(fetchUsers())
 })
 const singleArticleContainer = connect(mapStateToProps, mapDispatchToProps)(SingleArticle)
 export default singleArticleContainer

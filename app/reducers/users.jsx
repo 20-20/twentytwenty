@@ -40,6 +40,11 @@ export const fetchUsers = () => dispatch => {
     .then(res => dispatch(init(res.data)))
 }
 
+export const fetchUser = (userId) => dispatch => {
+  axios.get(`/api/users/${userId}`)
+    .then(res => dispatch(init(res.data)))
+}
+
 // optimistic
 export const removeUser = id => dispatch => {
   dispatch(remove(id))

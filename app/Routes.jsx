@@ -8,6 +8,7 @@ import { fetchTrending } from './reducers/trending'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import { fetchTopStories } from './reducers/topStories'
+import { fetchUsers } from './reducers/users'
 
 
 class Routes extends Component {
@@ -35,6 +36,7 @@ const mapDispatch = dispatch => ({
   fetchInitialData: () => {
     dispatch(fetchTrending())
     dispatch(fetchTopStories())
+    dispatch(fetchUsers())
   }
 })
 

@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import renderLoginPrompt from './loginPrompt'
@@ -32,7 +33,7 @@ function storeCurrentUser(currentUser) {
 	chrome.storage.local.set({ 'currentUser': currentUser })
 }
 
-function showButton(name) {
+export function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style)
 	appendSidebar(name)
@@ -52,7 +53,7 @@ export function extensionToggle() {
   $('#commentSubmission').focus()
 }
 
-function appendFormSubmission() {
+export function appendFormSubmission() {
 	$('#formSubmission').submit(function(evt) {
 		evt.preventDefault()
 		secureCommentContext()
@@ -60,7 +61,7 @@ function appendFormSubmission() {
 	})
 }
 
-function secureCommentContext() {
+export function secureCommentContext() {
 	const commentText = $('#commentSubmission').val()
 	chrome.storage.local.get(
 		['currentUser', 'currentArticle', 'selectedText', 'selectType'],
@@ -81,7 +82,7 @@ function secureCommentContext() {
 	)
 }
 
-function paragraphMatch(paragraphs, selectedText) {
+export function paragraphMatch(paragraphs, selectedText) {
 	const paragraphText = paragraphs.map(paragraph => paragraph.text)
 	const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
 	const selectedParagraph = paragraphs.filter(
@@ -90,7 +91,7 @@ function paragraphMatch(paragraphs, selectedText) {
 	return selectedParagraph[0].id
 }
 
-function postAndDisplayComment(
+export function postAndDisplayComment(
 	user, text, article_id, paragraph_id, domElText, domElType) {
 	postComment({
 		article_id,
