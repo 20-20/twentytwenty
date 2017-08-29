@@ -5,16 +5,16 @@ node_modules/*
 !node_modules/APP
 
 # Compiled JS
-public/bundle.js
-public/bundle.js.map
+#public/bundle.js
+#public/bundle.js.map
 
 # NPM errors
 npm-debug.log
 
 # chrome extensions
-chromeExtension/bundle.js
-chromeExtension/bundle.js.map
-chromeExtension/node_modules/*
+#chromeExtension/bundle.js
+#chromeExtension/bundle.js.map
+#chromeExtension/node_modules/*
 
 #ignore sass caches
 .sass-cache/*
@@ -24,4 +24,4 @@ config.js
 watson-config.js
 
 # css
-public/css/bulma.css.map
+#public/css/bulma.css.map
