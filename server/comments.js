@@ -1,10 +1,23 @@
 'use strict'
 
 const db = require('APP/db')
-const Comment = db.Comment
+const Comment = db.model('comments')
+const User = db.model('users')
 const router = require('express').Router()
+const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 
-module.exports = router
+
+// All comments Route
+router.get('/:articleId', (req, res, next) => {
+  Comment.findAll({
+    where:{
+      article_id: req.params.articleId
+    },
+    include: [User]
+  })
+  .then(comment => res.json(comment))
+  .catch(next)
+})
 
 // post comment
 router.post('/', (req, res, next) => {
@@ -13,11 +26,10 @@ router.post('/', (req, res, next) => {
   .catch(next)
 })
 
-// update comment
-router.put('/:id', (req, res, next) => {
+// get comment
+router.get('/:id', (req, res, next) => {
   Comment.findById(req.params.id)
-  .then(comment => comment.update(req.body))
-  .then(updatedComment => res.json(updatedComment))
+  .then(comment => res.json(comment))
   .catch(next)
 })
 
@@ -42,3 +54,4 @@ router.put('/:id', (req, res, next) => {
 //   .then(updatedcomment => res.json(updatedcomment))
 //   .catch(next)
 // })
+module.exports = router

@@ -19,12 +19,19 @@ module.exports = db => db.define('comments', {
     type: DATE,
     field: 'created_at'
   },
+  domElType: {
+    type: STRING,
+    allowNull: true
+  },
+  domElText: {
+    type: TEXT,
+    allowNull: true
+  }
 })
 
-module.exports.associations = (Comment, { Paragraph, User, Article, Topic }) => {
+module.exports.associations = (Comment, { Paragraph, User, Article }) => {
   Comment.belongsTo(User)
   Comment.belongsTo(Paragraph)
-  Comment.belongsTo(Topic)
   Comment.belongsTo(Article)
   Comment.belongsTo(Comment, {as: 'parent'})
 }
