@@ -4,13 +4,13 @@ import { extensionToggle } from './sidebar'
 
 $(() => {
   $('html').dblclick(() => {
-    getSelectionTextAndHighlight()
-    // extensionToggle()
-    // if ($('.iconText').text().length) extensionToggle()
+    selectionTextAndHighlight()
   })
 })
 
-function getSelectionTextAndHighlight() {
+// DETERMINE WHETHER TO KEEP ARGS OR NOT
+export default function selectionTextAndHighlight(chrExt=true) {
+  console.log("entered, should be false", chrExt)
   let text = ''
   if (window.getSelection) {
     text = window.getSelection().toString() // string generation
@@ -19,34 +19,38 @@ function getSelectionTextAndHighlight() {
   }
   // let clickCount = {}
   const parentEl = window.getSelection().anchorNode.parentElement
+  toggleSelectionAndHighlight(parentEl, chrExt)
+}
+
+function toggleSelectionAndHighlight(parentEl, chrExt) {
+  console.log("parentEl", parentEl)
   if ($(parentEl).attr('class')
     && $(parentEl).attr('class').includes('twentyHighlight')) {
-      if (!$('.iconText').text()) extensionToggle()
+      console.log("entered highlight removal")
+      console.log("here is the parent el", parentEl)
       $(parentEl).removeClass('twentyHighlight')
-      chrome.storage.local.set({ 'selectedText': null})
-      chrome.storage.local.get('selectedText', (selectedText) => console.log("empty???", selectedText))
+      if (chrExt) {
+        if (!$('.iconText').text()) extensionToggle()
+        chrome.storage.local.set({ 'selectedText': null})
+        chrome.storage.local.set({ 'selectType': null })
+      }
     } else {
-      if ($('.iconText').text().length) extensionToggle()
+      console.log("entered highlight addition")
       $(parentEl).addClass('twentyHighlight')
-      const storageObj = { 'selectedText': parentEl.innerHTML }
-      chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
-      chrome.storage.local.get('selectedText', (selectedText) => console.log("full???", selectedText))
+      // focus user cursor on comment text box
+      $('#commentSubmission').focus()
+      if (chrExt) {
+        if ($('.iconText').text().length) extensionToggle()
+        // const storageObj = { 'selectedText': parentEl.innerHTML }
+        chrome.storage.local.set({
+          'selectType': $(parentEl).prop('nodeName')
+        })
+        chrome.storage.local.set({ 'selectedText': parentEl.innerHTML})
+      }
   }
 }
 
-// function showExt() {
-//   // if style.cssText exists (is diplay: none), toggle sidebar
-//   if ($('.annotate-sidebar')[0].style.cssText) {
-//     $('.annotate-sidebar').toggle()
-//     $('.annotate-toggle').toggleClass('far-right')
-
-//     if ($('.annotate-toggle').text() === 'X') {
-//       $('.annotate-toggle').text('<')
-//     } else {
-//       $('.annotate-toggle').text('X')
-//     }
-//   }
-
-//   // focus user input into comment text box
-//   $('.annotate-text-entry').focus()
-// }
+export function removeSelection() {
+  $('.twentyHighlight').removeClass('twentyHighlight')
+  chrome.storage.local.set({ 'selectedText': null})
+}

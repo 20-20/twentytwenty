@@ -4,44 +4,36 @@ import axios from 'axios'
 // $(document).ready(function() {
 export default function renderComments() {
   const url = encodeURIComponent($(document)[0].URL)
+  console.log('this is a url',url)
   axios.post(`http://localhost:1337/api/singleArticle/${url}`)
   // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(article => {
-    console.log("HERE IS THE ARTICLE", article)
     chrome.storage.local.set({ 'currentArticle': article.data })
-    fetchArticleData(article.data)
+    fetchArticleData(article)
   })
-  .catch('Could not fetch article data')
+    .catch('Could not fetch article data')
 }
 
-function fetchArticleData(article) {
-  console.log("inside fetch")
-  article.paragraphs.forEach(paragraph => {
-    // sort comment order -Jason
-    console.log("this is a paragraph", paragraph)
-    paragraph.comments.forEach(comment => {
-      console.log("fetching user for comment", comment)
-      fetchCommenter(comment.user_id)
-        .then(user => {
-          console.log("displaying comment", comment)
-          $('.contentHere').append(
-            commentDisplay(user.name, comment)
-          )
-        })
-    })
+export function fetchArticleData(article) {
+  article.comments.sort((c1,c2) => c1.paragraph_id-c2.paragraph_id)
+  article.comments.forEach(comment => {
+    fetchCommenter(comment.user_id)
+      .then(user => {
+        commentDisplay(user.name, comment)
+      })
   })
 }
 
 export function commentDisplay(userName, comment) {
-  return (
+  const newHTML =
     `
-    <article class='media'>
+    <article class='media indComment' commentId=${comment && comment.id}>
       <figure class='media-left'>
         <p class='image is-48x48 leftBuffer'>
           <img src='http://bulma.io/images/placeholders/128x128.png'>
         </p>
       </figure>
-      <div class='media-content' id=${comment && comment.id}>
+      <div class='media-content'>
         <div class='content'>
           <p class='is-size-7 rightBuffer'>
             <strong>${userName}</strong>
@@ -53,16 +45,62 @@ export function commentDisplay(userName, comment) {
       </div>
     </article>
     `
+    Promise.resolve($('.contentHere').append(newHTML))
+      .then(() => addHoverHandler(comment))
+
+}
+
+
+export function addHoverHandler(comment, chrExt=true) {
+  console.log("inside add hover handler")
+  const hoverAppend = chrExt
+    ? $(`article[commentId='${comment.id}']`)
+    : $(`#${comment.id}`)
+  hoverAppend.hover(
+    (evt) => {
+      console.log("inside highlighting")
+      const node = parentTraversal(evt)
+      console.log("HERE IS THE FINAL NODE", node)
+      $(node).addClass('hoverHighlight')
+      // $(node).css('background', 'rgba(195, 195, 195, .2) !important')
+      comment.domElText && comment.domElType && highlightParagraph(comment)
+    },
+    (evt) => {
+      console.log("leaving highlighting")
+      const node = parentTraversal(evt)
+			if ($(node).attr('class') &&
+				$(node).attr('class').includes('hoverHighlight')) {
+          $(node).removeClass('hoverHighlight')
+          comment.domElText && comment.domElType && unHighlightParagraph(comment)
+        }
+    }
   )
+}
+
+function parentTraversal(evt) {
+	let node = evt.target
+	while (!$(node).attr('class') ||
+		!$(node).attr('class').includes('indComment')) {
+		node = node.parentNode
+	}
+	return node
+}
+
+function highlightParagraph(comment) {
+  const element = $(`${comment.domElType}:contains(${comment.domElText})`)
+  element.addClass('hoverHighlight')
+  $('html, body').animate({ scrollTop: element.offset().top-100 }, 2000)
+}
+
+function unHighlightParagraph(comment) {
+  $(`${comment.domElType}:contains(${comment.domElText})`).removeClass('hoverHighlight')
 }
 
 /* Axios requests below */
 
 export function postComment(comment) {
-  console.log("here is the comment", comment)
   return axios.post(`http://localhost:1337/api/comments`, comment)
   // `http://localhost:1337/api/comments` commented out for ngrok
-    // .then(newComment => console.log("HERE IS THE NEW COMMENT:", newComment.data))
     .then(newComment => newComment.data)
 		.catch('Comment was NOT successfully added to db')
 }

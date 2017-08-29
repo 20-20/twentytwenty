@@ -1,93 +1,115 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { render } from 'react-dom'
-import Login from './Login'
-import WhoAmI from './WhoAmI'
-import addComment from '../reducers/comments'
+import { NavLink, withRouter } from 'react-router-dom'
+import { fetchComments, addComment } from '../reducers/comments'
+import { fetchUsers } from '../reducers/users'
+import singleArticle from '../reducers/singleArticle'
+import { appendFormSubmission } from '../../chromeExtension/sidebar'
+import { fetchArticleData, addHoverHandler, commentDisplay } from '../../chromeExtension/comments'
+import axios from 'axios'
 
 class Comments extends Component {
-  constructor(props) {
-    super(props)
-      this.renderLoggedIn = this.renderLoggedIn.bind(this)
-      this.renderLoggedOut = this.renderLoggedOut.bind(this)
+
+  componentDidMount() {
+    this.addChrExtComments(this.props)
   }
 
-renderLoggedIn(){
-  console.log("renderLoggedIn - this.props", this.props)
-  console.log("renderLoggedIn - this.props.user", this.props.user)
-  return (
-    <div className="column">
-      <div className='scroll annotate-sidebar' style='display: none'>
+  render() {
+    console.log('state users', this.props.users)
+    const user = this.props.user ? this.props.user : {}
+    const comments = this.props.comments ? this.props.comments : []
+    return (
+      <div >
         <nav className="panel">
-          <p className="panel-heading annotate-header">
+          <p className="panel-heading">
             <strong>Comments</strong>
           </p>
         </nav>
+
         <article className='contentHere'></article>
+
+        {
+          comments.sort((a,b) => a.id - b.id ).map(comment => (
+            <article className='media indComment' id={comment && comment.id} key={comment.id}>
+              <figure className='media-left'></figure>
+              <div className='media-content'>
+                <div className='content'>
+                  <p className='is-size-7'>
+                    <strong>{comment.user.name}</strong>
+                    <br/>{comment.text}<br/>
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+
         <article className='media'>
-          <figure className='media-left'>
-            <p className='image is-48x48 leftBuffer'>
-              <img src='http://bulma.io/images/placeholders/128x128.png'/>
-            </p>
-          </figure>
           <div className='media-content'>
-            <form id='formSubmission'>
+            <form id='webFormSubmission'>
               <div className='field'>
-                <p className='control rightBuffer'>
+                <p className='control'>
                   <textarea
-                  id='commentSubmission'
+                    id='webCommentSubmission'
                     className='textarea is-size-7'
-                    placeholder={`${this.props.user.name}, what do you think?`}
+                    placeholder={`${user.name}, what do you think?`}
                 ></textarea>
                 </p>
               </div>
               <div className='field'>
-                <p className='control rightBuffer'>
-                  <input type={`submit`} className='button is-size-7'/>
+                <p className='control'>
+                  <input
+                    type='submit'
+                    className='button is-size-7'/>
                 </p>
               </div>
             </form>
           </div>
         </article>
       </div>
-    </div>
-
-  )
-}
-
-renderLoggedOut(){
-  return (
-    <div className="column">
-              <nav className="panel">
-                <p className="panel-heading">
-                  <center>PLEASE LOG IN TO <br />COMMENT</center>
-                </p>
-              </nav>
-    </div>
-  )
-}
-  render() {
-    const userInfo = this.props.user
-    return (
-      <div>
-      { userInfo ? this.renderLoggedIn() : this.renderLoggedOut() }
-      </div>
     )
   }
+
+  // fetchUserName(userId) {
+  //   console.log("here", userId)
+  //   axios.get(`/api/users/${userId}`)
+  //     .then(user => {
+  //       console.log("here is the user name", user.data.name)
+  //       user.data.name
+  //     })
+  // }
+  fetchUserName(userId) {
+    console.log("users". this.props.users)
+    const currentUser = this.props.users.filter(user => user.id === userId)
+    return currentUser.name
+  }
+
+  addChrExtComments(props) {
+    $('#webFormSubmission').submit(function(evt) {
+      evt.preventDefault()
+      const newComment = {
+        article_id: props.article.id,
+        text: $('#webCommentSubmission').val(),
+        user_id: props.user.id
+      }
+      props.addComment(newComment)
+			$('#webCommentSubmission').val('')
+    })
+  }
+
 }
 
 const mapStateToProps = (state) => ({
-  user: state.auth
+  user: state.auth,
+  article: state.singleArticle,
+  comments: state.comments,
+  users: state.users
 })
 
-const mapDispatchToProps = function(dispatch) {
-  return {
-    loadTopStories: () => {
-      dispatch(fetchTopStories())
-    }
-  }
-}
+const mapDispatchToProps = ({ addComment });
 
-const commentsContainer = connect(mapStateToProps, null)(Comments)
+const commentsContainer = connect(mapStateToProps, mapDispatchToProps)(Comments)
 
 export default commentsContainer
+

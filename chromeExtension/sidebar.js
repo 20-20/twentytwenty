@@ -1,10 +1,13 @@
+
 import axios from 'axios'
 import stringSimilarity from 'string-similarity'
 import renderLoginPrompt from './loginPrompt'
-import renderComments, { postComment, commentDisplay } from './comments'
+import renderComments, { postComment, commentDisplay, addHoverHandler } from './comments'
 import { style, appendSidebar, sidebarToggle, toggleButton } from './domAdditions'
+import { removeSelection } from './highlight'
 
 $(document).ready(function() {
+	chrome.storage.local.get('selectedText', (selectedText) => console.log("HERE IS THE SELECTED TEXT:",selectedText))
 	axios.get(`http://localhost:1337/api/auth/whoami`)
 		.then(res => {
 			res.data
@@ -24,14 +27,13 @@ function renderChrExt(currentUser) {
 	renderComments()
 	showButton(currentUser.name)
 	appendFormSubmission()
-	clickHandler()
 }
 
 function storeCurrentUser(currentUser) {
 	chrome.storage.local.set({ 'currentUser': currentUser })
 }
 
-function showButton(name) {
+export function showButton(name) {
 	// Add the sidebar to the page
 	$('head').append(style)
 	appendSidebar(name)
@@ -51,30 +53,36 @@ export function extensionToggle() {
   $('#commentSubmission').focus()
 }
 
-function appendFormSubmission() {
+export function appendFormSubmission() {
 	$('#formSubmission').submit(function(evt) {
 		evt.preventDefault()
 		secureCommentContext()
+		removeSelection()
 	})
 }
 
-// maybe move secureCommentContext and paragraphMatch to new file -Jason
-function secureCommentContext() {
+export function secureCommentContext() {
 	const commentText = $('#commentSubmission').val()
 	chrome.storage.local.get(
-		['currentUser', 'currentArticle', 'selectedText'],
-			({ currentUser, currentArticle, selectedText}) => {
-				console.log("HERE IS THE SELECTED TEXT", selectedText)
+		['currentUser', 'currentArticle', 'selectedText', 'selectType'],
+			({ currentUser, currentArticle, selectedText, selectType}) => {
+			let domElText = null
+			if (selectedText) {
+				domElText = selectedText.includes(`&nbsp`)
+					? selectedText.slice(0,selectedText.indexOf(`&nbsp`))
+					: selectedText
+			}
 			const paragraphId = (selectedText === null)
 				? null
 				: paragraphMatch(currentArticle.paragraphs, selectedText)
-			console.log("post attr", currentUser.id, commentText, currentArticle.id, paragraphId)
-			postAndDisplayComment(currentUser, commentText, currentArticle.id, paragraphId)
-		}
+			postAndDisplayComment(
+				currentUser, commentText, currentArticle.id,
+				paragraphId, domElText, selectType)
+			}
 	)
 }
 
-function paragraphMatch(paragraphs, selectedText) {
+export function paragraphMatch(paragraphs, selectedText) {
 	const paragraphText = paragraphs.map(paragraph => paragraph.text)
 	const { bestMatch } = stringSimilarity.findBestMatch(selectedText, paragraphText)
 	const selectedParagraph = paragraphs.filter(
@@ -83,26 +91,22 @@ function paragraphMatch(paragraphs, selectedText) {
 	return selectedParagraph[0].id
 }
 
-function postAndDisplayComment(user, text, article_id, paragraph_id) {
+export function postAndDisplayComment(
+	user, text, article_id, paragraph_id, domElText, domElType) {
 	postComment({
 		article_id,
 		paragraph_id,
 		text,
-		user_id: user.id
+		user_id: user.id,
+		domElText,
+		domElType
 	})
 		.then(newComment => {
-			console.log("new comment", newComment)
-			const commentHTML = commentDisplay(user.name, newComment)
-			$('.contentHere').append($(`${commentHTML}`))
-			console.log($('#commentSubmission').val())
+			commentDisplay(user.name, newComment)
 			$('#commentSubmission').val('')
 		})
 }
 
-function clickHandler() {
-	$('.panel').on('click', evt => {
-		console.log("event target", evt.target)
-		// console.log("LOOKY HERE:", evt)
-	})
+function storeCurrentUser(currentUser) {
+	chrome.storage.local.set({ 'currentUser': currentUser })
 }
-

@@ -43,7 +43,48 @@ export function appendSidebar(name) {
 	</div>
 	`
 	$('body').append(sidebar)
+
+	// closes to working...
+	// $('.annotate-sidebar').on({
+	// 	mouseenter: (evt) => {
+	// 		const node = parentTraversal(evt)
+	// 		$(node).addClass('hoverHighlight')
+	// 		console.log("entering", node)
+	// 	},
+	// 	mouseleave: (evt) => {
+	// 		const node = parentTraversal(evt)
+	// 		if ($(node).attr('class') &&
+	// 			$(node).attr('class').includes('hoverHighlight')) {
+	// 			$(node).removeClass('hoverHighlight')
+	// 		}
+	// 		console.log("exit", node)
+	// 	}
+	// })
+
 }
+
+// function parentTraversal(evt) {
+// 	let node = evt.target
+// 	while ($(node).attr('class') &&
+// 		!$(node).attr('class').includes('indComment')) {
+// 		node = node.parentNode
+// 	}
+// 	return node
+// }
+
+// ADD SELECTOR HEREEEEEEE
+
+	// $('.annotate-sidebar').on('mouseenter', '.indComment', (evt) => {
+	// 	const node = parentTraversal(evt)
+	// 	$(node).addClass('hoverHighlight')
+	// 	console.log("should be indComment class node", node)
+	// })
+	// $('.annotate-sidebar').on('mouseenter', '.indComment', (evt) => {
+	// 	const node = parentTraversal(evt)
+	// 	$(node).addClass('hoverHighlight')
+	// 	console.log("should be indComment class node", node)
+	// })
+
 
 		// <article class='contentHere'></article>
 

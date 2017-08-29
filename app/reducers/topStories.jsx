@@ -32,7 +32,6 @@ export default function reducer(topStories = [], action) {
 export const fetchTopStories = () => dispatch => {
   axios.get(`/api/topStories?sortBy=commentsCount`)
        .then(res => {
-         console.log('res.data:', res.data)
          dispatch(init(res.data))
        })
 }
