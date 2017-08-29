@@ -11,7 +11,6 @@ import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
 import RadarChart from './radarChart'
 import RelatedArticle from './RelatedArticle'
-import Comments2 from './Comments2'
 import selectionTextAndHighlight from '../../chromeExtension/highlight'
 
 class SingleArticle extends Component {

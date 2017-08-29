@@ -35,11 +35,3 @@ router.put('/:userId', (req, res, next) => {
   .catch(next)
 })
 
-// DELETE /api/users
-router.delete('/:userId', (req, res, next) => {
-  const id = req.params.userId
-
-  User.destroy({ where: { id } })
-    .then(() => res.sendStatus(204))
-    .catch(next)
-})

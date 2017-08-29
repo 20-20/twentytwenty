@@ -35,14 +35,6 @@ export default function reducer(user = null, action) {
 
 const resToData = res => res.data
 
-// a "simple" thunk creator which uses API, changes state, and returns a promise.
-// export const login = credentials => dispatch => axios.put('/api/auth/me', credentials)
-//   .then(resToData)
-//   .then(user => {
-//     dispatch(set(user))
-//     return user
-//   })
-
 export const login = (username, password) =>
   dispatch =>
     axios.post('/api/auth/login/local',

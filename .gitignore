@@ -5,23 +5,26 @@ node_modules/*
 !node_modules/APP
 
 # Compiled JS
-#public/bundle.js
-#public/bundle.js.map
+public/bundle.js
+public/bundle.js.map
 
 # NPM errors
 npm-debug.log
 
 # chrome extensions
-#chromeExtension/bundle.js
-#chromeExtension/bundle.js.map
-#chromeExtension/node_modules/*
+chromeExtension/bundle.js
+chromeExtension/bundle.js.map
+chromeExtension/node_modules/*
+chromeExtension/package-lock.json
 
 #ignore sass caches
 .sass-cache/*
 
-# don't upload config
+# don't upload configs or package-lock
 config.js
 watson-config.js
+package-lock.json
+yarn.lock
 
 # css
 #public/css/bulma.css.map

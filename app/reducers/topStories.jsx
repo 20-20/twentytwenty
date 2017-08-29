@@ -16,7 +16,6 @@ export default function reducer(topStories = [], action) {
   switch (action.type) {
   case INITIALIZE:
     return action.topStories
-
   case UPDATE:
     return topStories.map(topStories => (
       action.topStories.id === topStories.id ? action.topStories : topStories

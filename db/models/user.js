@@ -1,8 +1,7 @@
 'use strict'
 
-// bcrypt docs: https://www.npmjs.com/package/bcrypt
 const bcrypt = require('bcryptjs')
-    , {STRING, VIRTUAL, ENUM} = require('sequelize')
+  , { STRING, VIRTUAL } = require('sequelize')
 
 module.exports = db => db.define('users', {
   name: STRING,
@@ -13,37 +12,31 @@ module.exports = db => db.define('users', {
       notEmpty: true,
     }
   },
-  language: {
-    type: ENUM,
-    values: ['English', 'Chinese', 'Spanish', 'Arabic', 'Portuguese', 'Japanese', 'Malay', 'Russian', 'French', 'German']
-  },
 
   // We support oauth, so users may or may not have passwords.
   password_digest: STRING, // This column stores the hashed password in the DB, via the beforeCreate/beforeUpdate hooks
   password: VIRTUAL, // Note that this is a virtual, and not actually stored in DB
   googleId: STRING
 }, {
-  indexes: [{fields: ['email'], unique: true}],
-  hooks: {
-    beforeCreate: setEmailAndPassword,
-    beforeUpdate: setEmailAndPassword,
-  },
-  defaultScope: {
-    attributes: {exclude: ['password_digest']}
-  },
-  instanceMethods: {
-    // This method is a Promisified bcrypt.compare
-    authenticate(plaintext) {
-      return bcrypt.compare(plaintext, this.password_digest)
+    indexes: [{ fields: ['email'], unique: true }],
+    hooks: {
+      beforeCreate: setEmailAndPassword,
+      beforeUpdate: setEmailAndPassword,
+    },
+    defaultScope: {
+      attributes: { exclude: ['password_digest'] }
+    },
+    instanceMethods: {
+      // This method is a Promisified bcrypt.compare
+      authenticate(plaintext) {
+        return bcrypt.compare(plaintext, this.password_digest)
+      }
     }
-  }
-})
+  })
 
-module.exports.associations = (User, {OAuth, Thing, Favorite, Article, Comment, History}) => {
+module.exports.associations = (User, { OAuth, Comment }) => {
   User.hasOne(OAuth)
-  User.belongsToMany(Thing, {as: 'favorites', through: Favorite})
   User.hasMany(Comment)
-  User.belongsToMany(Article, {through: History})
 }
 
 function setEmailAndPassword(user) {

@@ -6,7 +6,6 @@ const Paragraph = db.model('paragraphs')
 const Comment = db.model('comments')
 const router = require('express').Router()
 
-
 module.exports = router
   .get('/', (req, res, next) => {
     Article.findAll({

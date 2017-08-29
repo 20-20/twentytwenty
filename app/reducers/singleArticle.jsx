@@ -15,7 +15,6 @@ export default function reducer(singleArticle = null, action) {
   switch (action.type) {
   case INITIALIZE:
     return action.singleArticle
-
   default:
     return singleArticle
   }
