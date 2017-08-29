@@ -30,13 +30,13 @@ class Comments extends Component {
         <article className='contentHere'></article>
 
         {
-          comments.map(comment => (
+          comments.sort((a,b) => a.id - b.id ).map(comment => (
             <article className='media indComment' id={comment && comment.id} key={comment.id}>
               <figure className='media-left'></figure>
               <div className='media-content'>
                 <div className='content'>
                   <p className='is-size-7'>
-                    <strong>{user.name}</strong>
+                    <strong>{comment.user.name}</strong>
                     <br/>{comment.text}<br/>
                   </p>
                 </div>

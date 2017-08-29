@@ -7,7 +7,7 @@ function RelatedArticle({ relatedArticle }) {
 
   return (
     <div className="column is-one-quarter">
-      <NavLink to={`/SingleArticle/${relatedArticle.id}`} id={relatedArticle.id} className='card'>
+      <NavLink to={`/SingleArticle/${relatedArticle.id}`} id={relatedArticle.id}>
           <div className='card-image'>
             <figure className='image'>
               <img src={relatedArticle.urlToImage} alt='Image' />

@@ -4,11 +4,12 @@ import axios from 'axios'
 // $(document).ready(function() {
 export default function renderComments() {
   const url = encodeURIComponent($(document)[0].URL)
+  console.log('this is a url',url)
   axios.post(`http://localhost:1337/api/singleArticle/${url}`)
   // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(article => {
     chrome.storage.local.set({ 'currentArticle': article.data })
-    fetchArticleData(article.data)
+    fetchArticleData(article)
   })
     .catch('Could not fetch article data')
 }
