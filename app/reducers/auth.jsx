@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { create as createUser } from './users'
-import history from '../history'
 
 /* ------------------    ACTIONS    --------------------- */
 
@@ -47,7 +46,6 @@ export const login = (username, password) =>
 // a "composed" thunk creator which uses the "simple" one, then routes to a page.
 export const loginAndGoToUser = credentials => dispatch => {
   dispatch(login(credentials))
-    .then(user => history.push(`/`))
     .catch(err => console.error('Problem logging in:', err))
 }
 
@@ -61,7 +59,6 @@ export const signup = credentials => dispatch => axios.post('/api/auth/me', cred
 
 export const signupAndGoToUser = credentials => dispatch => {
   dispatch(signup(credentials))
-    .then(user => history.push(`/`))
     .catch(err => console.error('Problem signing up:', err))
 }
 

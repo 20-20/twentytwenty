@@ -9,7 +9,7 @@ import { fetchUsers } from '../reducers/users'
 import { setParagraph } from '../reducers/highlight'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
-import RadarChart from './radarChart'
+import RadarChart from './RadarChart'
 import RelatedArticle from './RelatedArticle'
 import selectionTextAndHighlight from '../../chromeExtension/highlight'
 
