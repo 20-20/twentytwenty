@@ -5,32 +5,32 @@ const style =
 
 // html for login page
 const loginPage =
-	`
-	<div class='annotate-sidebar'>
-	<div class='hero'>
-		<h1 class='title marginTop centerText'>
-			Please login to access this extension
-		</h1>
-		<h1 class='title centerText'>
-		<a
-			class='button
-				is-dark
-				is-large
-				is-focused'
-			href='http://localhost:1337/login'
-			target='_blank'
-			rel='noopener'>
-			Login
-		</a>
-		</h1>
-	</div>
-	</div>
-	`
+  `
+  <div class='annotate-sidebar'>
+  <div class='hero'>
+    <h1 class='title marginTop centerText'>
+      Please login to access this extension
+    </h1>
+    <h1 class='title centerText'>
+    <a
+      class='button
+        is-dark
+        is-large
+        is-focused'
+      href='http://localhost:1337/login'
+      target='_blank'
+      rel='noopener'>
+      Login
+    </a>
+    </h1>
+  </div>
+  </div>
+  `
 
 // if not logged in, render login page
 export default function renderLoginPrompt() {
-	$('head').append(style)
-	$('body').append(loginPage)
+  $('head').append(style)
+  $('body').append(loginPage)
 }
 
 

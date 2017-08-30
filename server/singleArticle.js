@@ -1,5 +1,5 @@
-
 'use strict'
+
 const db = require('APP/db')
 const Article = db.model('articles')
 const Paragraph = db.model('paragraphs')
@@ -8,6 +8,7 @@ const router = require('express').Router()
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 const sentimentAnalysis = require('./sentiment')
 const axios = require('axios')
+
 /* Event Registry Api Functions */
 const eventRegistryFull = (url, trending) =>
     eventRegistryUri(url)
@@ -105,5 +106,6 @@ router.get('/:articleId', (req, res, next) => {
   .then(article => res.json(article))
   .catch('Error fetching article with provided Id')
 })
+
 /********        Routes till here        ********/
 module.exports = { router, createArticle, createArticleParagraphs }

@@ -1,5 +1,5 @@
 
-const {STRING, TEXT, INTEGER, DATE} = require('sequelize')
+const {STRING, TEXT, DATE} = require('sequelize')
 
 module.exports = db => db.define('comments', {
   text: {
@@ -8,12 +8,6 @@ module.exports = db => db.define('comments', {
     validate: {
       notEmpty: true
     }
-  },
-  upVote: {
-    type: INTEGER,
-  },
-  downVote: {
-    type: INTEGER
   },
   createdAt: {
     type: DATE,
@@ -33,5 +27,4 @@ module.exports.associations = (Comment, { Paragraph, User, Article }) => {
   Comment.belongsTo(User)
   Comment.belongsTo(Paragraph)
   Comment.belongsTo(Article)
-  Comment.belongsTo(Comment, {as: 'parent'})
 }

@@ -10,24 +10,19 @@ $(() => {
 
 // DETERMINE WHETHER TO KEEP ARGS OR NOT
 export default function selectionTextAndHighlight(chrExt=true) {
-  console.log("entered, should be false", chrExt)
   let text = ''
   if (window.getSelection) {
     text = window.getSelection().toString() // string generation
   } else if (document.selection && document.selection.type != 'Control') {
     text = document.selection.createRange().text
   }
-  // let clickCount = {}
   const parentEl = window.getSelection().anchorNode.parentElement
   toggleSelectionAndHighlight(parentEl, chrExt)
 }
 
 function toggleSelectionAndHighlight(parentEl, chrExt) {
-  console.log("parentEl", parentEl)
   if ($(parentEl).attr('class')
     && $(parentEl).attr('class').includes('twentyHighlight')) {
-      console.log("entered highlight removal")
-      console.log("here is the parent el", parentEl)
       $(parentEl).removeClass('twentyHighlight')
       if (chrExt) {
         if (!$('.iconText').text()) extensionToggle()
@@ -35,13 +30,11 @@ function toggleSelectionAndHighlight(parentEl, chrExt) {
         chrome.storage.local.set({ 'selectType': null })
       }
     } else {
-      console.log("entered highlight addition")
       $(parentEl).addClass('twentyHighlight')
       // focus user cursor on comment text box
       $('#commentSubmission').focus()
       if (chrExt) {
         if ($('.iconText').text().length) extensionToggle()
-        // const storageObj = { 'selectedText': parentEl.innerHTML }
         chrome.storage.local.set({
           'selectType': $(parentEl).prop('nodeName')
         })

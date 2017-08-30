@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { create as createUser } from './users'
-import history from '../history'
 
 /* ------------------    ACTIONS    --------------------- */
 
@@ -35,14 +34,6 @@ export default function reducer(user = null, action) {
 
 const resToData = res => res.data
 
-// a "simple" thunk creator which uses API, changes state, and returns a promise.
-// export const login = credentials => dispatch => axios.put('/api/auth/me', credentials)
-//   .then(resToData)
-//   .then(user => {
-//     dispatch(set(user))
-//     return user
-//   })
-
 export const login = (username, password) =>
   dispatch =>
     axios.post('/api/auth/login/local',
@@ -55,7 +46,6 @@ export const login = (username, password) =>
 // a "composed" thunk creator which uses the "simple" one, then routes to a page.
 export const loginAndGoToUser = credentials => dispatch => {
   dispatch(login(credentials))
-    .then(user => history.push(`/`))
     .catch(err => console.error('Problem logging in:', err))
 }
 
@@ -69,7 +59,6 @@ export const signup = credentials => dispatch => axios.post('/api/auth/me', cred
 
 export const signupAndGoToUser = credentials => dispatch => {
   dispatch(signup(credentials))
-    .then(user => history.push(`/`))
     .catch(err => console.error('Problem signing up:', err))
 }
 

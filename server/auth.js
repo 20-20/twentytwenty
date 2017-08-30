@@ -5,48 +5,7 @@ const passport = require('passport')
 const {User, OAuth} = require('APP/db')
 const auth = require('express').Router()
 const config = require('../config.js')
-
-/*************************
- * Auth strategies
- *
- * The OAuth model knows how to configure Passport middleware.
- * To enable an auth strategy, ensure that the appropriate
- * environment variables are set.
- *
- * You can do it on the command line:
- *
- *   FACEBOOK_CLIENT_ID=abcd FACEBOOK_CLIENT_SECRET=1234 npm run dev
- *
- * Or, better, you can create a ~/.$your_app_name.env.json file in
- * your home directory, and set them in there:
- *
- * {
- *   FACEBOOK_CLIENT_ID: 'abcd',
- *   FACEBOOK_CLIENT_SECRET: '1234',
- * }
- *
- * Concentrating your secrets this way will make it less likely that you
- * accidentally push them to Github, for example.
- *
- * When you deploy to production, you'll need to set up these environment
- * variables with your hosting provider.
- **/
-
-// Facebook needs the FACEBOOK_CLIENT_ID and FACEBOOK_CLIENT_SECRET
-// environment variables.
-OAuth.setupStrategy({
-  provider: 'facebook',
-  strategy: require('passport-facebook').Strategy,
-  config: {
-    clientID: env.FACEBOOK_CLIENT_ID,
-    clientSecret: env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: `${app.baseUrl}/api/auth/login/facebook`,
-  },
-  passport
-})
-
-// Google needs the GOOGLE_CLIENT_SECRET AND GOOGLE_CLIENT_ID
-// environment variables.
+  
 OAuth.setupStrategy({
   provider: 'google',
   strategy: require('passport-google-oauth').OAuth2Strategy,
@@ -54,22 +13,6 @@ OAuth.setupStrategy({
   passport
 })
 
-// Github needs the GITHUB_CLIENT_ID AND GITHUB_CLIENT_SECRET
-// environment variables.
-OAuth.setupStrategy({
-  provider: 'github',
-  strategy: require('passport-github2').Strategy,
-  config: {
-    clientID: env.GITHUB_CLIENT_ID,
-    clientSecret: env.GITHUB_CLIENT_SECRET,
-    callbackURL: `${app.baseUrl}/api/auth/login/github`,
-  },
-  passport
-})
-
-// Other passport configuration:
-// Passport review in the Week 6 Concept Review:
-// https://docs.google.com/document/d/1MHS7DzzXKZvR6MkL8VWdCxohFJHGgdms71XNLIET52Q/edit?usp=sharing
 passport.serializeUser((user, done) => {
   done(null, user.id)
 })
@@ -90,7 +33,6 @@ passport.deserializeUser(
   }
 )
 
-// require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
 passport.use(new (require('passport-local').Strategy)(
   (email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
@@ -124,15 +66,10 @@ auth.post('/login/local', passport.authenticate('local', {successRedirect: '/'})
 
 // GET requests for OAuth login:
 // Register this route as a callback URL with OAuth provider
-auth.get('/login/:strategy', (req, res, next) => {
-  return passport.authenticate(req.params.strategy, {
-    scope: 'email', // You may want to ask for additional OAuth scopes. These are
-                    // provider specific, and let you access additional data (like
-                    // their friends or email), or perform actions on their behalf.
+auth.get('/login/:strategy', (req, res, next) => passport.authenticate(req.params.strategy, {
+    scope: 'email', 
     successRedirect: '/',
-    // Specify other config here
-  })(req, res, next)
-})
+  })(req, res, next))
 
 auth.post('/logout', (req, res) => {
   req.logout()

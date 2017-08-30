@@ -46,19 +46,15 @@ class TopStories extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = (state) => ({
     topStory: state.topStories
-  }
-}
+  })
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = (dispatch) => ({
     loadTopStories: () => {
       dispatch(fetchTopStories())
     }
-  }
-}
+  })
 
 const topStoriesContainer = connect(mapStateToProps, mapDispatchToProps)(TopStories)
 

@@ -15,13 +15,16 @@ npm-debug.log
 chromeExtension/bundle.js
 chromeExtension/bundle.js.map
 chromeExtension/node_modules/*
+chromeExtension/package-lock.json
 
 #ignore sass caches
 .sass-cache/*
 
-# don't upload config
+# don't upload configs or package-lock
 config.js
 watson-config.js
+package-lock.json
+yarn.lock
 
 # css
-public/css/bulma.css.map
+#public/css/bulma.css.map

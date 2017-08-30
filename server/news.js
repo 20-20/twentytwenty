@@ -1,10 +1,3 @@
-const db = require('App/db')
-const Article = db.model('articles')
-const Paragraph = db.model('paragraphs')
-const Comment = db.model('comments')
-const router = require('express').Router()
-const request = require('request')
-const { createArticle, createArticleParagraphs } = require('./singleArticle')
 const axios = require('axios')
 
 function eventregistryTrendingCall() {

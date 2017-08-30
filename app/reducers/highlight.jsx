@@ -26,22 +26,10 @@ export default function reducer(paragraph = null, action) {
 
 /* ------------       THUNK CREATORS ------------------ */
 
-// export const getParagraph = (paragraphId) => dispatch => {
-//   axios.get(`/api/paragraphs/${paragraphId}`)
-//        .then(res => dispatch(init(res.data)))
-//        .catch(err => console.error(`Getting paragraphs was unsuccesful`, err))
-// }
-
 export const setParagraph = (paragraph) => dispatch => {
-	dispatch(set(paragraph))
+  dispatch(set(paragraph))
 }
 
 export const removeParagraph = () => dispatch => {
-	dispatch(remove(paragraph))
+  dispatch(remove(paragraph))
 }
-
-// export const removeParagraph = (paragraphId) => dispatch => {
-//   axios.get(`/api/paragraphs/${paragraphId}`)
-//        .then(res => dispatch(init(res.data)))
-//        .catch(err => console.error(`Getting paragraphs was unsuccesful`, err))
-// }

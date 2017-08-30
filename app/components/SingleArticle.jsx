@@ -9,9 +9,8 @@ import { fetchUsers } from '../reducers/users'
 import { setParagraph } from '../reducers/highlight'
 import Comments from './Comments.jsx'
 import Radar from 'react-d3-radar'
-import RadarChart from './radarChart'
+import RadarChart from './RadarChart'
 import RelatedArticle from './RelatedArticle'
-import Comments2 from './Comments2'
 import selectionTextAndHighlight from '../../chromeExtension/highlight'
 
 class SingleArticle extends Component {
@@ -22,10 +21,8 @@ class SingleArticle extends Component {
     this.props.fetchParagraphs(articleId)
     this.props.fetchComments(articleId)
     this.props.fetchUsers()
-    // this.addChrExtHighlight()
   }
   render() {
-    console.log("single artist users", this.props.users)
     const singleArticle = this.props.singleArticle
     const paragraphs = this.props.paragraphs
     const comments = this.props.comments

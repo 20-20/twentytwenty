@@ -16,7 +16,6 @@ class Comments extends Component {
   }
 
   render() {
-    console.log('state users', this.props.users)
     const user = this.props.user ? this.props.user : {}
     const comments = this.props.comments ? this.props.comments : []
     return (
@@ -26,9 +25,7 @@ class Comments extends Component {
             <strong>Comments</strong>
           </p>
         </nav>
-
         <article className='contentHere'></article>
-
         {
           comments.sort((a,b) => a.id - b.id ).map(comment => (
             <article className='media indComment' id={comment && comment.id} key={comment.id}>
@@ -44,7 +41,6 @@ class Comments extends Component {
             </article>
           ))
         }
-
         <article className='media'>
           <div className='media-content'>
             <form id='webFormSubmission'>
@@ -71,16 +67,7 @@ class Comments extends Component {
     )
   }
 
-  // fetchUserName(userId) {
-  //   console.log("here", userId)
-  //   axios.get(`/api/users/${userId}`)
-  //     .then(user => {
-  //       console.log("here is the user name", user.data.name)
-  //       user.data.name
-  //     })
-  // }
   fetchUserName(userId) {
-    console.log("users". this.props.users)
     const currentUser = this.props.users.filter(user => user.id === userId)
     return currentUser.name
   }
@@ -94,10 +81,9 @@ class Comments extends Component {
         user_id: props.user.id
       }
       props.addComment(newComment)
-			$('#webCommentSubmission').val('')
+      $('#webCommentSubmission').val('')
     })
   }
-
 }
 
 const mapStateToProps = (state) => ({
@@ -108,7 +94,6 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = ({ addComment });
-
 const commentsContainer = connect(mapStateToProps, mapDispatchToProps)(Comments)
 
 export default commentsContainer
