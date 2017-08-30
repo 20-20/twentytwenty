@@ -5,9 +5,7 @@ const passport = require('passport')
 const {User, OAuth} = require('APP/db')
 const auth = require('express').Router()
 const config = require('../config.js')
-
-// Google needs the GOOGLE_CLIENT_SECRET AND GOOGLE_CLIENT_ID
-// environment variables.
+  
 OAuth.setupStrategy({
   provider: 'google',
   strategy: require('passport-google-oauth').OAuth2Strategy,
