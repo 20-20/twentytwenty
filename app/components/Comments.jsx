@@ -10,7 +10,6 @@ import { fetchArticleData, addHoverHandler, commentDisplay } from '../../chromeE
 import axios from 'axios'
 
 class Comments extends Component {
-
   componentDidMount() {
     this.addChrExtComments(this.props)
   }
