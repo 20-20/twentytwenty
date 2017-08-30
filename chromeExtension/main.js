@@ -2,7 +2,6 @@ let userInfo;
 
 // Listens for browser action button to be clicked
 chrome.browserAction.onClicked.addListener(function(tab) {
-  console.log("hi there")
   chrome.tabs.executeScript({
     file: 'bundle.js'
   });
@@ -11,18 +10,13 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 // Listens for sigin / signout message sent from sidebar.js
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    console.log("request", request)
-    console.log("sender", sender)
-    console.log("background.js got message")
     if (request === 'signin') {
       signIn();
       sendResponse(userInfo);
-      console.log('Main.js: userInfo', userInfo)
       userInfo = '';
     }
     if (request === 'signout') {
       signOut();
-      console.log('Signed Out')
     }
   }
 );
