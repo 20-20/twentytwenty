@@ -16,7 +16,6 @@ class Comments extends Component {
   }
 
   render() {
-    console.log('state users', this.props.users)
     const user = this.props.user ? this.props.user : {}
     const comments = this.props.comments ? this.props.comments : []
     return (
@@ -69,7 +68,6 @@ class Comments extends Component {
   }
 
   fetchUserName(userId) {
-    console.log("users". this.props.users)
     const currentUser = this.props.users.filter(user => user.id === userId)
     return currentUser.name
   }

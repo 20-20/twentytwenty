@@ -1,12 +1,8 @@
-
 import axios from 'axios'
 
-// $(document).ready(function() {
 export default function renderComments() {
   const url = encodeURIComponent($(document)[0].URL)
-  console.log('this is a url',url)
   axios.post(`http://localhost:1337/api/singleArticle/${url}`)
-  // `http://localhost:1337/api/singleArticle/${url}` commented out for ngrock
   .then(article => {
     chrome.storage.local.set({ 'currentArticle': article.data })
     fetchArticleData(article)
@@ -47,26 +43,20 @@ export function commentDisplay(userName, comment) {
     `
     Promise.resolve($('.contentHere').append(newHTML))
       .then(() => addHoverHandler(comment))
-
 }
 
 
 export function addHoverHandler(comment, chrExt=true) {
-  console.log("inside add hover handler")
   const hoverAppend = chrExt
     ? $(`article[commentId='${comment.id}']`)
     : $(`#${comment.id}`)
   hoverAppend.hover(
     (evt) => {
-      console.log("inside highlighting")
       const node = parentTraversal(evt)
-      console.log("HERE IS THE FINAL NODE", node)
       $(node).addClass('hoverHighlight')
-      // $(node).css('background', 'rgba(195, 195, 195, .2) !important')
       comment.domElText && comment.domElType && highlightParagraph(comment)
     },
     (evt) => {
-      console.log("leaving highlighting")
       const node = parentTraversal(evt)
 			if ($(node).attr('class') &&
 				$(node).attr('class').includes('hoverHighlight')) {
@@ -100,7 +90,6 @@ function unHighlightParagraph(comment) {
 
 export function postComment(comment) {
   return axios.post(`http://localhost:1337/api/comments`, comment)
-  // `http://localhost:1337/api/comments` commented out for ngrok
     .then(newComment => newComment.data)
 		.catch('Comment was NOT successfully added to db')
 }
