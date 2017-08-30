@@ -18,7 +18,7 @@ class Navbar extends Component {
         <nav className="navbar has-shadow">
           <div className="navbar-brand is-info">
             <NavLink className="navbar-item" to={'/'} >
-              Twenty Twenty
+              <img src="/logo.gif" alt="Twenty Twenty" width="auto" height="120"/>
             </NavLink>
             <NavLink className="navbar-item is-hidden-desktop" to={'https://github.com/20-20/twentytwenty'} target="_blank">
               <span className="icon" style={{ color: '#333' }}>
